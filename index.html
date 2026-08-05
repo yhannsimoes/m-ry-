@@ -243,7 +243,7 @@
             background: linear-gradient(135deg, #1e3a5f 0%, #0a192f 100%);
             border: 1px solid var(--neon-blue);
             color: #fff;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
@@ -253,6 +253,7 @@
             align-items: center;
             gap: 8px;
             justify-content: center;
+            text-decoration: none;
         }
 
         .btn:hover {
@@ -331,7 +332,7 @@
         .chat-container {
             display: flex;
             flex-direction: column;
-            height: 420px;
+            height: 450px;
             border: 1px solid var(--border-chrome);
             border-radius: 8px;
             background: rgba(5, 8, 17, 0.9);
@@ -343,35 +344,19 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .chat-bubble {
-            max-width: 75%;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            line-height: 1.4;
-        }
-
-        .chat-bubble.incoming {
-            background: rgba(30, 58, 95, 0.6);
+        .chat-ticket {
+            background: rgba(15, 25, 45, 0.7);
             border: 1px solid var(--border-chrome);
-            align-self: flex-start;
+            border-radius: 8px;
+            padding: 15px;
         }
 
-        .chat-bubble.outgoing {
-            background: rgba(0, 240, 255, 0.15);
-            border: 1px solid var(--neon-blue);
-            align-self: flex-end;
-            color: #fff;
-        }
-
-        .chat-input-row {
-            display: flex;
-            padding: 10px;
-            gap: 10px;
-            border-top: 1px solid var(--border-chrome);
+        .chat-ticket.resolved {
+            border-color: var(--success-green);
+            opacity: 0.7;
         }
 
         .status-tag {
@@ -406,8 +391,16 @@
             background: rgba(15, 25, 45, 0.6);
             border: 1px solid var(--border-chrome);
             border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        .creation-panel {
+            background: rgba(0, 240, 255, 0.03);
+            border: 1px dashed var(--neon-blue);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
         }
     </style>
 </head>
@@ -454,11 +447,11 @@
                 <div class="form-group">
                     <label>Perfil de Acesso</label>
                     <select id="roleSelect">
+                        <option value="master">Master (Professor)</option>
+                        <option value="firewall">Firewall (Orientador / Segurança)</option>
                         <option value="cluster">Cluster (Monitor)</option>
                         <option value="cpu">CPU (Líder de Node)</option>
                         <option value="executor">Executor (Estudante)</option>
-                        <option value="firewall">Firewall (Orientador / Segurança)</option>
-                        <option value="master">Master (Professor)</option>
                     </select>
                 </div>
 
@@ -525,10 +518,6 @@
                 <div id="fwSupportTab" class="fw-tab-content" style="display: none;">
                     <div class="chat-container">
                         <div class="chat-messages" id="fwSupportMessages"></div>
-                        <div class="chat-input-row">
-                            <input type="text" id="fwSupportReplyInput" placeholder="Responder chamado...">
-                            <button class="btn" onclick="sendSupportReply('Firewall')"><i class="fa-solid fa-paper-plane"></i> Responder</button>
-                        </div>
                     </div>
                 </div>
 
@@ -540,7 +529,6 @@
                                 <th>Timestamp</th>
                                 <th>Evento</th>
                                 <th>Origem</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody id="logsTableBody"></tbody>
@@ -572,29 +560,54 @@
                 <!-- 1. PROTOCOLS -->
                 <div id="modProtocols" class="matrix-tab-content">
                     <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Protocolos de Operação Pedagógica</h3>
-                    <div id="protocolsContainer">
-                        <div class="resource-card">
-                            <h4 style="color: var(--chrome-silver);"><i class="fa-solid fa-shield"></i> Diretriz #01 - Formação de Nodes</h4>
-                            <p style="color: var(--text-dim); margin-top: 5px;">Os grupos de trabalho (Nodes) devem respeitar a alocação dos 4 eixos mapeados no formulário central da filial NODE.</p>
+
+                    <!-- Painel de Inserção (Exclusivo Master / Firewall) -->
+                    <div id="protocolAdminPanel" class="creation-panel" style="display: none;">
+                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-plus-circle"></i> Cadastrar Novo Protocolo</h4>
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" id="protoTitle" placeholder="Título do Protocolo (ex: Protocolo #03 - Entregas)">
+                            <input type="text" id="protoCategory" placeholder="Categoria / Âmbito (ex: Filial NODE)">
                         </div>
-                        <div class="resource-card">
-                            <h4 style="color: var(--chrome-silver);"><i class="fa-solid fa-shield"></i> Diretriz #02 - Atuação do Firewall</h4>
-                            <p style="color: var(--text-dim); margin-top: 5px;">O orientador (Firewall) inspeciona as produções e sinaliza o recebimento por meio do marcador de validação.</p>
+                        <div class="form-group">
+                            <textarea id="protoDesc" rows="2" placeholder="Descrição detalhada das diretrizes..."></textarea>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="url" id="protoLink" placeholder="Link do Anexo/Documento (Google Drive, PDF, etc.)">
+                            <button class="btn" onclick="publishProtocol()"><i class="fa-solid fa-upload"></i> Publicar Protocolo</button>
                         </div>
                     </div>
+
+                    <div id="protocolsList"></div>
                 </div>
 
                 <!-- 2. TASKS -->
                 <div id="modTasks" class="matrix-tab-content" style="display: none;">
                     <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Matriz de Tarefas & Entregáveis</h3>
-                    <div id="tasksList"></div>
-                    <div id="addTaskForm" style="margin-top: 20px; border-top: 1px solid var(--border-chrome); padding-top: 15px;">
-                        <h4 style="color: var(--chrome-silver); margin-bottom: 10px;">Nova Tarefa Matriz</h4>
+
+                    <!-- Criador de Tarefas (Master / CPU) -->
+                    <div id="taskAdminPanel" class="creation-panel" style="display: none;">
+                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-calendar-plus"></i> Criar Nova Tarefa / Entregável</h4>
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" id="taskTitle" placeholder="Título da Tarefa">
+                            <select id="taskTarget">
+                                <option value="Toda a Turma">Toda a Turma</option>
+                                <option value="Node 01">Node 01</option>
+                                <option value="Node 02">Node 02</option>
+                                <option value="Apenas CPUs">Apenas CPUs</option>
+                                <option value="Executores">Executores</option>
+                            </select>
+                            <input type="datetime-local" id="taskDeadline">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="taskDesc" rows="2" placeholder="Instruções detalhadas do entregável..."></textarea>
+                        </div>
                         <div style="display: flex; gap: 10px;">
-                            <input type="text" id="newTaskInput" placeholder="Descreva a nova tarefa pedagógica...">
-                            <button class="btn" onclick="addNewTask()"><i class="fa-solid fa-plus"></i> Publicar</button>
+                            <input type="url" id="taskLink" placeholder="Link de Apoio / Modelo (Google Drive, PDF, etc.)">
+                            <button class="btn" onclick="publishTask()"><i class="fa-solid fa-check-circle"></i> Publicar Tarefa</button>
                         </div>
                     </div>
+
+                    <div id="tasksList"></div>
                 </div>
 
                 <!-- 3. LOG -->
@@ -612,25 +625,76 @@
                     </table>
                 </div>
 
-                <!-- 4. REPOSITORY -->
+                <!-- 4. REPOSITORY (REGISTRO DAS DUAS OBRAS) -->
                 <div id="modRepository" class="matrix-tab-content" style="display: none;">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Repositório de Temas e Recursos (THEMES_DB)</h3>
-                    <div id="repositoryContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
-                        <div class="resource-card">
-                            <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-book"></i> Banco de Contos & Temas</h4>
-                            <p style="color: var(--text-dim); margin-top: 5px;">Acesso aos temas configurados para os Nodes dos 3ºs Anos (3A a 3E).</p>
+                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Registro Central das Obras</h3>
+
+                    <!-- Painel de Edição Master -->
+                    <div id="repoAdminPanel" class="creation-panel" style="display: none;">
+                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-pen-to-square"></i> Atualizar Registro das Obras (Exclusivo Master)</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <!-- Edit Obra 1 -->
+                            <div style="border-right: 1px solid var(--border-chrome); padding-right: 15px;">
+                                <h5 style="color: var(--chrome-silver); margin-bottom: 8px;">Obra 01</h5>
+                                <input type="text" id="editObra1Title" placeholder="Título da Obra 01" style="margin-bottom: 8px;">
+                                <textarea id="editObra1Desc" rows="2" placeholder="Sinopse / Diretriz Central" style="margin-bottom: 8px;"></textarea>
+                                <input type="text" id="editObra1Eixos" placeholder="Eixos Mapeados" style="margin-bottom: 8px;">
+                                <input type="url" id="editObra1Link" placeholder="Link do Material/Texto">
+                            </div>
+                            <!-- Edit Obra 2 -->
+                            <div>
+                                <h5 style="color: var(--chrome-silver); margin-bottom: 8px;">Obra 02</h5>
+                                <input type="text" id="editObra2Title" placeholder="Título da Obra 02" style="margin-bottom: 8px;">
+                                <textarea id="editObra2Desc" rows="2" placeholder="Sinopse / Diretriz Central" style="margin-bottom: 8px;"></textarea>
+                                <input type="text" id="editObra2Eixos" placeholder="Eixos Mapeados" style="margin-bottom: 8px;">
+                                <input type="url" id="editObra2Link" placeholder="Link do Material/Texto">
+                            </div>
+                        </div>
+                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="saveRepositoryObras()"><i class="fa-solid fa-save"></i> Salvar Obras no Repositório</button>
+                    </div>
+
+                    <!-- Cards Fixos Obra 01 e Obra 02 -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+                        <div class="resource-card" style="border-top: 3px solid var(--neon-blue);">
+                            <span class="status-tag seen" style="margin-bottom: 10px; display: inline-block;">OBRA 01</span>
+                            <h3 id="obra1TitleDisplay" style="color: #fff; margin-bottom: 8px;">Carregando Obra 01...</h3>
+                            <p id="obra1DescDisplay" style="color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">-</p>
+                            <div style="font-size: 0.85rem; color: var(--chrome-silver); margin-bottom: 15px;">
+                                <strong>Eixos Relacionados:</strong> <span id="obra1EixosDisplay">-</span>
+                            </div>
+                            <a id="obra1LinkDisplay" href="#" target="_blank" class="btn" style="width: 100%;"><i class="fa-solid fa-book-open"></i> Acessar Material da Obra 01</a>
+                        </div>
+
+                        <div class="resource-card" style="border-top: 3px solid var(--neon-blue);">
+                            <span class="status-tag seen" style="margin-bottom: 10px; display: inline-block;">OBRA 02</span>
+                            <h3 id="obra2TitleDisplay" style="color: #fff; margin-bottom: 8px;">Carregando Obra 02...</h3>
+                            <p id="obra2DescDisplay" style="color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">-</p>
+                            <div style="font-size: 0.85rem; color: var(--chrome-silver); margin-bottom: 15px;">
+                                <strong>Eixos Relacionados:</strong> <span id="obra2EixosDisplay">-</span>
+                            </div>
+                            <a id="obra2LinkDisplay" href="#" target="_blank" class="btn" style="width: 100%;"><i class="fa-solid fa-book-open"></i> Acessar Material da Obra 02</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- 5. SUPPORT -->
+                <!-- 5. SUPPORT (RECEPÇÃO MASTER OU ENVIO DEMAIS) -->
                 <div id="modSupport" class="matrix-tab-content" style="display: none;">
                     <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Central de Suporte & Comunicação</h3>
-                    <div class="chat-container">
-                        <div class="chat-messages" id="matrixSupportMessages"></div>
-                        <div class="chat-input-row">
-                            <input type="text" id="matrixSupportInput" placeholder="Envie uma dúvida ou chamada ao Suporte/Firewall...">
-                            <button class="btn" onclick="sendMatrixSupport()"><i class="fa-solid fa-paper-plane"></i> Enviar</button>
+
+                    <!-- Visão Master: Mesa de Recepção de Chamados -->
+                    <div id="masterSupportInbox" style="display: none;">
+                        <h4 style="color: var(--chrome-silver); margin-bottom: 15px;"><i class="fa-solid fa-inbox"></i> Chamados Recebidos</h4>
+                        <div id="masterTicketsContainer" class="chat-messages" style="height: auto; max-height: 500px;"></div>
+                    </div>
+
+                    <!-- Visão Demais Perfis: Form de Envio para o Master -->
+                    <div id="clientSupportPanel" style="display: none;">
+                        <div class="chat-container">
+                            <div class="chat-messages" id="matrixSupportMessages"></div>
+                            <div class="chat-input-row">
+                                <input type="text" id="matrixSupportInput" placeholder="Descreva sua dúvida ou solicitação para a mesa Master...">
+                                <button class="btn" onclick="sendClientSupport()"><i class="fa-solid fa-paper-plane"></i> Enviar ao Master</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -638,6 +702,20 @@
                 <!-- 6. FEEDBACK -->
                 <div id="modFeedback" class="matrix-tab-content" style="display: none;">
                     <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Devolutivas & Avaliação Pedagógica</h3>
+                    
+                    <!-- Form Envio Devolutiva Master -->
+                    <div id="feedbackAdminPanel" class="creation-panel" style="display: none;">
+                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-comment-dots"></i> Publicar Devolutiva</h4>
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" id="fbTitle" placeholder="Título da Devolutiva">
+                            <input type="text" id="fbTarget" placeholder="Destinatário (ex: Node 01, Aluno X)">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="fbContent" rows="3" placeholder="Insira o parecer ou devolutiva pedagógica..."></textarea>
+                        </div>
+                        <button class="btn" onclick="publishFeedback()"><i class="fa-solid fa-share"></i> Enviar Devolutiva</button>
+                    </div>
+
                     <div id="feedbackContainer"></div>
                 </div>
 
@@ -647,7 +725,7 @@
     </div>
 
     <script>
-        // CONFIGURAÇÃO DO FIREBASE (Sincronizado com a plataforma Filial NODE)
+        // CONFIGURAÇÃO DO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForMaryPlatformNodeSecular",
             authDomain: "mary-node-secular.firebaseapp.com",
@@ -671,7 +749,7 @@
             "3E": "orientador3e"
         };
 
-        // Splash Intro Video
+        // Intro Video Handler
         const introVideo = document.getElementById('introVideo');
         const introOverlay = document.getElementById('introOverlay');
 
@@ -687,7 +765,11 @@
             setTimeout(finishIntro, 12500);
         }
 
-        // Handle Login
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') finishIntro();
+        });
+
+        // Authentication Handler
         function handleLogin(e) {
             e.preventDefault();
             const role = document.getElementById('roleSelect').value;
@@ -712,7 +794,7 @@
             document.getElementById('userInfo').style.display = 'flex';
             document.getElementById('userRoleDisplay').innerText = `${role.toUpperCase()} [${turma}]`;
 
-            logSystemEvent(`Autenticação no m@ry: ${role.toUpperCase()}`, `Turma ${turma}`);
+            logSystemEvent(`Login efetuado: ${role.toUpperCase()}`, `Turma ${turma}`);
 
             if (role === 'firewall') {
                 document.getElementById('firewallSection').classList.add('active');
@@ -721,8 +803,30 @@
             } else {
                 document.getElementById('matrixSection').classList.add('active');
                 document.getElementById('matrixDashTitle').innerHTML = `<i class="fa-solid fa-sitemap"></i> Painel Matriz ${role.toUpperCase()} // Turma ${turma}`;
+                
+                // Configurar visibilidade por perfil
+                setupRolePermissions(role);
                 listenMatrixData(turma);
             }
+        }
+
+        function setupRolePermissions(role) {
+            // Protocols admin panel
+            document.getElementById('protocolAdminPanel').style.display = (role === 'master' || role === 'firewall') ? 'block' : 'none';
+            // Tasks admin panel
+            document.getElementById('taskAdminPanel').style.display = (role === 'master' || role === 'cpu') ? 'block' : 'none';
+            // Repository admin panel
+            document.getElementById('repoAdminPanel').style.display = (role === 'master') ? 'block' : 'none';
+            // Support view layout
+            if (role === 'master') {
+                document.getElementById('masterSupportInbox').style.display = 'block';
+                document.getElementById('clientSupportPanel').style.display = 'none';
+            } else {
+                document.getElementById('masterSupportInbox').style.display = 'none';
+                document.getElementById('clientSupportPanel').style.display = 'block';
+            }
+            // Feedback admin panel
+            document.getElementById('feedbackAdminPanel').style.display = (role === 'master') ? 'block' : 'none';
         }
 
         function logout() {
@@ -758,7 +862,7 @@
             const keys = Object.keys(answers);
 
             if (keys.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-dim);">Nenhuma resposta enviada ainda nesta turma.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-dim);">Nenhuma resposta registrada.</td></tr>`;
                 return;
             }
 
@@ -793,7 +897,7 @@
                 viewedByFirewall: !currentStatus,
                 viewedAt: new Date().toISOString()
             });
-            logSystemEvent(`Firewall alterou status da resposta [${answerId}]`, `Turma ${turma}`);
+            logSystemEvent(`Firewall alterou validação [${answerId}]`, `Turma ${turma}`);
         }
 
         function renderNodesCards(nodes) {
@@ -802,7 +906,7 @@
             const keys = Object.keys(nodes);
 
             if (keys.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-dim);">Nenhum Node alocado até o momento.</p>`;
+                container.innerHTML = `<p style="color: var(--text-dim);">Nenhum Node alocado.</p>`;
                 return;
             }
 
@@ -820,54 +924,103 @@
             });
         }
 
-        /* --- MATRIX CENTRAL LOGIC (MASTER, CLUSTER, CPU, EXECUTOR) --- */
+        /* --- MATRIX DATA LISTENERS & HANDLERS --- */
         function listenMatrixData(turma) {
-            database.ref(`support_messages/${turma}`).on('value', (snapshot) => { renderSupportMessages(snapshot.val() || {}, 'matrixSupportMessages'); });
-            database.ref(`system_logs/${turma}`).on('value', (snapshot) => { renderLogs(snapshot.val() || {}, 'matrixLogsBody'); });
+            database.ref(`matrix_protocols/${turma}`).on('value', (snapshot) => { renderProtocols(snapshot.val() || {}); });
             database.ref(`matrix_tasks/${turma}`).on('value', (snapshot) => { renderTasks(snapshot.val() || {}); });
+            database.ref(`system_logs/${turma}`).on('value', (snapshot) => { renderLogs(snapshot.val() || {}, 'matrixLogsBody'); });
+            database.ref(`matrix_repository/${turma}`).on('value', (snapshot) => { renderRepository(snapshot.val() || {}); });
+            database.ref(`support_messages/${turma}`).on('value', (snapshot) => { renderSupportData(snapshot.val() || {}); });
             database.ref(`matrix_feedback/${turma}`).on('value', (snapshot) => { renderFeedbacks(snapshot.val() || {}); });
         }
 
-        function renderSupportMessages(messages, elementId) {
-            const container = document.getElementById(elementId);
+        /* 1. PROTOCOLS */
+        function publishProtocol() {
+            const title = document.getElementById('protoTitle').value.trim();
+            const cat = document.getElementById('protoCategory').value.trim();
+            const desc = document.getElementById('protoDesc').value.trim();
+            const link = document.getElementById('protoLink').value.trim();
+
+            if (!title || !desc || !currentUser.turma) {
+                alert('Preencha pelo menos o Título e a Descrição do Protocolo.');
+                return;
+            }
+
+            database.ref(`matrix_protocols/${currentUser.turma}`).push({
+                title: title,
+                category: cat || 'Geral',
+                desc: desc,
+                link: link || '',
+                author: currentUser.role.toUpperCase(),
+                timestamp: new Date().toLocaleDateString('pt-BR')
+            });
+
+            document.getElementById('protoTitle').value = '';
+            document.getElementById('protoCategory').value = '';
+            document.getElementById('protoDesc').value = '';
+            document.getElementById('protoLink').value = '';
+
+            logSystemEvent(`Novo Protocolo criado: "${title}"`, `Turma ${currentUser.turma}`);
+        }
+
+        function renderProtocols(protocols) {
+            const container = document.getElementById('protocolsList');
             container.innerHTML = '';
-            Object.keys(messages).forEach(key => {
-                const msg = messages[key];
-                const bubble = document.createElement('div');
-                bubble.className = `chat-bubble ${msg.sender === currentUser.role ? 'outgoing' : 'incoming'}`;
-                bubble.innerHTML = `
-                    <div style="font-size: 0.75rem; color: var(--neon-blue); font-weight: bold;">${msg.sender}</div>
-                    <div>${msg.text}</div>
+            const keys = Object.keys(protocols);
+
+            if (keys.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-dim);">Nenhum protocolo cadastrado para esta turma.</p>`;
+                return;
+            }
+
+            keys.reverse().forEach(key => {
+                const item = protocols[key];
+                const card = document.createElement('div');
+                card.className = 'resource-card';
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                        <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-shield-cat"></i> ${item.title}</h4>
+                        <span class="status-tag seen">${item.category}</span>
+                    </div>
+                    <p style="color: var(--text-main); line-height: 1.4; margin-bottom: 12px;">${item.desc}</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size: 0.8rem; color: var(--text-dim);">Autor: ${item.author} | ${item.timestamp}</span>
+                        ${item.link ? `<a href="${item.link}" target="_blank" class="btn" style="padding: 4px 12px; font-size: 0.8rem;"><i class="fa-solid fa-paperclip"></i> Abrir Anexo / Documento</a>` : ''}
+                    </div>
                 `;
-                container.appendChild(bubble);
+                container.appendChild(card);
             });
-            container.scrollTop = container.scrollHeight;
         }
 
-        function sendSupportReply(senderRole) {
-            const input = document.getElementById('fwSupportReplyInput');
-            const text = input.value.trim();
-            if (!text || !currentUser.turma) return;
+        /* 2. TASKS */
+        function publishTask() {
+            const title = document.getElementById('taskTitle').value.trim();
+            const target = document.getElementById('taskTarget').value;
+            const deadline = document.getElementById('taskDeadline').value;
+            const desc = document.getElementById('taskDesc').value.trim();
+            const link = document.getElementById('taskLink').value.trim();
 
-            database.ref(`support_messages/${currentUser.turma}`).push({
-                sender: senderRole,
-                text: text,
+            if (!title || !desc || !currentUser.turma) {
+                alert('Preencha o Título e as Instruções da Tarefa.');
+                return;
+            }
+
+            database.ref(`matrix_tasks/${currentUser.turma}`).push({
+                title: title,
+                target: target,
+                deadline: deadline || 'Sem prazo fixado',
+                desc: desc,
+                link: link || '',
+                author: currentUser.role.toUpperCase(),
                 timestamp: new Date().toISOString()
             });
-            input.value = '';
-        }
 
-        function sendMatrixSupport() {
-            const input = document.getElementById('matrixSupportInput');
-            const text = input.value.trim();
-            if (!text || !currentUser.turma) return;
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskDesc').value = '';
+            document.getElementById('taskLink').value = '';
+            document.getElementById('taskDeadline').value = '';
 
-            database.ref(`support_messages/${currentUser.turma}`).push({
-                sender: currentUser.role.toUpperCase(),
-                text: text,
-                timestamp: new Date().toISOString()
-            });
-            input.value = '';
+            logSystemEvent(`Nova Tarefa publicada: "${title}" [Alvo: ${target}]`, `Turma ${currentUser.turma}`);
         }
 
         function renderTasks(tasks) {
@@ -876,35 +1029,251 @@
             const keys = Object.keys(tasks);
 
             if (keys.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-dim);">Nenhuma tarefa ativa cadastrada.</p>`;
+                container.innerHTML = `<p style="color: var(--text-dim);">Nenhuma tarefa pendente no momento.</p>`;
                 return;
             }
 
-            keys.forEach(key => {
-                const task = tasks[key];
-                const item = document.createElement('div');
-                item.className = 'resource-card';
-                item.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <h4 style="color: #fff;"><i class="fa-solid fa-check-square"></i> ${task.title}</h4>
-                        <span class="status-tag seen">${task.author}</span>
+            keys.reverse().forEach(taskId => {
+                const task = tasks[taskId];
+                const card = document.createElement('div');
+                card.className = 'resource-card';
+                
+                const deadlineFormatted = task.deadline !== 'Sem prazo fixado' ? new Date(task.deadline).toLocaleString('pt-BR') : 'Sem prazo limite';
+
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                        <h4 style="color: #fff;"><i class="fa-solid fa-list-check"></i> ${task.title}</h4>
+                        <span class="status-tag unseen">Destinado a: ${task.target}</span>
                     </div>
+                    <p style="color: var(--chrome-silver); margin-bottom: 12px; line-height: 1.4;">${task.desc}</p>
+                    
+                    <div style="background: rgba(5,8,17,0.6); padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+                        <span><i class="fa-solid fa-hourglass-half" style="color: var(--neon-blue);"></i> <strong>Prazo:</strong> ${deadlineFormatted}</span>
+                        ${task.link ? `<a href="${task.link}" target="_blank" style="color: var(--neon-blue);"><i class="fa-solid fa-link"></i> Arquivo de Apoio</a>` : ''}
+                    </div>
+
+                    ${currentUser.role === 'executor' ? `
+                        <div style="margin-top: 10px; border-top: 1px dashed var(--border-chrome); padding-top: 10px;">
+                            <label style="font-size: 0.85rem;">Enviar Solução (URL do arquivo/trabalho):</label>
+                            <div style="display: flex; gap: 8px; margin-top: 4px;">
+                                <input type="url" id="subInput_${taskId}" placeholder="https://drive.google.com/..." style="padding: 6px;">
+                                <button class="btn" style="padding: 6px 14px;" onclick="submitTaskWork('${taskId}')"><i class="fa-solid fa-paper-plane"></i> Entregar</button>
+                            </div>
+                        </div>
+                    ` : ''}
                 `;
-                container.appendChild(item);
+                container.appendChild(card);
             });
         }
 
-        function addNewTask() {
-            const input = document.getElementById('newTaskInput');
-            const title = input.value.trim();
-            if (!title || !currentUser.turma) return;
+        function submitTaskWork(taskId) {
+            const input = document.getElementById(`subInput_${taskId}`);
+            const link = input.value.trim();
+            if (!link) {
+                alert('Cole a URL da sua entrega.');
+                return;
+            }
 
-            database.ref(`matrix_tasks/${currentUser.turma}`).push({
-                title: title,
-                author: currentUser.role.toUpperCase(),
-                timestamp: new Date().toISOString()
+            database.ref(`task_submissions/${currentUser.turma}/${taskId}`).push({
+                student: currentUser.role.toUpperCase(),
+                workUrl: link,
+                submittedAt: new Date().toISOString()
             });
+
+            alert('Entregável submetido com sucesso!');
             input.value = '';
+            logSystemEvent(`Entregável enviado para tarefa [${taskId}]`, `Turma ${currentUser.turma}`);
+        }
+
+        /* 3. REPOSITORY (REGISTRO DAS 2 OBRAS) */
+        function saveRepositoryObras() {
+            const o1 = {
+                title: document.getElementById('editObra1Title').value.trim() || 'Obra Central 01',
+                desc: document.getElementById('editObra1Desc').value.trim() || 'Sinopse e diretrizes da primeira obra.',
+                eixos: document.getElementById('editObra1Eixos').value.trim() || 'Eixo A / Eixo B',
+                link: document.getElementById('editObra1Link').value.trim() || '#'
+            };
+
+            const o2 = {
+                title: document.getElementById('editObra2Title').value.trim() || 'Obra Central 02',
+                desc: document.getElementById('editObra2Desc').value.trim() || 'Sinopse e diretrizes da segunda obra.',
+                eixos: document.getElementById('editObra2Eixos').value.trim() || 'Eixo C / Eixo D',
+                link: document.getElementById('editObra2Link').value.trim() || '#'
+            };
+
+            database.ref(`matrix_repository/${currentUser.turma}`).set({
+                obra1: o1,
+                obra2: o2,
+                updatedBy: currentUser.role.toUpperCase(),
+                updatedAt: new Date().toISOString()
+            });
+
+            alert('Registro das duas obras atualizado com sucesso!');
+            logSystemEvent(`Repositório de Obras atualizado pelo Master`, `Turma ${currentUser.turma}`);
+        }
+
+        function renderRepository(repoData) {
+            const o1 = repoData.obra1 || {
+                title: 'Obra Central 01',
+                desc: 'Nenhum registro cadastrado para a Obra 01 nesta turma.',
+                eixos: 'Não definido',
+                link: '#'
+            };
+
+            const o2 = repoData.obra2 || {
+                title: 'Obra Central 02',
+                desc: 'Nenhum registro cadastrado para a Obra 02 nesta turma.',
+                eixos: 'Não definido',
+                link: '#'
+            };
+
+            document.getElementById('obra1TitleDisplay').innerText = o1.title;
+            document.getElementById('obra1DescDisplay').innerText = o1.desc;
+            document.getElementById('obra1EixosDisplay').innerText = o1.eixos;
+            document.getElementById('obra1LinkDisplay').href = o1.link;
+
+            document.getElementById('obra2TitleDisplay').innerText = o2.title;
+            document.getElementById('obra2DescDisplay').innerText = o2.desc;
+            document.getElementById('obra2EixosDisplay').innerText = o2.eixos;
+            document.getElementById('obra2LinkDisplay').href = o2.link;
+
+            // Preencher form do admin Master caso esteja vazio
+            if (currentUser.role === 'master' && !document.getElementById('editObra1Title').value) {
+                document.getElementById('editObra1Title').value = o1.title;
+                document.getElementById('editObra1Desc').value = o1.desc;
+                document.getElementById('editObra1Eixos').value = o1.eixos;
+                document.getElementById('editObra1Link').value = o1.link;
+
+                document.getElementById('editObra2Title').value = o2.title;
+                document.getElementById('editObra2Desc').value = o2.desc;
+                document.getElementById('editObra2Eixos').value = o2.eixos;
+                document.getElementById('editObra2Link').value = o2.link;
+            }
+        }
+
+        /* 4. SUPPORT (RECEPÇÃO MASTER E ENVIO DEMAIS) */
+        function sendClientSupport() {
+            const input = document.getElementById('matrixSupportInput');
+            const text = input.value.trim();
+            if (!text || !currentUser.turma) return;
+
+            database.ref(`support_messages/${currentUser.turma}`).push({
+                sender: currentUser.role.toUpperCase(),
+                text: text,
+                status: 'aberto',
+                timestamp: new Date().toLocaleTimeString('pt-BR')
+            });
+
+            input.value = '';
+        }
+
+        function replyAsMaster(msgId) {
+            const replyInput = document.getElementById(`replyInput_${msgId}`);
+            const replyText = replyInput.value.trim();
+            if (!replyText) return;
+
+            database.ref(`support_messages/${currentUser.turma}/${msgId}`).update({
+                masterReply: replyText,
+                status: 'respondido',
+                repliedAt: new Date().toLocaleTimeString('pt-BR')
+            });
+
+            logSystemEvent(`Master respondeu chamado de suporte [${msgId}]`, `Turma ${currentUser.turma}`);
+        }
+
+        function renderSupportData(messages) {
+            const keys = Object.keys(messages);
+
+            // Se for MASTER: Renderizar a caixa de recepção de chamados
+            if (currentUser.role === 'master') {
+                const container = document.getElementById('masterTicketsContainer');
+                container.innerHTML = '';
+
+                if (keys.length === 0) {
+                    container.innerHTML = `<p style="color: var(--text-dim);">Nenhum chamado de suporte recebido nesta turma.</p>`;
+                    return;
+                }
+
+                keys.reverse().forEach(msgId => {
+                    const msg = messages[msgId];
+                    const card = document.createElement('div');
+                    card.className = `chat-ticket ${msg.status === 'respondido' ? 'resolved' : ''}`;
+                    
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                            <strong style="color: var(--neon-blue);"><i class="fa-solid fa-user-circle"></i> ${msg.sender}</strong>
+                            <span class="status-tag ${msg.status === 'respondido' ? 'seen' : 'unseen'}">${msg.status || 'aberto'}</span>
+                        </div>
+                        <p style="color: #fff; margin-bottom: 10px;">${msg.text}</p>
+                        <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 10px;">Recebido às ${msg.timestamp}</div>
+
+                        ${msg.masterReply ? `
+                            <div style="background: rgba(0,240,255,0.08); border-left: 2px solid var(--neon-blue); padding: 8px; font-size: 0.9rem; margin-top: 8px;">
+                                <strong style="color: var(--neon-blue);">Sua Resposta:</strong> ${msg.masterReply}
+                            </div>
+                        ` : `
+                            <div style="display:flex; gap: 8px; margin-top: 8px;">
+                                <input type="text" id="replyInput_${msgId}" placeholder="Responder este chamado..." style="padding: 6px;">
+                                <button class="btn" style="padding: 6px 12px;" onclick="replyAsMaster('${msgId}')"><i class="fa-solid fa-reply"></i> Responder</button>
+                            </div>
+                        `}
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                // Se for DEMAIS PERFIS: Renderizar o chat tradicional
+                renderSupportMessages(messages, 'matrixSupportMessages');
+            }
+        }
+
+        function renderSupportMessages(messages, elementId) {
+            const container = document.getElementById(elementId);
+            if (!container) return;
+            container.innerHTML = '';
+            
+            Object.keys(messages).forEach(key => {
+                const msg = messages[key];
+                const bubble = document.createElement('div');
+                bubble.className = `chat-ticket`;
+                bubble.style.marginBottom = '10px';
+                bubble.innerHTML = `
+                    <div style="font-size: 0.75rem; color: var(--neon-blue); font-weight: bold;">${msg.sender} - ${msg.timestamp}</div>
+                    <div style="color: #fff; margin-top: 4px;">${msg.text}</div>
+                    ${msg.masterReply ? `
+                        <div style="background: rgba(0,255,157,0.1); border-left: 2px solid var(--success-green); padding: 6px; margin-top: 6px; font-size: 0.85rem; color: var(--success-green);">
+                            <strong>Resposta do Master:</strong> ${msg.masterReply}
+                        </div>
+                    ` : ''}
+                `;
+                container.appendChild(bubble);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        /* 5. FEEDBACK */
+        function publishFeedback() {
+            const title = document.getElementById('fbTitle').value.trim();
+            const target = document.getElementById('fbTarget').value.trim();
+            const content = document.getElementById('fbContent').value.trim();
+
+            if (!title || !content || !currentUser.turma) {
+                alert('Preencha o Título e o Conteúdo da Devolutiva.');
+                return;
+            }
+
+            database.ref(`matrix_feedback/${currentUser.turma}`).push({
+                title: title,
+                target: target || 'Geral',
+                content: content,
+                author: currentUser.role.toUpperCase(),
+                timestamp: new Date().toLocaleDateString('pt-BR')
+            });
+
+            document.getElementById('fbTitle').value = '';
+            document.getElementById('fbTarget').value = '';
+            document.getElementById('fbContent').value = '';
+
+            logSystemEvent(`Devolutiva publicada: "${title}"`, `Turma ${currentUser.turma}`);
         }
 
         function renderFeedbacks(feedbacks) {
@@ -917,25 +1286,29 @@
                 return;
             }
 
-            keys.forEach(key => {
+            keys.reverse().forEach(key => {
                 const fb = feedbacks[key];
                 const div = document.createElement('div');
                 div.className = 'resource-card';
                 div.innerHTML = `
-                    <h4 style="color: var(--neon-blue);">${fb.title}</h4>
-                    <p style="color: var(--chrome-silver); margin-top: 5px;">${fb.content}</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                        <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-comment-dots"></i> ${fb.title}</h4>
+                        <span class="status-tag seen">Alvo: ${fb.target}</span>
+                    </div>
+                    <p style="color: var(--chrome-silver); margin-bottom: 10px; line-height: 1.4;">${fb.content}</p>
+                    <span style="font-size: 0.75rem; color: var(--text-dim);">Autor: ${fb.author} | Data: ${fb.timestamp}</span>
                 `;
                 container.appendChild(div);
             });
         }
 
+        /* LOG SYSTEM */
         function logSystemEvent(eventDesc, origin) {
             if (!currentUser.turma) return;
             database.ref(`system_logs/${currentUser.turma}`).push({
                 timestamp: new Date().toLocaleTimeString('pt-BR'),
                 event: eventDesc,
-                origin: origin,
-                status: 'OK'
+                origin: origin
             });
         }
 
