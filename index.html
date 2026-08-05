@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>m@ry // Plataforma Central Matriz</title>
+    
+    <!-- Design Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Firebase SDK (Compat Version) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <style>
+        :root {
+            --bg-deep: #050811;
+            --panel-bg: rgba(10, 16, 30, 0.88);
+            --border-chrome: #4a6fa5;
+            --neon-blue: #00f0ff;
+            --neon-glow: rgba(0, 240, 255, 0.4);
+            --chrome-silver: #c0d6e4;
+            --text-main: #e0f2fe;
+            --text-dim: #7a9bb8;
+            --alert-red: #ff3366;
+            --success-green: #00ff9d;
+            --font-title: 'Orbitron', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-body);
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            background-image: 
+                radial-gradient(circle at 50% 10%, rgba(0, 240, 255, 0.15), transparent 40%),
+                linear-gradient(to bottom, #020408, #080d1a);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(180deg, rgba(20, 30, 50, 0.9) 0%, rgba(5, 8, 17, 0.95) 100%);
+            border-bottom: 2px solid var(--border-chrome);
+            box-shadow: 0 4px 20px var(--neon-glow);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 12px var(--neon-blue);
+            object-fit: cover;
+        }
+
+        .brand-title {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        .brand-sub {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filial-link-btn {
+            font-family: var(--font-title);
+            font-size: 0.8rem;
+            padding: 8px 14px;
+            border-radius: 4px;
+            background: rgba(0, 240, 255, 0.08);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .filial-link-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 12px var(--neon-blue);
+        }
+
+        .user-badge {
+            font-family: var(--font-title);
+            font-size: 0.85rem;
+            padding: 6px 14px;
+            border-radius: 4px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .main-container {
+            flex: 1;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-chrome);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
+        }
+
+        .card-header {
+            font-family: var(--font-title);
+            font-size: 1.2rem;
+            color: var(--neon-blue);
+            border-bottom: 1px solid rgba(74, 111, 165, 0.4);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--chrome-silver);
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(5, 8, 17, 0.8);
+            border: 1px solid var(--border-chrome);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .btn {
+            font-family: var(--font-title);
+            background: linear-gradient(135deg, #1e3a5f 0%, #0a192f 100%);
+            border: 1px solid var(--neon-blue);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .btn-eye {
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-eye.seen {
+            background: rgba(0, 255, 157, 0.2);
+            border-color: var(--success-green);
+            color: var(--success-green);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-chrome);
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-dim);
+            padding: 10px 20px;
+            font-family: var(--font-title);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--neon-blue);
+            border-color: var(--neon-blue);
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(74, 111, 165, 0.2);
+        }
+
+        .data-table th {
+            font-family: var(--font-title);
+            color: var(--chrome-silver);
+            background: rgba(15, 25, 45, 0.9);
+        }
+
+        .data-table tr:hover {
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+            border: 1px solid var(--border-chrome);
+            border-radius: 8px;
+            background: rgba(5, 8, 17, 0.9);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-bubble {
+            max-width: 75%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .chat-bubble.incoming {
+            background: rgba(30, 58, 95, 0.6);
+            border: 1px solid var(--border-chrome);
+            align-self: flex-start;
+        }
+
+        .chat-bubble.outgoing {
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid var(--neon-blue);
+            align-self: flex-end;
+            color: #fff;
+        }
+
+        .chat-input-row {
+            display: flex;
+            padding: 10px;
+            gap: 10px;
+            border-top: 1px solid var(--border-chrome);
+        }
+
+        .status-tag {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-family: var(--font-title);
+            text-transform: uppercase;
+        }
+
+        .status-tag.seen {
+            background: rgba(0, 255, 157, 0.2);
+            color: var(--success-green);
+            border: 1px solid var(--success-green);
+        }
+
+        .status-tag.unseen {
+            background: rgba(255, 51, 102, 0.2);
+            color: var(--alert-red);
+            border: 1px solid var(--alert-red);
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Central Matriz m@ry -->
+    <header>
+        <div class="brand-container">
+            <img src="m@ry (1).jpg" alt="m@ry Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/48/00f0ff/000000?text=m%40ry'">
+            <div>
+                <div class="brand-title">m@ry</div>
+                <div class="brand-sub">Plataforma Matriz Central</div>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <!-- Link Direto para a Plataforma Filial NODE -->
+            <a href="https://yhannsimoes.github.io/node/" target="_blank" class="filial-link-btn">
+                <i class="fa-solid fa-network-wired"></i> Acessar Filial NODE
+            </a>
+
+            <div id="userInfo" class="user-badge" style="display: none;">
+                <i class="fa-solid fa-shield-halved"></i> <span id="userRoleDisplay">DESCONECTADO</span>
+                <button onclick="logout()" class="btn-eye" style="margin-left: 8px; padding: 4px 8px;"><i class="fa-solid fa-power-off"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <!-- LOGIN CENTRAL -->
+        <div id="loginSection" class="card view-section active" style="max-width: 450px; margin: 40px auto;">
+            <div class="card-header">
+                <span><i class="fa-solid fa-user-shield"></i> Login Matriz m@ry</span>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Perfil de Acesso</label>
+                    <select id="roleSelect">
+                        <option value="firewall">Firewall (Orientador / Segurança)</option>
+                        <option value="master">Master (Professor)</option>
+                        <option value="cluster">Cluster (Monitor)</option>
+                        <option value="cpu">CPU (Líder de Node)</option>
+                        <option value="executor">Executor (Estudante)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Turma</label>
+                    <select id="turmaSelect">
+                        <option value="3A">Terceiro Ano A (3A)</option>
+                        <option value="3B">Terceiro Ano B (3B)</option>
+                        <option value="3C">Terceiro Ano C (3C)</option>
+                        <option value="3D">Terceiro Ano D (3D)</option>
+                        <option value="3E">Terceiro Ano E (3E)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Senha de Acesso</label>
+                    <input type="password" id="passInput" placeholder="Digite sua credencial" required>
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">
+                    <i class="fa-solid fa-right-to-bracket"></i> Conectar à Matriz
+                </button>
+            </form>
+        </div>
+
+        <!-- MÓDULO FIREWALL -->
+        <div id="firewallSection" class="view-section">
+            <div class="card">
+                <div class="card-header">
+                    <span><i class="fa-solid fa-eye"></i> Painel Firewall // Inspeção e Monitoramento</span>
+                    <span id="firewallTurmaBadge" class="user-badge">TURMA: --</span>
+                </div>
+
+                <div class="nav-tabs">
+                    <button class="tab-btn active" onclick="switchFirewallTab('answersTab', event)"><i class="fa-solid fa-list-check"></i> Respostas</button>
+                    <button class="tab-btn" onclick="switchFirewallTab('nodesTab', event)"><i class="fa-solid fa-cubes"></i> Nodes Criados</button>
+                    <button class="tab-btn" onclick="switchFirewallTab('supportTab', event)"><i class="fa-solid fa-headset"></i> Suporte</button>
+                    <button class="tab-btn" onclick="switchFirewallTab('logsTab', event)"><i class="fa-solid fa-terminal"></i> Logs do Sistema</button>
+                </div>
+
+                <!-- Respostas com Olhinho -->
+                <div id="answersTab" class="fw-tab-content">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Estudante</th>
+                                <th>Afinidade</th>
+                                <th>Habilidades</th>
+                                <th>Disponibilidade</th>
+                                <th>Status</th>
+                                <th>Sinalizar Visualizado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="answersTableBody">
+                            <!-- Inserido dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Visualização dos Nodes -->
+                <div id="nodesTab" class="fw-tab-content" style="display: none;">
+                    <div id="nodesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                        <!-- Cards dinâmicos dos nodes -->
+                    </div>
+                </div>
+
+                <!-- Suporte & Mensagens -->
+                <div id="supportTab" class="fw-tab-content" style="display: none;">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="supportMessages"></div>
+                        <div class="chat-input-row">
+                            <input type="text" id="supportReplyInput" placeholder="Digite uma resposta como Firewall...">
+                            <button class="btn" onclick="sendSupportReply()"><i class="fa-solid fa-paper-plane"></i> Responder</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs de Atividade -->
+                <div id="logsTab" class="fw-tab-content" style="display: none;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Horário</th>
+                                <th>Evento</th>
+                                <th>Origem</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MÓDULO GENÉRICO PARA DEMAIS PERFIS -->
+        <div id="genericDashboardSection" class="card view-section">
+            <div class="card-header">
+                <span id="genericDashTitle">Painel de Controle</span>
+            </div>
+            <p style="color: var(--chrome-silver); margin-bottom: 20px;">Você está conectado à Plataforma Matriz <strong>m@ry</strong>.</p>
+            <a href="https://yhannsimoes.github.io/node/" target="_blank" class="btn">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Ir para a Plataforma Filial NODE
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO DO FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForMaryPlatformNodeSecular",
+            authDomain: "mary-node-secular.firebaseapp.com",
+            databaseURL: "https://mary-node-secular-default-rtdb.firebaseio.com",
+            projectId: "mary-node-secular",
+            storageBucket: "mary-node-secular.appspot.com",
+            messagingSenderId: "000000000000",
+            appId: "1:000000000000:web:000000000000"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let currentUser = { role: null, turma: null, authenticated: false };
+
+        const FIREWALL_PASSWORDS = {
+            "3A": "orientador3a",
+            "3B": "orientador3b",
+            "3C": "orientador3c",
+            "3D": "orientador3d",
+            "3E": "orientador3e"
+        };
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const role = document.getElementById('roleSelect').value;
+            const turma = document.getElementById('turmaSelect').value;
+            const pass = document.getElementById('passInput').value.trim();
+
+            if (role === 'firewall') {
+                if (pass === FIREWALL_PASSWORDS[turma]) {
+                    initSession(role, turma);
+                } else {
+                    alert(`Senha incorreta para o Firewall da turma ${turma}.`);
+                }
+            } else {
+                initSession(role, turma);
+            }
+        }
+
+        function initSession(role, turma) {
+            currentUser = { role, turma, authenticated: true };
+
+            document.getElementById('loginSection').classList.remove('active');
+            document.getElementById('userInfo').style.display = 'flex';
+            document.getElementById('userRoleDisplay').innerText = `${role.toUpperCase()} [${turma}]`;
+
+            logSystemEvent(`Autenticação efetuada: ${role.toUpperCase()}`, `Turma ${turma}`);
+
+            if (role === 'firewall') {
+                document.getElementById('firewallSection').classList.add('active');
+                document.getElementById('firewallTurmaBadge').innerText = `TURMA: ${turma}`;
+                listenFirewallData(turma);
+            } else {
+                document.getElementById('genericDashboardSection').classList.add('active');
+                document.getElementById('genericDashTitle').innerText = `Painel ${role.toUpperCase()} // Turma ${turma}`;
+            }
+        }
+
+        function logout() {
+            currentUser = { role: null, turma: null, authenticated: false };
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('loginSection').classList.add('active');
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('passInput').value = '';
+        }
+
+        function switchFirewallTab(tabId, evt) {
+            document.querySelectorAll('.fw-tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).style.display = 'block';
+            evt.currentTarget.classList.add('active');
+        }
+
+        function listenFirewallData(turma) {
+            database.ref(`node_answers/${turma}`).on('value', (snapshot) => {
+                renderAnswersTable(snapshot.val() || {});
+            });
+
+            database.ref(`node_published/${turma}`).on('value', (snapshot) => {
+                renderNodesCards(snapshot.val() || {});
+            });
+
+            database.ref(`support_messages/${turma}`).on('value', (snapshot) => {
+                renderSupportMessages(snapshot.val() || {});
+            });
+
+            database.ref(`system_logs/${turma}`).on('value', (snapshot) => {
+                renderLogs(snapshot.val() || {});
+            });
+        }
+
+        function renderAnswersTable(answers) {
+            const tbody = document.getElementById('answersTableBody');
+            tbody.innerHTML = '';
+            const keys = Object.keys(answers);
+
+            if (keys.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-dim);">Nenhuma resposta enviada ainda nesta turma.</td></tr>`;
+                return;
+            }
+
+            keys.forEach(id => {
+                const item = answers[id];
+                const isSeen = item.viewedByFirewall === true;
+                const tr = document.createElement('tr');
+
+                tr.innerHTML = `
+                    <td><strong>${item.studentName || 'Estudante ' + id}</strong></td>
+                    <td>${item.eixoAfinidade || 'Geral'}</td>
+                    <td>${item.eixoHabilidades || 'Padrão'}</td>
+                    <td>${item.eixoDisponibilidade || 'Integral'}</td>
+                    <td>
+                        <span class="status-tag ${isSeen ? 'seen' : 'unseen'}">
+                            ${isSeen ? '<i class="fa-solid fa-check-double"></i> Visto' : '<i class="fa-solid fa-clock"></i> Pendente'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn-eye ${isSeen ? 'seen' : ''}" onclick="toggleViewedStatus('${id}', ${isSeen})">
+                            <i class="fa-solid ${isSeen ? 'fa-eye-slash' : 'fa-eye'}"></i> ${isSeen ? 'Sinalizado' : 'Marcar Visto'}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleViewedStatus(answerId, currentStatus) {
+            const turma = currentUser.turma;
+            database.ref(`node_answers/${turma}/${answerId}`).update({
+                viewedByFirewall: !currentStatus,
+                viewedAt: new Date().toISOString()
+            });
+            logSystemEvent(`Firewall alterou status da resposta [${answerId}] para ${!currentStatus ? 'VISTO' : 'PENDENTE'}`, `Turma ${turma}`);
+        }
+
+        function renderNodesCards(nodes) {
+            const container = document.getElementById('nodesContainer');
+            container.innerHTML = '';
+            const keys = Object.keys(nodes);
+
+            if (keys.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-dim);">Nenhum Node alocado até o momento.</p>`;
+                return;
+            }
+
+            keys.forEach(key => {
+                const node = nodes[key];
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.margin = '0';
+                card.innerHTML = `
+                    <div style="font-family: var(--font-title); color: var(--neon-blue); margin-bottom: 8px;">
+                        <i class="fa-solid fa-cube"></i> Node #${key}
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--chrome-silver);"><strong>CPU Líder:</strong> ${node.cpuLeader || 'Não atribuído'}</div>
+                    <div style="font-size: 0.9rem; color: var(--chrome-silver);"><strong>Integrantes:</strong> ${node.members ? node.members.length : 0}</div>
+                    <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 8px;"><strong>Tema:</strong> ${node.theme || 'Conto Base'}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderSupportMessages(messages) {
+            const container = document.getElementById('supportMessages');
+            container.innerHTML = '';
+
+            Object.keys(messages).forEach(key => {
+                const msg = messages[key];
+                const bubble = document.createElement('div');
+                bubble.className = `chat-bubble ${msg.sender === 'Firewall' ? 'outgoing' : 'incoming'}`;
+                bubble.innerHTML = `
+                    <div style="font-size: 0.75rem; color: var(--neon-blue); font-weight: bold;">${msg.sender}</div>
+                    <div>${msg.text}</div>
+                `;
+                container.appendChild(bubble);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendSupportReply() {
+            const input = document.getElementById('supportReplyInput');
+            const text = input.value.trim();
+            if (!text || !currentUser.turma) return;
+
+            database.ref(`support_messages/${currentUser.turma}`).push({
+                sender: 'Firewall',
+                text: text,
+                timestamp: new Date().toISOString()
+            });
+
+            logSystemEvent(`Mensagem enviada via Suporte`, `Turma ${currentUser.turma}`);
+            input.value = '';
+        }
+
+        function logSystemEvent(eventDesc, origin) {
+            if (!currentUser.turma) return;
+            database.ref(`system_logs/${currentUser.turma}`).push({
+                timestamp: new Date().toLocaleTimeString('pt-BR'),
+                event: eventDesc,
+                origin: origin,
+                status: 'REGISTRADO'
+            });
+        }
+
+        function renderLogs(logs) {
+            const tbody = document.getElementById('logsTableBody');
+            tbody.innerHTML = '';
+            const keys = Object.keys(logs).reverse();
+
+            keys.forEach(key => {
+                const log = logs[key];
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-family: monospace; font-size: 0.85rem; color: var(--text-dim);">${log.timestamp}</td>
+                    <td>${log.event}</td>
+                    <td>${log.origin}</td>
+                    <td><span class="status-tag seen">${log.status}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
