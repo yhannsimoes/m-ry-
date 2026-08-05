@@ -29,6 +29,7 @@
             --text-dim: #7a9bb8;
             --alert-red: #ff3366;
             --success-green: #00ff9d;
+            --warning-amber: #ffb703;
             --font-title: 'Orbitron', sans-serif;
             --font-body: 'Rajdhani', sans-serif;
         }
@@ -106,6 +107,8 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .brand-container {
@@ -144,6 +147,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         .filial-link-btn {
@@ -180,6 +184,35 @@
             gap: 8px;
         }
 
+        .master-turma-picker {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(15, 25, 45, 0.9);
+            border: 1px solid var(--neon-blue);
+            padding: 4px 10px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .master-turma-picker label {
+            font-family: var(--font-title);
+            font-size: 0.75rem;
+            color: var(--neon-blue);
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .master-turma-picker select {
+            width: auto;
+            padding: 4px 8px;
+            font-size: 0.85rem;
+            background: rgba(5, 8, 17, 0.9);
+            color: #fff;
+            border: 1px solid var(--border-chrome);
+            border-radius: 4px;
+        }
+
         .main-container {
             flex: 1;
             padding: 30px;
@@ -208,6 +241,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .form-group {
@@ -262,21 +297,42 @@
             box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        .btn-eye {
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            background: rgba(0, 240, 255, 0.1);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            cursor: pointer;
-            transition: all 0.3s ease;
+        /* Eye Audit Component */
+        .eye-audit-container {
+            display: inline-flex;
+            gap: 6px;
+            align-items: center;
+            background: rgba(5, 8, 17, 0.6);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(74, 111, 165, 0.3);
         }
 
-        .btn-eye.seen {
-            background: rgba(0, 255, 157, 0.2);
+        .eye-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: var(--font-title);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--text-dim);
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .eye-btn.verified {
+            background: rgba(0, 255, 157, 0.15);
             border-color: var(--success-green);
             color: var(--success-green);
+            box-shadow: 0 0 8px rgba(0, 255, 157, 0.3);
+        }
+
+        .eye-btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .nav-tabs {
@@ -332,7 +388,7 @@
         .chat-container {
             display: flex;
             flex-direction: column;
-            height: 450px;
+            height: 480px;
             border: 1px solid var(--border-chrome);
             border-radius: 8px;
             background: rgba(5, 8, 17, 0.9);
@@ -356,7 +412,15 @@
 
         .chat-ticket.resolved {
             border-color: var(--success-green);
-            opacity: 0.7;
+            opacity: 0.85;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(10, 16, 30, 0.95);
+            border-top: 1px solid var(--border-chrome);
         }
 
         .status-tag {
@@ -402,6 +466,34 @@
             padding: 20px;
             margin-bottom: 25px;
         }
+
+        .attachment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .attachment-badge:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .coming-soon-box {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(15, 25, 45, 0.4);
+            border: 1px dashed var(--neon-blue);
+            border-radius: 12px;
+        }
     </style>
 </head>
 <body>
@@ -425,20 +517,32 @@
         </div>
 
         <div class="header-actions">
+            <!-- Master Turma Dynamic Selector Header -->
+            <div id="masterHeaderTurmaPicker" class="master-turma-picker" style="display: none;">
+                <label><i class="fa-solid fa-filter"></i> TURMA MASTER:</label>
+                <select id="masterGlobalTurmaSelect" onchange="changeMasterTurma(this.value)">
+                    <option value="3A">3º Ano A (3A)</option>
+                    <option value="3B">3º Ano B (3B)</option>
+                    <option value="3C">3º Ano C (3C)</option>
+                    <option value="3D">3º Ano D (3D)</option>
+                    <option value="3E">3º Ano E (3E)</option>
+                </select>
+            </div>
+
             <a href="https://yhannsimoes.github.io/node/" target="_blank" class="filial-link-btn">
                 <i class="fa-solid fa-network-wired"></i> Acessar Filial NODE
             </a>
 
             <div id="userInfo" class="user-badge" style="display: none;">
                 <i class="fa-solid fa-shield-halved"></i> <span id="userRoleDisplay">DESCONECTADO</span>
-                <button onclick="logout()" class="btn-eye" style="margin-left: 8px; padding: 4px 8px;" title="Encerrar Sessão"><i class="fa-solid fa-power-off"></i></button>
+                <button onclick="logout()" class="eye-btn" style="margin-left: 8px;" title="Encerrar Sessão"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </div>
     </header>
 
     <div class="main-container">
 
-        <!-- LOGIN -->
+        <!-- LOGIN SECTION -->
         <div id="loginSection" class="card view-section active" style="max-width: 450px; margin: 40px auto;">
             <div class="card-header">
                 <span><i class="fa-solid fa-user-shield"></i> Login Matriz m@ry</span>
@@ -446,7 +550,7 @@
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label>Perfil de Acesso</label>
-                    <select id="roleSelect">
+                    <select id="roleSelect" onchange="toggleLoginTurmaGroup()">
                         <option value="master">Master (Professor)</option>
                         <option value="firewall">Firewall (Orientador / Segurança)</option>
                         <option value="cluster">Cluster (Monitor)</option>
@@ -455,7 +559,7 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="loginTurmaGroup" style="display: none;">
                     <label>Turma</label>
                     <select id="turmaSelect">
                         <option value="3A">Terceiro Ano A (3A)</option>
@@ -486,8 +590,8 @@
                 </div>
 
                 <div class="nav-tabs">
-                    <button class="tab-btn active" onclick="switchTab('fwAnswersTab', event, 'fw-tab')"><i class="fa-solid fa-list-check"></i> Respostas (Olhinho)</button>
-                    <button class="tab-btn" onclick="switchTab('fwNodesTab', event, 'fw-tab')"><i class="fa-solid fa-cubes"></i> Nodes</button>
+                    <button class="tab-btn active" onclick="switchTab('fwAnswersTab', event, 'fw-tab')"><i class="fa-solid fa-list-check"></i> Respostas (Auditoria Olhinho)</button>
+                    <button class="tab-btn" onclick="switchTab('fwNodesTab', event, 'fw-tab')"><i class="fa-solid fa-cubes"></i> Nodes Filial</button>
                     <button class="tab-btn" onclick="switchTab('fwSupportTab', event, 'fw-tab')"><i class="fa-solid fa-headset"></i> Suporte</button>
                     <button class="tab-btn" onclick="switchTab('fwLogsTab', event, 'fw-tab')"><i class="fa-solid fa-terminal"></i> Logs</button>
                 </div>
@@ -501,17 +605,16 @@
                                 <th>Afinidade</th>
                                 <th>Habilidades</th>
                                 <th>Disponibilidade</th>
-                                <th>Status</th>
-                                <th>Sinalizar</th>
+                                <th>Validação Olhinho (Master / Cluster / Firewall)</th>
                             </tr>
                         </thead>
                         <tbody id="answersTableBody"></tbody>
                     </table>
                 </div>
 
-                <!-- Nodes -->
+                <!-- Nodes Filial -->
                 <div id="fwNodesTab" class="fw-tab-content" style="display: none;">
-                    <div id="nodesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;"></div>
+                    <div id="nodesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;"></div>
                 </div>
 
                 <!-- Suporte Firewall -->
@@ -529,6 +632,7 @@
                                 <th>Timestamp</th>
                                 <th>Evento</th>
                                 <th>Origem</th>
+                                <th>Auditoria Olhinho</th>
                             </tr>
                         </thead>
                         <tbody id="logsTableBody"></tbody>
@@ -542,9 +646,12 @@
             <div class="card">
                 <div class="card-header">
                     <span id="matrixDashTitle"><i class="fa-solid fa-sitemap"></i> Matriz m@ry</span>
-                    <a href="https://yhannsimoes.github.io/node/" target="_blank" class="filial-link-btn">
-                        <i class="fa-solid fa-right-to-bracket"></i> Ir para Filial NODE
-                    </a>
+                    
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <a href="https://yhannsimoes.github.io/node/" target="_blank" class="filial-link-btn">
+                            <i class="fa-solid fa-right-to-bracket"></i> Ir para Filial NODE
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Navegação dos 6 Módulos Centralizados -->
@@ -561,7 +668,7 @@
                 <div id="modProtocols" class="matrix-tab-content">
                     <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Protocolos de Operação Pedagógica</h3>
 
-                    <!-- Painel de Inserção (Exclusivo Master / Firewall) -->
+                    <!-- Painel de Inserção (Master / Firewall) -->
                     <div id="protocolAdminPanel" class="creation-panel" style="display: none;">
                         <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-plus-circle"></i> Cadastrar Novo Protocolo</h4>
                         <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
@@ -572,7 +679,7 @@
                             <textarea id="protoDesc" rows="2" placeholder="Descrição detalhada das diretrizes..."></textarea>
                         </div>
                         <div style="display: flex; gap: 10px;">
-                            <input type="url" id="protoLink" placeholder="Link do Anexo/Documento (Google Drive, PDF, etc.)">
+                            <input type="url" id="protoLink" placeholder="URL do Anexo/Documento (Google Drive, PDF, DOC, Imagem, ZIP...)">
                             <button class="btn" onclick="publishProtocol()"><i class="fa-solid fa-upload"></i> Publicar Protocolo</button>
                         </div>
                     </div>
@@ -602,7 +709,7 @@
                             <textarea id="taskDesc" rows="2" placeholder="Instruções detalhadas do entregável..."></textarea>
                         </div>
                         <div style="display: flex; gap: 10px;">
-                            <input type="url" id="taskLink" placeholder="Link de Apoio / Modelo (Google Drive, PDF, etc.)">
+                            <input type="url" id="taskLink" placeholder="Link de Apoio / Anexo (Drive, PDF, DOC, Planilha, etc.)">
                             <button class="btn" onclick="publishTask()"><i class="fa-solid fa-check-circle"></i> Publicar Tarefa</button>
                         </div>
                     </div>
@@ -619,6 +726,7 @@
                                 <th>Horário</th>
                                 <th>Ação / Evento</th>
                                 <th>Origem</th>
+                                <th>Auditoria Olhinho</th>
                             </tr>
                         </thead>
                         <tbody id="matrixLogsBody"></tbody>
@@ -627,7 +735,10 @@
 
                 <!-- 4. REPOSITORY (REGISTRO DAS DUAS OBRAS) -->
                 <div id="modRepository" class="matrix-tab-content" style="display: none;">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Registro Central das Obras</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="color: var(--neon-blue); margin: 0;">Registro Central das Obras</h3>
+                        <div id="repoEyeAuditContainer" class="eye-audit-container"></div>
+                    </div>
 
                     <!-- Painel de Edição Master -->
                     <div id="repoAdminPanel" class="creation-panel" style="display: none;">
@@ -639,7 +750,7 @@
                                 <input type="text" id="editObra1Title" placeholder="Título da Obra 01" style="margin-bottom: 8px;">
                                 <textarea id="editObra1Desc" rows="2" placeholder="Sinopse / Diretriz Central" style="margin-bottom: 8px;"></textarea>
                                 <input type="text" id="editObra1Eixos" placeholder="Eixos Mapeados" style="margin-bottom: 8px;">
-                                <input type="url" id="editObra1Link" placeholder="Link do Material/Texto">
+                                <input type="url" id="editObra1Link" placeholder="Link do Material (PDF, Drive, Livro)">
                             </div>
                             <!-- Edit Obra 2 -->
                             <div>
@@ -647,7 +758,7 @@
                                 <input type="text" id="editObra2Title" placeholder="Título da Obra 02" style="margin-bottom: 8px;">
                                 <textarea id="editObra2Desc" rows="2" placeholder="Sinopse / Diretriz Central" style="margin-bottom: 8px;"></textarea>
                                 <input type="text" id="editObra2Eixos" placeholder="Eixos Mapeados" style="margin-bottom: 8px;">
-                                <input type="url" id="editObra2Link" placeholder="Link do Material/Texto">
+                                <input type="url" id="editObra2Link" placeholder="Link do Material (PDF, Drive, Livro)">
                             </div>
                         </div>
                         <button class="btn" style="width: 100%; margin-top: 15px;" onclick="saveRepositoryObras()"><i class="fa-solid fa-save"></i> Salvar Obras no Repositório</button>
@@ -662,7 +773,7 @@
                             <div style="font-size: 0.85rem; color: var(--chrome-silver); margin-bottom: 15px;">
                                 <strong>Eixos Relacionados:</strong> <span id="obra1EixosDisplay">-</span>
                             </div>
-                            <a id="obra1LinkDisplay" href="#" target="_blank" class="btn" style="width: 100%;"><i class="fa-solid fa-book-open"></i> Acessar Material da Obra 01</a>
+                            <a id="obra1LinkDisplay" href="#" target="_blank" class="attachment-badge" style="width: 100%; justify-content: center;"><i class="fa-solid fa-book-open"></i> Acessar Material da Obra 01</a>
                         </div>
 
                         <div class="resource-card" style="border-top: 3px solid var(--neon-blue);">
@@ -672,14 +783,14 @@
                             <div style="font-size: 0.85rem; color: var(--chrome-silver); margin-bottom: 15px;">
                                 <strong>Eixos Relacionados:</strong> <span id="obra2EixosDisplay">-</span>
                             </div>
-                            <a id="obra2LinkDisplay" href="#" target="_blank" class="btn" style="width: 100%;"><i class="fa-solid fa-book-open"></i> Acessar Material da Obra 02</a>
+                            <a id="obra2LinkDisplay" href="#" target="_blank" class="attachment-badge" style="width: 100%; justify-content: center;"><i class="fa-solid fa-book-open"></i> Acessar Material da Obra 02</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- 5. SUPPORT (RECEPÇÃO MASTER OU ENVIO DEMAIS) -->
+                <!-- 5. SUPPORT (CANAL PRINCIPAL DE COMUNICAÇÃO) -->
                 <div id="modSupport" class="matrix-tab-content" style="display: none;">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Central de Suporte & Comunicação</h3>
+                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Central de Suporte & Comunicação Direta</h3>
 
                     <!-- Visão Master: Mesa de Recepção de Chamados -->
                     <div id="masterSupportInbox" style="display: none;">
@@ -699,24 +810,16 @@
                     </div>
                 </div>
 
-                <!-- 6. FEEDBACK -->
+                <!-- 6. FEEDBACK (EM BREVE) -->
                 <div id="modFeedback" class="matrix-tab-content" style="display: none;">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Devolutivas & Avaliação Pedagógica</h3>
-                    
-                    <!-- Form Envio Devolutiva Master -->
-                    <div id="feedbackAdminPanel" class="creation-panel" style="display: none;">
-                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-comment-dots"></i> Publicar Devolutiva</h4>
-                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
-                            <input type="text" id="fbTitle" placeholder="Título da Devolutiva">
-                            <input type="text" id="fbTarget" placeholder="Destinatário (ex: Node 01, Aluno X)">
-                        </div>
-                        <div class="form-group">
-                            <textarea id="fbContent" rows="3" placeholder="Insira o parecer ou devolutiva pedagógica..."></textarea>
-                        </div>
-                        <button class="btn" onclick="publishFeedback()"><i class="fa-solid fa-share"></i> Enviar Devolutiva</button>
+                    <div class="coming-soon-box">
+                        <i class="fa-solid fa-hourglass-half" style="font-size: 3.5rem; color: var(--neon-blue); margin-bottom: 15px;"></i>
+                        <h3 style="color: #fff; font-family: var(--font-title); font-size: 1.6rem; margin-bottom: 10px;">Módulo de Feedback em Desenvolvimento</h3>
+                        <p style="color: var(--text-dim); max-width: 550px; margin: 0 auto 20px auto; line-height: 1.5; font-size: 1.05rem;">
+                            As devolutivas pedagógicas e pareceres estruturados estarão disponíveis <strong>em breve</strong> neste espaço. Para todas as comunicações ativas, utilize o canal de <strong>Support</strong>.
+                        </p>
+                        <span class="status-tag seen" style="font-size: 0.85rem; padding: 6px 16px;"><i class="fa-solid fa-code"></i> EM BREVE // MATRIZ m@ry</span>
                     </div>
-
-                    <div id="feedbackContainer"></div>
                 </div>
 
             </div>
@@ -725,7 +828,7 @@
     </div>
 
     <script>
-        // CONFIGURAÇÃO DO FIREBASE
+        // CONFIGURAÇÃO DO FIREBASE (CONECTADO À BASE DA FILIAL NODE)
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForMaryPlatformNodeSecular",
             authDomain: "mary-node-secular.firebaseapp.com",
@@ -739,7 +842,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let currentUser = { role: null, turma: null, authenticated: false };
+        let currentUser = { role: null, turma: '3A', authenticated: false };
 
         const FIREWALL_PASSWORDS = {
             "3A": "orientador3a",
@@ -769,14 +872,29 @@
             if (e.key === 'Escape') finishIntro();
         });
 
+        // Alterna campo de turma no formulário de login baseado no perfil selecionado
+        function toggleLoginTurmaGroup() {
+            const role = document.getElementById('roleSelect').value;
+            const turmaGroup = document.getElementById('loginTurmaGroup');
+            if (role === 'master') {
+                turmaGroup.style.display = 'none';
+            } else {
+                turmaGroup.style.display = 'block';
+            }
+        }
+        toggleLoginTurmaGroup();
+
         // Authentication Handler
         function handleLogin(e) {
             e.preventDefault();
             const role = document.getElementById('roleSelect').value;
-            const turma = document.getElementById('turmaSelect').value;
             const pass = document.getElementById('passInput').value.trim();
+            let turma = document.getElementById('turmaSelect').value;
 
-            if (role === 'firewall') {
+            if (role === 'master') {
+                turma = document.getElementById('masterGlobalTurmaSelect').value || '3A';
+                initSession(role, turma);
+            } else if (role === 'firewall') {
                 if (pass === FIREWALL_PASSWORDS[turma]) {
                     initSession(role, turma);
                 } else {
@@ -792,7 +910,15 @@
 
             document.getElementById('loginSection').classList.remove('active');
             document.getElementById('userInfo').style.display = 'flex';
-            document.getElementById('userRoleDisplay').innerText = `${role.toUpperCase()} [${turma}]`;
+            
+            if (role === 'master') {
+                document.getElementById('masterHeaderTurmaPicker').style.display = 'flex';
+                document.getElementById('masterGlobalTurmaSelect').value = turma;
+                document.getElementById('userRoleDisplay').innerText = `MASTER [DINÂMICO]`;
+            } else {
+                document.getElementById('masterHeaderTurmaPicker').style.display = 'none';
+                document.getElementById('userRoleDisplay').innerText = `${role.toUpperCase()} [${turma}]`;
+            }
 
             logSystemEvent(`Login efetuado: ${role.toUpperCase()}`, `Turma ${turma}`);
 
@@ -802,12 +928,42 @@
                 listenFirewallData(turma);
             } else {
                 document.getElementById('matrixSection').classList.add('active');
-                document.getElementById('matrixDashTitle').innerHTML = `<i class="fa-solid fa-sitemap"></i> Painel Matriz ${role.toUpperCase()} // Turma ${turma}`;
-                
-                // Configurar visibilidade por perfil
+                updateMatrixTitle();
                 setupRolePermissions(role);
                 listenMatrixData(turma);
             }
+        }
+
+        function changeMasterTurma(newTurma) {
+            if (currentUser.role !== 'master') return;
+            
+            // Remove listeners antigos
+            detachCurrentListeners(currentUser.turma);
+            
+            currentUser.turma = newTurma;
+            logSystemEvent(`Master alterou visão para turma ${newTurma}`, `Master Global`);
+            
+            updateMatrixTitle();
+            listenMatrixData(newTurma);
+            if (document.getElementById('firewallSection').classList.contains('active')) {
+                listenFirewallData(newTurma);
+            }
+        }
+
+        function updateMatrixTitle() {
+            document.getElementById('matrixDashTitle').innerHTML = 
+                `<i class="fa-solid fa-sitemap"></i> Painel Matriz ${currentUser.role.toUpperCase()} // Turma ${currentUser.turma}`;
+        }
+
+        function detachCurrentListeners(turma) {
+            if (!turma) return;
+            database.ref(`node_answers/${turma}`).off();
+            database.ref(`node_published/${turma}`).off();
+            database.ref(`support_messages/${turma}`).off();
+            database.ref(`system_logs/${turma}`).off();
+            database.ref(`matrix_protocols/${turma}`).off();
+            database.ref(`matrix_tasks/${turma}`).off();
+            database.ref(`matrix_repository/${turma}`).off();
         }
 
         function setupRolePermissions(role) {
@@ -817,6 +973,7 @@
             document.getElementById('taskAdminPanel').style.display = (role === 'master' || role === 'cpu') ? 'block' : 'none';
             // Repository admin panel
             document.getElementById('repoAdminPanel').style.display = (role === 'master') ? 'block' : 'none';
+            
             // Support view layout
             if (role === 'master') {
                 document.getElementById('masterSupportInbox').style.display = 'block';
@@ -825,15 +982,15 @@
                 document.getElementById('masterSupportInbox').style.display = 'none';
                 document.getElementById('clientSupportPanel').style.display = 'block';
             }
-            // Feedback admin panel
-            document.getElementById('feedbackAdminPanel').style.display = (role === 'master') ? 'block' : 'none';
         }
 
         function logout() {
-            currentUser = { role: null, turma: null, authenticated: false };
+            detachCurrentListeners(currentUser.turma);
+            currentUser = { role: null, turma: '3A', authenticated: false };
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('loginSection').classList.add('active');
             document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('masterHeaderTurmaPicker').style.display = 'none';
             document.getElementById('passInput').value = '';
         }
 
@@ -846,6 +1003,75 @@
             
             document.getElementById(targetId).style.display = 'block';
             evt.currentTarget.classList.add('active');
+        }
+
+        /* --- AUDITORIA MULTIPERFIL "OLHINHO" (MASTER, CLUSTER, FIREWALL) --- */
+        function toggleEyeAudit(pathNode, itemId) {
+            const allowedRoles = ['master', 'cluster', 'firewall'];
+            if (!allowedRoles.includes(currentUser.role)) {
+                alert('Apenas Master, Cluster e Firewall podem alterar verificação.');
+                return;
+            }
+
+            const currentRole = currentUser.role;
+            const ref = database.ref(`${pathNode}/${currentUser.turma}/${itemId}/verifications/${currentRole}`);
+            
+            ref.once('value', snapshot => {
+                if (snapshot.exists()) {
+                    ref.remove();
+                } else {
+                    ref.set({
+                        role: currentRole.toUpperCase(),
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                logSystemEvent(`Auditoria Olhinho alterada por ${currentRole.toUpperCase()} em [${itemId}]`, `Turma ${currentUser.turma}`);
+            });
+        }
+
+        function renderEyeAuditGroup(pathNode, itemId, verifications) {
+            const roles = ['master', 'cluster', 'firewall'];
+            let html = `<div class="eye-audit-container">`;
+
+            roles.forEach(role => {
+                const isVerified = verifications && verifications[role];
+                const canClick = currentUser.role === role;
+                const statusClass = isVerified ? 'verified' : '';
+                const disabledClass = canClick ? '' : 'disabled';
+                const clickAction = canClick ? `onclick="toggleEyeAudit('${pathNode}', '${itemId}')"` : '';
+                const titleText = isVerified 
+                    ? `Verificado por ${role.toUpperCase()} em ${new Date(isVerified.timestamp).toLocaleString('pt-BR')}`
+                    : `Pendente de validação por ${role.toUpperCase()}`;
+
+                html += `
+                    <button class="eye-btn ${statusClass} ${disabledClass}" ${clickAction} title="${titleText}">
+                        <i class="fa-solid ${isVerified ? 'fa-eye' : 'fa-eye-slash'}"></i> ${role.toUpperCase()}
+                    </button>
+                `;
+            });
+
+            html += `</div>`;
+            return html;
+        }
+
+        /* --- HELPER FORMATADOR DE ARQUIVOS/ANEXOS MULTIFORMATO --- */
+        function renderAttachmentButton(url, label = 'Acessar Anexo') {
+            if (!url) return '';
+            const lower = url.toLowerCase();
+            let iconClass = 'fa-file-lines';
+
+            if (lower.includes('drive.google.com')) iconClass = 'fa-brands fa-google-drive';
+            else if (lower.endsWith('.pdf')) iconClass = 'fa-file-pdf';
+            else if (lower.endsWith('.doc') || lower.endsWith('.docx')) iconClass = 'fa-file-word';
+            else if (lower.endsWith('.xls') || lower.endsWith('.xlsx')) iconClass = 'fa-file-excel';
+            else if (lower.endsWith('.png') || lower.endsWith('.jpg') || lower.endsWith('.jpeg')) iconClass = 'fa-file-image';
+            else if (lower.endsWith('.zip') || lower.endsWith('.rar')) iconClass = 'fa-file-zipper';
+
+            return `
+                <a href="${url}" target="_blank" class="attachment-badge">
+                    <i class="fa-solid ${iconClass}"></i> ${label}
+                </a>
+            `;
         }
 
         /* --- FIREWALL LOGIC --- */
@@ -862,13 +1088,12 @@
             const keys = Object.keys(answers);
 
             if (keys.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-dim);">Nenhuma resposta registrada.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-dim);">Nenhuma resposta registrada nesta turma.</td></tr>`;
                 return;
             }
 
             keys.forEach(id => {
                 const item = answers[id];
-                const isSeen = item.viewedByFirewall === true;
                 const tr = document.createElement('tr');
 
                 tr.innerHTML = `
@@ -876,37 +1101,20 @@
                     <td>${item.eixoAfinidade || 'Geral'}</td>
                     <td>${item.eixoHabilidades || 'Padrão'}</td>
                     <td>${item.eixoDisponibilidade || 'Integral'}</td>
-                    <td>
-                        <span class="status-tag ${isSeen ? 'seen' : 'unseen'}">
-                            ${isSeen ? '<i class="fa-solid fa-check-double"></i> Visto' : '<i class="fa-solid fa-clock"></i> Pendente'}
-                        </span>
-                    </td>
-                    <td>
-                        <button class="btn-eye ${isSeen ? 'seen' : ''}" onclick="toggleViewedStatus('${id}', ${isSeen})">
-                            <i class="fa-solid ${isSeen ? 'fa-eye-slash' : 'fa-eye'}"></i> ${isSeen ? 'Sinalizado' : 'Marcar Visto'}
-                        </button>
-                    </td>
+                    <td>${renderEyeAuditGroup('node_answers', id, item.verifications)}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        function toggleViewedStatus(answerId, currentStatus) {
-            const turma = currentUser.turma;
-            database.ref(`node_answers/${turma}/${answerId}`).update({
-                viewedByFirewall: !currentStatus,
-                viewedAt: new Date().toISOString()
-            });
-            logSystemEvent(`Firewall alterou validação [${answerId}]`, `Turma ${turma}`);
-        }
-
+        /* INTEGRAÇÃO EM TEMPO REAL COM A FILIAL NODE */
         function renderNodesCards(nodes) {
             const container = document.getElementById('nodesContainer');
             container.innerHTML = '';
             const keys = Object.keys(nodes);
 
             if (keys.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-dim);">Nenhum Node alocado.</p>`;
+                container.innerHTML = `<p style="color: var(--text-dim);">Nenhum Node ativado na Filial para esta turma.</p>`;
                 return;
             }
 
@@ -915,10 +1123,23 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.style.margin = '0';
+
+                let membersHtml = '';
+                if (node.members && Array.isArray(node.members)) {
+                    membersHtml = node.members.map(m => `<li style="margin-left: 15px; color: var(--text-main); font-size: 0.85rem;">${m.name || m} (${m.role || 'Integrante'})</li>`).join('');
+                } else {
+                    membersHtml = '<li style="margin-left: 15px; color: var(--text-dim); font-size: 0.85rem;">Nenhum integrante sincronizado</li>';
+                }
+
                 card.innerHTML = `
-                    <div style="font-family: var(--font-title); color: var(--neon-blue); margin-bottom: 8px;"><i class="fa-solid fa-cube"></i> Node #${key}</div>
-                    <div style="font-size: 0.9rem; color: var(--chrome-silver);"><strong>CPU Líder:</strong> ${node.cpuLeader || 'Não atribuído'}</div>
-                    <div style="font-size: 0.9rem; color: var(--chrome-silver);"><strong>Integrantes:</strong> ${node.members ? node.members.length : 0}</div>
+                    <div style="font-family: var(--font-title); color: var(--neon-blue); margin-bottom: 8px; display:flex; justify-shadow:space-between; align-items:center;">
+                        <span><i class="fa-solid fa-cube"></i> Node #${key} - ${node.title || 'Sem Título'}</span>
+                        <span class="status-tag seen">${node.status || 'Ativo'}</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--chrome-silver); margin-bottom: 6px;"><strong>CPU Líder:</strong> ${node.cpuLeader || 'Não atribuído'}</div>
+                    <div style="font-size: 0.9rem; color: var(--chrome-silver); margin-bottom: 6px;"><strong>Integrantes & Perfis:</strong></div>
+                    <ul style="margin-bottom: 12px;">${membersHtml}</ul>
+                    <a href="https://yhannsimoes.github.io/node/" target="_blank" style="font-size: 0.8rem; color: var(--neon-blue); text-decoration: none;"><i class="fa-solid fa-external-link"></i> Inspecionar na Filial NODE</a>
                 `;
                 container.appendChild(card);
             });
@@ -931,7 +1152,6 @@
             database.ref(`system_logs/${turma}`).on('value', (snapshot) => { renderLogs(snapshot.val() || {}, 'matrixLogsBody'); });
             database.ref(`matrix_repository/${turma}`).on('value', (snapshot) => { renderRepository(snapshot.val() || {}); });
             database.ref(`support_messages/${turma}`).on('value', (snapshot) => { renderSupportData(snapshot.val() || {}); });
-            database.ref(`matrix_feedback/${turma}`).on('value', (snapshot) => { renderFeedbacks(snapshot.val() || {}); });
         }
 
         /* 1. PROTOCOLS */
@@ -983,9 +1203,9 @@
                         <span class="status-tag seen">${item.category}</span>
                     </div>
                     <p style="color: var(--text-main); line-height: 1.4; margin-bottom: 12px;">${item.desc}</p>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px;">
                         <span style="font-size: 0.8rem; color: var(--text-dim);">Autor: ${item.author} | ${item.timestamp}</span>
-                        ${item.link ? `<a href="${item.link}" target="_blank" class="btn" style="padding: 4px 12px; font-size: 0.8rem;"><i class="fa-solid fa-paperclip"></i> Abrir Anexo / Documento</a>` : ''}
+                        ${renderAttachmentButton(item.link, 'Abrir Anexo do Protocolo')}
                     </div>
                 `;
                 container.appendChild(card);
@@ -1041,22 +1261,25 @@
                 const deadlineFormatted = task.deadline !== 'Sem prazo fixado' ? new Date(task.deadline).toLocaleString('pt-BR') : 'Sem prazo limite';
 
                 card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
                         <h4 style="color: #fff;"><i class="fa-solid fa-list-check"></i> ${task.title}</h4>
-                        <span class="status-tag unseen">Destinado a: ${task.target}</span>
+                        <div style="display:flex; align-items:center; gap: 10px;">
+                            <span class="status-tag unseen">Destinado a: ${task.target}</span>
+                            ${renderEyeAuditGroup('matrix_tasks', taskId, task.verifications)}
+                        </div>
                     </div>
                     <p style="color: var(--chrome-silver); margin-bottom: 12px; line-height: 1.4;">${task.desc}</p>
                     
-                    <div style="background: rgba(5,8,17,0.6); padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="background: rgba(5,8,17,0.6); padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                         <span><i class="fa-solid fa-hourglass-half" style="color: var(--neon-blue);"></i> <strong>Prazo:</strong> ${deadlineFormatted}</span>
-                        ${task.link ? `<a href="${task.link}" target="_blank" style="color: var(--neon-blue);"><i class="fa-solid fa-link"></i> Arquivo de Apoio</a>` : ''}
+                        ${renderAttachmentButton(task.link, 'Material / Anexo de Apoio')}
                     </div>
 
                     ${currentUser.role === 'executor' ? `
                         <div style="margin-top: 10px; border-top: 1px dashed var(--border-chrome); padding-top: 10px;">
-                            <label style="font-size: 0.85rem;">Enviar Solução (URL do arquivo/trabalho):</label>
+                            <label style="font-size: 0.85rem;">Enviar Solução / Entregável (Link de qualquer formato):</label>
                             <div style="display: flex; gap: 8px; margin-top: 4px;">
-                                <input type="url" id="subInput_${taskId}" placeholder="https://drive.google.com/..." style="padding: 6px;">
+                                <input type="url" id="subInput_${taskId}" placeholder="Cole a URL do seu trabalho (Drive, PDF, GitHub...)" style="padding: 6px;">
                                 <button class="btn" style="padding: 6px 14px;" onclick="submitTaskWork('${taskId}')"><i class="fa-solid fa-paper-plane"></i> Entregar</button>
                             </div>
                         </div>
@@ -1101,7 +1324,7 @@
                 link: document.getElementById('editObra2Link').value.trim() || '#'
             };
 
-            database.ref(`matrix_repository/${currentUser.turma}`).set({
+            database.ref(`matrix_repository/${currentUser.turma}/data`).set({
                 obra1: o1,
                 obra2: o2,
                 updatedBy: currentUser.role.toUpperCase(),
@@ -1112,7 +1335,13 @@
             logSystemEvent(`Repositório de Obras atualizado pelo Master`, `Turma ${currentUser.turma}`);
         }
 
-        function renderRepository(repoData) {
+        function renderRepository(repoSnapshot) {
+            const repoData = repoSnapshot.data || {};
+            const verifications = repoSnapshot.verifications || {};
+
+            // Renderizar Auditoria do Olhinho no cabeçalho do Repositório
+            document.getElementById('repoEyeAuditContainer').innerHTML = renderEyeAuditGroup('matrix_repository', 'data', verifications);
+
             const o1 = repoData.obra1 || {
                 title: 'Obra Central 01',
                 desc: 'Nenhum registro cadastrado para a Obra 01 nesta turma.',
@@ -1137,7 +1366,6 @@
             document.getElementById('obra2EixosDisplay').innerText = o2.eixos;
             document.getElementById('obra2LinkDisplay').href = o2.link;
 
-            // Preencher form do admin Master caso esteja vazio
             if (currentUser.role === 'master' && !document.getElementById('editObra1Title').value) {
                 document.getElementById('editObra1Title').value = o1.title;
                 document.getElementById('editObra1Desc').value = o1.desc;
@@ -1151,7 +1379,7 @@
             }
         }
 
-        /* 4. SUPPORT (RECEPÇÃO MASTER E ENVIO DEMAIS) */
+        /* 4. SUPPORT (CANAL PRINCIPAL DE COMUNICAÇÃO) */
         function sendClientSupport() {
             const input = document.getElementById('matrixSupportInput');
             const text = input.value.trim();
@@ -1184,7 +1412,6 @@
         function renderSupportData(messages) {
             const keys = Object.keys(messages);
 
-            // Se for MASTER: Renderizar a caixa de recepção de chamados
             if (currentUser.role === 'master') {
                 const container = document.getElementById('masterTicketsContainer');
                 container.innerHTML = '';
@@ -1221,7 +1448,6 @@
                     container.appendChild(card);
                 });
             } else {
-                // Se for DEMAIS PERFIS: Renderizar o chat tradicional
                 renderSupportMessages(messages, 'matrixSupportMessages');
             }
         }
@@ -1250,59 +1476,7 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        /* 5. FEEDBACK */
-        function publishFeedback() {
-            const title = document.getElementById('fbTitle').value.trim();
-            const target = document.getElementById('fbTarget').value.trim();
-            const content = document.getElementById('fbContent').value.trim();
-
-            if (!title || !content || !currentUser.turma) {
-                alert('Preencha o Título e o Conteúdo da Devolutiva.');
-                return;
-            }
-
-            database.ref(`matrix_feedback/${currentUser.turma}`).push({
-                title: title,
-                target: target || 'Geral',
-                content: content,
-                author: currentUser.role.toUpperCase(),
-                timestamp: new Date().toLocaleDateString('pt-BR')
-            });
-
-            document.getElementById('fbTitle').value = '';
-            document.getElementById('fbTarget').value = '';
-            document.getElementById('fbContent').value = '';
-
-            logSystemEvent(`Devolutiva publicada: "${title}"`, `Turma ${currentUser.turma}`);
-        }
-
-        function renderFeedbacks(feedbacks) {
-            const container = document.getElementById('feedbackContainer');
-            container.innerHTML = '';
-            const keys = Object.keys(feedbacks);
-
-            if (keys.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-dim);">Nenhuma devolutiva registrada nesta turma.</p>`;
-                return;
-            }
-
-            keys.reverse().forEach(key => {
-                const fb = feedbacks[key];
-                const div = document.createElement('div');
-                div.className = 'resource-card';
-                div.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
-                        <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-comment-dots"></i> ${fb.title}</h4>
-                        <span class="status-tag seen">Alvo: ${fb.target}</span>
-                    </div>
-                    <p style="color: var(--chrome-silver); margin-bottom: 10px; line-height: 1.4;">${fb.content}</p>
-                    <span style="font-size: 0.75rem; color: var(--text-dim);">Autor: ${fb.author} | Data: ${fb.timestamp}</span>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        /* LOG SYSTEM */
+        /* LOG SYSTEM COM AUDITORIA OLHINHO */
         function logSystemEvent(eventDesc, origin) {
             if (!currentUser.turma) return;
             database.ref(`system_logs/${currentUser.turma}`).push({
@@ -1318,6 +1492,11 @@
             tbody.innerHTML = '';
             const keys = Object.keys(logs).reverse();
 
+            if (keys.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--text-dim);">Nenhum log registrado.</td></tr>`;
+                return;
+            }
+
             keys.forEach(key => {
                 const log = logs[key];
                 const tr = document.createElement('tr');
@@ -1325,6 +1504,7 @@
                     <td style="font-family: monospace; font-size: 0.85rem; color: var(--text-dim);">${log.timestamp}</td>
                     <td>${log.event}</td>
                     <td>${log.origin}</td>
+                    <td>${renderEyeAuditGroup('system_logs', key, log.verifications)}</td>
                 `;
                 tbody.appendChild(tr);
             });
