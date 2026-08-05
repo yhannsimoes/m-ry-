@@ -1,4 +1,4 @@
-<!DOCTYPE1 html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -33,7 +33,7 @@
       overflow-x: hidden;
     }
 
-    /* VÍDEO DE ABERTURA AJUSTADO */
+    /* OVERLAY DO VÍDEO DE ABERTURA */
     #intro-overlay {
       position: fixed;
       top: 0;
@@ -51,7 +51,7 @@
     .intro-wrapper {
       position: relative;
       width: 90%;
-      max-width: 850px;
+      max-width: 800px;
       max-height: 80vh;
       display: flex;
       flex-direction: column;
@@ -61,17 +61,17 @@
 
     .intro-wrapper video {
       width: 100%;
-      max-height: 75vh;
+      max-height: 70vh;
       object-fit: contain;
       border-radius: 12px;
-      box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.2);
       border: 1px solid rgba(0, 240, 255, 0.3);
     }
 
     .btn-skip-intro {
       margin-top: 15px;
       align-self: flex-end;
-      background: rgba(10, 19, 41, 0.8);
+      background: rgba(10, 19, 41, 0.85);
       border: 1px solid var(--primary-cyan);
       color: var(--primary-cyan);
       padding: 8px 18px;
@@ -219,7 +219,6 @@
       align-items: center;
     }
 
-    /* FILTROS MASTER */
     .master-controls {
       background: rgba(0, 119, 255, 0.08);
       border: 1px solid var(--primary-blue);
@@ -232,7 +231,6 @@
       align-items: center;
     }
 
-    /* RASTREADOR "OLHINHO" */
     .view-tracker {
       display: inline-flex;
       gap: 8px;
@@ -256,7 +254,6 @@
     .eye-tag.firewall.active { color: #ffaa00; }
     .eye-tag.cluster.active { color: var(--accent-success); }
 
-    /* FORMULÁRIOS E LISTAS */
     .form-group {
       margin-bottom: 15px;
       display: flex;
@@ -310,10 +307,10 @@
 <body>
 
   <!-- OVERLAY DO VÍDEO DE ABERTURA -->
-  <div id-="intro-overlay" id="intro-overlay">
+  <div id="intro-overlay">
     <div class="intro-wrapper">
       <video id="intro-video" autoplay muted playsinline>
-        <source src="intro.mp4" type="video/mp4">
+        <source src="abertura.mp4" type="video/mp4">
         Seu navegador não suporta o vídeo de abertura.
       </video>
       <button class="btn-skip-intro" onclick="fecharIntro()">PULAR INTRO ➔</button>
@@ -332,7 +329,7 @@
 
     <div class="user-profile-bar">
       <label for="user-role-select">Perfil de Acesso:</label>
-      <select id="user-role-select" onchange="alternarPerfil(this.value)">
+      <select id="user-role-select">
         <option value="MASTER">MASTER (Global)</option>
         <option value="FIREWALL">FIREWALL (Orientador)</option>
         <option value="CLUSTER">CLUSTER (Monitor)</option>
@@ -346,7 +343,7 @@
   <div id="master-global-controls" class="master-controls" style="margin: 15px 30px 0 30px;">
     <strong>PAINEL MASTER:</strong>
     <label>Filtrar Visualização da Turma:</label>
-    <select id="master-view-turma" onchange="atualizarFiltrosMaster()">
+    <select id="master-view-turma">
       <option value="TODAS">Todas as Turmas (1 a 5)</option>
       <option value="TURMA_1">Turma 1</option>
       <option value="TURMA_2">Turma 2</option>
@@ -358,17 +355,16 @@
 
   <!-- MENU DE NAVEGAÇÃO -->
   <nav>
-    <button class="nav-btn active" onclick="trocarAba('protocols')">PROTOCOLS</button>
-    <button class="nav-btn" onclick="trocarAba('tasks')">TASKS</button>
-    <button class="nav-btn" onclick="trocarAba('log')">LOG (Diário)</button>
-    <button class="nav-btn" onclick="trocarAba('repository')">REPOSITORY (Obras)</button>
-    <button class="nav-btn" onclick="trocarAba('suporte')">SUPORTE</button>
-    <button class="nav-btn" onclick="trocarAba('feedback')">FEEDBACK (360º)</button>
+    <button class="nav-btn active" onclick="trocarAba(event, 'protocols')">PROTOCOLS</button>
+    <button class="nav-btn" onclick="trocarAba(event, 'tasks')">TASKS</button>
+    <button class="nav-btn" onclick="trocarAba(event, 'log')">LOG (Diário)</button>
+    <button class="nav-btn" onclick="trocarAba(event, 'repository')">REPOSITORY (Obras)</button>
+    <button class="nav-btn" onclick="trocarAba(event, 'suporte')">SUPORTE</button>
+    <button class="nav-btn" onclick="trocarAba(event, 'feedback')">FEEDBACK (360º)</button>
   </nav>
 
   <!-- CONTEÚDO DAS ABAS -->
   <main>
-
     <!-- ABA 1: PROTOCOLS -->
     <section id="sec-protocols" class="panel-section active">
       <div class="card" id="card-create-protocol">
@@ -432,13 +428,13 @@
         <button class="btn-primary">ATRIBUIR TAREFA</button>
       </div>
 
-      <div class="card" onclick="registrarLeitura('task1')">
+      <div class="card">
         <div class="card-title">
           <span>Task #01 - Entrega do Modelo Dimensional</span>
           <div class="view-tracker">
-            <span class="eye-tag master" id="task1-eye-master">👁️ MASTER</span>
-            <span class="eye-tag firewall" id="task1-eye-firewall">👁️ FIREWALL</span>
-            <span class="eye-tag cluster" id="task1-eye-cluster">👁️ CLUSTER</span>
+            <span class="eye-tag master active">👁️ MASTER</span>
+            <span class="eye-tag firewall active">👁️ FIREWALL</span>
+            <span class="eye-tag cluster">👁️ CLUSTER</span>
           </div>
         </div>
         <p style="color: var(--text-muted); margin-bottom: 12px;">Elaboração e revisão das peças do projeto de exposição.</p>
@@ -451,13 +447,13 @@
 
     <!-- ABA 3: LOG (DIÁRIO) -->
     <section id="sec-log" class="panel-section">
-      <div class="card" onclick="registrarLeitura('log1')">
+      <div class="card">
         <div class="card-title">
           <span>Diário Operacional do Node (LOG)</span>
           <div class="view-tracker">
-            <span class="eye-tag master" id="log1-eye-master">👁️ MASTER</span>
-            <span class="eye-tag firewall" id="log1-eye-firewall">👁️ FIREWALL</span>
-            <span class="eye-tag cluster" id="log1-eye-cluster">👁️ CLUSTER</span>
+            <span class="eye-tag master active">👁️ MASTER</span>
+            <span class="eye-tag firewall">👁️ FIREWALL</span>
+            <span class="eye-tag cluster">👁️ CLUSTER</span>
           </div>
         </div>
         <div id="log-editor-area">
@@ -472,20 +468,20 @@
 
     <!-- ABA 4: REPOSITORY -->
     <section id="sec-repository" class="panel-section">
-      <div class="card" onclick="registrarLeitura('repo1')">
+      <div class="card">
         <div class="card-title">
           <span>Repositório de Obras e Produção</span>
           <div class="view-tracker">
-            <span class="eye-tag master" id="repo1-eye-master">👁️ MASTER</span>
-            <span class="eye-tag firewall" id="repo1-eye-firewall">👁️ FIREWALL</span>
-            <span class="eye-tag cluster" id="repo1-eye-cluster">👁️ CLUSTER</span>
+            <span class="eye-tag master active">👁️ MASTER</span>
+            <span class="eye-tag firewall active">👁️ FIREWALL</span>
+            <span class="eye-tag cluster active">👁️ CLUSTER</span>
           </div>
         </div>
         <p style="color: var(--text-muted);">Acervo das obras e registros das plataformas filiais (Nodes).</p>
       </div>
     </section>
 
-    <!-- ABA 5: SUPORTE (COMUNICAÇÃO TEXTUAL ASSÍNCRONA) -->
+    <!-- ABA 5: SUPORTE -->
     <section id="sec-suporte" class="panel-section">
       <div class="card">
         <div class="card-title">Canal Oficial de Suporte e Dúvidas</div>
@@ -518,7 +514,7 @@
       </div>
     </section>
 
-    <!-- ABA 6: FEEDBACK (FORMULÁRIO DE AVALIAÇÃO 360º) -->
+    <!-- ABA 6: FEEDBACK -->
     <section id="sec-feedback" class="panel-section">
       <div id="feedback-locked-container" class="locked-banner">
         <h2>🔒 Módulo de Feedback Bloqueado</h2>
@@ -543,11 +539,60 @@
         <button class="btn-primary">SUBMETER AVALIAÇÃO FINAL</button>
       </div>
     </section>
-
   </main>
 
   <script>
-    // TIMER REGRESSIVO PARA 04/SETEMBRO/2026
+    // 1. FECHAR A INTRO
+    function fecharIntro() {
+      const overlay = document.getElementById("intro-overlay");
+      if (overlay) {
+        overlay.style.display = "none";
+      }
+    }
+
+    // 2. CONTROLE DO VÍDEO 'abertura.mp4'
+    document.addEventListener("DOMContentLoaded", function () {
+      const video = document.getElementById("intro-video");
+
+      if (video) {
+        video.play().catch(function (err) {
+          console.warn("Autoplay bloqueado pelo navegador:", err);
+        });
+
+        // Fecha automaticamente quando o vídeo termina
+        video.addEventListener("ended", fecharIntro);
+
+        // Se o arquivo 'abertura.mp4' não for encontrado, fecha o overlay sem travar
+        video.addEventListener("error", function () {
+          console.warn("Vídeo 'abertura.mp4' não foi encontrado. Fechando overlay...");
+          fecharIntro();
+        });
+      }
+
+      // Inicia o Timer Regressivo
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
+    });
+
+    // 3. TROCA DE ABAS
+    function trocarAba(event, nomeAba) {
+      const secoes = document.querySelectorAll('.panel-section');
+      const botoes = document.querySelectorAll('.nav-btn');
+
+      secoes.forEach(sec => sec.classList.remove('active'));
+      botoes.forEach(btn => btn.classList.remove('active'));
+
+      const secaoAlvo = document.getElementById('sec-' + nomeAba);
+      if (secaoAlvo) {
+        secaoAlvo.classList.add('active');
+      }
+
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+      }
+    }
+
+    // 4. TIMER REGRESSIVO PARA 04/SETEMBRO/2026
     const targetDate = new Date("2026-09-04T00:00:00").getTime();
 
     function updateCountdown() {
@@ -555,7 +600,8 @@
       const distance = targetDate - now;
 
       if (distance < 0) {
-        document.getElementById("countdown-timer").innerText = "MOSTRA CONCLUÍDA";
+        const timerElem = document.getElementById("countdown-timer");
+        if (timerElem) timerElem.innerText = "MOSTRA CONCLUÍDA";
         liberarFeedback();
         return;
       }
@@ -563,34 +609,6 @@
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const seconds = Math.floor((distance % (1Como esta mensagem iniciou um novo histórico, não tenho acesso à pergunta anterior. 
 
-      Para ajustar o vídeo da introdução, centralizá-lo e limitar o tamanho para manter a resolução sem esticar, você deve aplicar **Flexbox** no container da introdução e definir dimensões máximas (`max-width` e `max-height`) para o elemento `<video>`.
-
-Substitua ou adicione o seguinte trecho no seu CSS (no arquivo de estilos do seu projeto):
-
-```css
-/* Container da tela de introdução */
-.intro-container, #intro-screen { /* Adapte para a classe ou ID do seu container */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: #0b132b; /* Cor do fundo azul padrão da plataforma */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-/* O elemento do vídeo */
-.intro-container video, #intro-video { /* Adapte para a classe ou ID do seu video */
-    width: 85%;
-    max-width: 720px;   /* Limita a largura para o vídeo não esticar */
-    max-height: 75vh;   /* Limita a altura proporcional à tela */
-    height: auto;
-    object-fit: contain; /* Garante que o vídeo mantenha as proporções sem cortar */
-    border-radius: 12px; /* Opcional: bordas suaves para um acabamento elegante */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); /* Opcional: destaca o vídeo do fundo */
-}
+Se você puder compartilhar o assunto que estava sendo discutido ou o que precisa resolver, posso te ajudar diretamente.
