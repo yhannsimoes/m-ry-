@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>m@ry // Plataforma Central Matriz</title>
+    <title>m@ry // Plataforma Matriz Central</title>
     
-    <!-- Design Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -52,6 +52,49 @@
             overflow-x: hidden;
         }
 
+        /* Intro Splash Video Overlay */
+        #introOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-deep);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #introVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #skipIntroBtn {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(10, 16, 30, 0.85);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 10px 20px;
+            font-family: var(--font-title);
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 6px;
+            box-shadow: 0 0 12px var(--neon-glow);
+            transition: all 0.3s ease;
+        }
+
+        #skipIntroBtn:hover {
+            background: var(--neon-blue);
+            color: #000;
+        }
+
+        /* Header */
         header {
             background: linear-gradient(180deg, rgba(20, 30, 50, 0.9) 0%, rgba(5, 8, 17, 0.95) 100%);
             border-bottom: 2px solid var(--border-chrome);
@@ -78,6 +121,7 @@
             border: 1px solid var(--neon-blue);
             box-shadow: 0 0 12px var(--neon-blue);
             object-fit: cover;
+            background: #0a101e;
         }
 
         .brand-title {
@@ -218,7 +262,7 @@
         }
 
         .btn-eye {
-            padding: 8px 14px;
+            padding: 6px 12px;
             border-radius: 4px;
             font-size: 0.85rem;
             background: rgba(0, 240, 255, 0.1);
@@ -247,8 +291,9 @@
             background: transparent;
             border: 1px solid transparent;
             color: var(--text-dim);
-            padding: 10px 20px;
+            padding: 10px 18px;
             font-family: var(--font-title);
+            font-size: 0.9rem;
             cursor: pointer;
             border-radius: 6px;
             transition: all 0.3s ease;
@@ -286,7 +331,7 @@
         .chat-container {
             display: flex;
             flex-direction: column;
-            height: 400px;
+            height: 420px;
             border: 1px solid var(--border-chrome);
             border-radius: 8px;
             background: rgba(5, 8, 17, 0.9);
@@ -356,14 +401,30 @@
         .view-section.active {
             display: block;
         }
+
+        .resource-card {
+            background: rgba(15, 25, 45, 0.6);
+            border: 1px solid var(--border-chrome);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Header Central Matriz m@ry -->
+    <!-- VIDEO INTRO OVERLAY -->
+    <div id="introOverlay">
+        <video id="introVideo" autoplay muted playsinline>
+            <source src="abertura.mp4" type="video/mp4">
+        </video>
+        <button id="skipIntroBtn" onclick="finishIntro()">PULAR INTRO <i class="fa-solid fa-forward"></i></button>
+    </div>
+
+    <!-- HEADER MATRIZ m@ry -->
     <header>
         <div class="brand-container">
-            <img src="m@ry (1).jpg" alt="m@ry Logo" class="brand-logo" onerror="this.src='https://via.placeholder.com/48/00f0ff/000000?text=m%40ry'">
+            <img src="m@ry (1).jpg" alt="m@ry Logo" class="brand-logo" onerror="this.src='logo.png'">
             <div>
                 <div class="brand-title">m@ry</div>
                 <div class="brand-sub">Plataforma Matriz Central</div>
@@ -371,21 +432,20 @@
         </div>
 
         <div class="header-actions">
-            <!-- Link Direto para a Plataforma Filial NODE -->
             <a href="https://yhannsimoes.github.io/node/" target="_blank" class="filial-link-btn">
                 <i class="fa-solid fa-network-wired"></i> Acessar Filial NODE
             </a>
 
             <div id="userInfo" class="user-badge" style="display: none;">
                 <i class="fa-solid fa-shield-halved"></i> <span id="userRoleDisplay">DESCONECTADO</span>
-                <button onclick="logout()" class="btn-eye" style="margin-left: 8px; padding: 4px 8px;"><i class="fa-solid fa-power-off"></i></button>
+                <button onclick="logout()" class="btn-eye" style="margin-left: 8px; padding: 4px 8px;" title="Encerrar Sessão"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </div>
     </header>
 
     <div class="main-container">
 
-        <!-- LOGIN CENTRAL -->
+        <!-- LOGIN -->
         <div id="loginSection" class="card view-section active" style="max-width: 450px; margin: 40px auto;">
             <div class="card-header">
                 <span><i class="fa-solid fa-user-shield"></i> Login Matriz m@ry</span>
@@ -394,11 +454,11 @@
                 <div class="form-group">
                     <label>Perfil de Acesso</label>
                     <select id="roleSelect">
-                        <option value="firewall">Firewall (Orientador / Segurança)</option>
-                        <option value="master">Master (Professor)</option>
                         <option value="cluster">Cluster (Monitor)</option>
                         <option value="cpu">CPU (Líder de Node)</option>
                         <option value="executor">Executor (Estudante)</option>
+                        <option value="firewall">Firewall (Orientador / Segurança)</option>
+                        <option value="master">Master (Professor)</option>
                     </select>
                 </div>
 
@@ -415,11 +475,11 @@
 
                 <div class="form-group">
                     <label>Senha de Acesso</label>
-                    <input type="password" id="passInput" placeholder="Digite sua credencial" required>
+                    <input type="password" id="passInput" placeholder="Digite sua senha" required>
                 </div>
 
                 <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">
-                    <i class="fa-solid fa-right-to-bracket"></i> Conectar à Matriz
+                    <i class="fa-solid fa-right-to-bracket"></i> Inicializar Sessão
                 </button>
             </form>
         </div>
@@ -428,19 +488,19 @@
         <div id="firewallSection" class="view-section">
             <div class="card">
                 <div class="card-header">
-                    <span><i class="fa-solid fa-eye"></i> Painel Firewall // Inspeção e Monitoramento</span>
+                    <span><i class="fa-solid fa-eye"></i> Painel Firewall // Auditoria e Inspeção</span>
                     <span id="firewallTurmaBadge" class="user-badge">TURMA: --</span>
                 </div>
 
                 <div class="nav-tabs">
-                    <button class="tab-btn active" onclick="switchFirewallTab('answersTab', event)"><i class="fa-solid fa-list-check"></i> Respostas</button>
-                    <button class="tab-btn" onclick="switchFirewallTab('nodesTab', event)"><i class="fa-solid fa-cubes"></i> Nodes Criados</button>
-                    <button class="tab-btn" onclick="switchFirewallTab('supportTab', event)"><i class="fa-solid fa-headset"></i> Suporte</button>
-                    <button class="tab-btn" onclick="switchFirewallTab('logsTab', event)"><i class="fa-solid fa-terminal"></i> Logs do Sistema</button>
+                    <button class="tab-btn active" onclick="switchTab('fwAnswersTab', event, 'fw-tab')"><i class="fa-solid fa-list-check"></i> Respostas (Olhinho)</button>
+                    <button class="tab-btn" onclick="switchTab('fwNodesTab', event, 'fw-tab')"><i class="fa-solid fa-cubes"></i> Nodes</button>
+                    <button class="tab-btn" onclick="switchTab('fwSupportTab', event, 'fw-tab')"><i class="fa-solid fa-headset"></i> Suporte</button>
+                    <button class="tab-btn" onclick="switchTab('fwLogsTab', event, 'fw-tab')"><i class="fa-solid fa-terminal"></i> Logs</button>
                 </div>
 
-                <!-- Respostas com Olhinho -->
-                <div id="answersTab" class="fw-tab-content">
+                <!-- Respostas -->
+                <div id="fwAnswersTab" class="fw-tab-content">
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -449,39 +509,35 @@
                                 <th>Habilidades</th>
                                 <th>Disponibilidade</th>
                                 <th>Status</th>
-                                <th>Sinalizar Visualizado</th>
+                                <th>Sinalizar</th>
                             </tr>
                         </thead>
-                        <tbody id="answersTableBody">
-                            <!-- Inserido dinamicamente -->
-                        </tbody>
+                        <tbody id="answersTableBody"></tbody>
                     </table>
                 </div>
 
-                <!-- Visualização dos Nodes -->
-                <div id="nodesTab" class="fw-tab-content" style="display: none;">
-                    <div id="nodesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
-                        <!-- Cards dinâmicos dos nodes -->
-                    </div>
+                <!-- Nodes -->
+                <div id="fwNodesTab" class="fw-tab-content" style="display: none;">
+                    <div id="nodesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;"></div>
                 </div>
 
-                <!-- Suporte & Mensagens -->
-                <div id="supportTab" class="fw-tab-content" style="display: none;">
+                <!-- Suporte Firewall -->
+                <div id="fwSupportTab" class="fw-tab-content" style="display: none;">
                     <div class="chat-container">
-                        <div class="chat-messages" id="supportMessages"></div>
+                        <div class="chat-messages" id="fwSupportMessages"></div>
                         <div class="chat-input-row">
-                            <input type="text" id="supportReplyInput" placeholder="Digite uma resposta como Firewall...">
-                            <button class="btn" onclick="sendSupportReply()"><i class="fa-solid fa-paper-plane"></i> Responder</button>
+                            <input type="text" id="fwSupportReplyInput" placeholder="Responder chamado...">
+                            <button class="btn" onclick="sendSupportReply('Firewall')"><i class="fa-solid fa-paper-plane"></i> Responder</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Logs de Atividade -->
-                <div id="logsTab" class="fw-tab-content" style="display: none;">
+                <!-- Logs -->
+                <div id="fwLogsTab" class="fw-tab-content" style="display: none;">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Horário</th>
+                                <th>Timestamp</th>
                                 <th>Evento</th>
                                 <th>Origem</th>
                                 <th>Status</th>
@@ -493,21 +549,105 @@
             </div>
         </div>
 
-        <!-- MÓDULO GENÉRICO PARA DEMAIS PERFIS -->
-        <div id="genericDashboardSection" class="card view-section">
-            <div class="card-header">
-                <span id="genericDashTitle">Painel de Controle</span>
+        <!-- MÓDULO PEDAGÓGICO CENTRAL (MASTER, CLUSTER, CPU, EXECUTOR) -->
+        <div id="matrixSection" class="view-section">
+            <div class="card">
+                <div class="card-header">
+                    <span id="matrixDashTitle"><i class="fa-solid fa-sitemap"></i> Matriz m@ry</span>
+                    <a href="https://yhannsimoes.github.io/node/" target="_blank" class="filial-link-btn">
+                        <i class="fa-solid fa-right-to-bracket"></i> Ir para Filial NODE
+                    </a>
+                </div>
+
+                <!-- Navegação dos 6 Módulos Centralizados -->
+                <div class="nav-tabs">
+                    <button class="tab-btn active" onclick="switchTab('modProtocols', event, 'matrix-tab')"><i class="fa-solid fa-scroll"></i> Protocols</button>
+                    <button class="tab-btn" onclick="switchTab('modTasks', event, 'matrix-tab')"><i class="fa-solid fa-tasks"></i> Tasks</button>
+                    <button class="tab-btn" onclick="switchTab('modLogs', event, 'matrix-tab')"><i class="fa-solid fa-list-ol"></i> Log</button>
+                    <button class="tab-btn" onclick="switchTab('modRepository', event, 'matrix-tab')"><i class="fa-solid fa-folder-open"></i> Repository</button>
+                    <button class="tab-btn" onclick="switchTab('modSupport', event, 'matrix-tab')"><i class="fa-solid fa-headset"></i> Support</button>
+                    <button class="tab-btn" onclick="switchTab('modFeedback', event, 'matrix-tab')"><i class="fa-solid fa-comments"></i> Feedback</button>
+                </div>
+
+                <!-- 1. PROTOCOLS -->
+                <div id="modProtocols" class="matrix-tab-content">
+                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Protocolos de Operação Pedagógica</h3>
+                    <div id="protocolsContainer">
+                        <div class="resource-card">
+                            <h4 style="color: var(--chrome-silver);"><i class="fa-solid fa-shield"></i> Diretriz #01 - Formação de Nodes</h4>
+                            <p style="color: var(--text-dim); margin-top: 5px;">Os grupos de trabalho (Nodes) devem respeitar a alocação dos 4 eixos mapeados no formulário central da filial NODE.</p>
+                        </div>
+                        <div class="resource-card">
+                            <h4 style="color: var(--chrome-silver);"><i class="fa-solid fa-shield"></i> Diretriz #02 - Atuação do Firewall</h4>
+                            <p style="color: var(--text-dim); margin-top: 5px;">O orientador (Firewall) inspeciona as produções e sinaliza o recebimento por meio do marcador de validação.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. TASKS -->
+                <div id="modTasks" class="matrix-tab-content" style="display: none;">
+                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Matriz de Tarefas & Entregáveis</h3>
+                    <div id="tasksList"></div>
+                    <div id="addTaskForm" style="margin-top: 20px; border-top: 1px solid var(--border-chrome); padding-top: 15px;">
+                        <h4 style="color: var(--chrome-silver); margin-bottom: 10px;">Nova Tarefa Matriz</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="newTaskInput" placeholder="Descreva a nova tarefa pedagógica...">
+                            <button class="btn" onclick="addNewTask()"><i class="fa-solid fa-plus"></i> Publicar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. LOG -->
+                <div id="modLogs" class="matrix-tab-content" style="display: none;">
+                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Logs de Atividades em Tempo Real</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Horário</th>
+                                <th>Ação / Evento</th>
+                                <th>Origem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrixLogsBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- 4. REPOSITORY -->
+                <div id="modRepository" class="matrix-tab-content" style="display: none;">
+                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Repositório de Temas e Recursos (THEMES_DB)</h3>
+                    <div id="repositoryContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                        <div class="resource-card">
+                            <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-book"></i> Banco de Contos & Temas</h4>
+                            <p style="color: var(--text-dim); margin-top: 5px;">Acesso aos temas configurados para os Nodes dos 3ºs Anos (3A a 3E).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. SUPPORT -->
+                <div id="modSupport" class="matrix-tab-content" style="display: none;">
+                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Central de Suporte & Comunicação</h3>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="matrixSupportMessages"></div>
+                        <div class="chat-input-row">
+                            <input type="text" id="matrixSupportInput" placeholder="Envie uma dúvida ou chamada ao Suporte/Firewall...">
+                            <button class="btn" onclick="sendMatrixSupport()"><i class="fa-solid fa-paper-plane"></i> Enviar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. FEEDBACK -->
+                <div id="modFeedback" class="matrix-tab-content" style="display: none;">
+                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Devolutivas & Avaliação Pedagógica</h3>
+                    <div id="feedbackContainer"></div>
+                </div>
+
             </div>
-            <p style="color: var(--chrome-silver); margin-bottom: 20px;">Você está conectado à Plataforma Matriz <strong>m@ry</strong>.</p>
-            <a href="https://yhannsimoes.github.io/node/" target="_blank" class="btn">
-                <i class="fa-solid fa-arrow-right-to-bracket"></i> Ir para a Plataforma Filial NODE
-            </a>
         </div>
 
     </div>
 
     <script>
-        // CONFIGURAÇÃO DO FIREBASE
+        // CONFIGURAÇÃO DO FIREBASE (Sincronizado com a plataforma Filial NODE)
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForMaryPlatformNodeSecular",
             authDomain: "mary-node-secular.firebaseapp.com",
@@ -531,6 +671,23 @@
             "3E": "orientador3e"
         };
 
+        // Splash Intro Video
+        const introVideo = document.getElementById('introVideo');
+        const introOverlay = document.getElementById('introOverlay');
+
+        function finishIntro() {
+            if (!introOverlay) return;
+            introOverlay.style.opacity = '0';
+            introOverlay.style.visibility = 'hidden';
+            setTimeout(() => { introOverlay.style.display = 'none'; }, 800);
+        }
+
+        if (introVideo) {
+            introVideo.onended = finishIntro;
+            setTimeout(finishIntro, 12500);
+        }
+
+        // Handle Login
         function handleLogin(e) {
             e.preventDefault();
             const role = document.getElementById('roleSelect').value;
@@ -555,15 +712,16 @@
             document.getElementById('userInfo').style.display = 'flex';
             document.getElementById('userRoleDisplay').innerText = `${role.toUpperCase()} [${turma}]`;
 
-            logSystemEvent(`Autenticação efetuada: ${role.toUpperCase()}`, `Turma ${turma}`);
+            logSystemEvent(`Autenticação no m@ry: ${role.toUpperCase()}`, `Turma ${turma}`);
 
             if (role === 'firewall') {
                 document.getElementById('firewallSection').classList.add('active');
                 document.getElementById('firewallTurmaBadge').innerText = `TURMA: ${turma}`;
                 listenFirewallData(turma);
             } else {
-                document.getElementById('genericDashboardSection').classList.add('active');
-                document.getElementById('genericDashTitle').innerText = `Painel ${role.toUpperCase()} // Turma ${turma}`;
+                document.getElementById('matrixSection').classList.add('active');
+                document.getElementById('matrixDashTitle').innerHTML = `<i class="fa-solid fa-sitemap"></i> Painel Matriz ${role.toUpperCase()} // Turma ${turma}`;
+                listenMatrixData(turma);
             }
         }
 
@@ -575,30 +733,23 @@
             document.getElementById('passInput').value = '';
         }
 
-        function switchFirewallTab(tabId, evt) {
-            document.querySelectorAll('.fw-tab-content').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        function switchTab(targetId, evt, groupClass) {
+            const isFw = groupClass === 'fw-tab';
+            const contentSelector = isFw ? '.fw-tab-content' : '.matrix-tab-content';
             
-            document.getElementById(tabId).style.display = 'block';
+            document.querySelectorAll(contentSelector).forEach(el => el.style.display = 'none');
+            evt.currentTarget.parentElement.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(targetId).style.display = 'block';
             evt.currentTarget.classList.add('active');
         }
 
+        /* --- FIREWALL LOGIC --- */
         function listenFirewallData(turma) {
-            database.ref(`node_answers/${turma}`).on('value', (snapshot) => {
-                renderAnswersTable(snapshot.val() || {});
-            });
-
-            database.ref(`node_published/${turma}`).on('value', (snapshot) => {
-                renderNodesCards(snapshot.val() || {});
-            });
-
-            database.ref(`support_messages/${turma}`).on('value', (snapshot) => {
-                renderSupportMessages(snapshot.val() || {});
-            });
-
-            database.ref(`system_logs/${turma}`).on('value', (snapshot) => {
-                renderLogs(snapshot.val() || {});
-            });
+            database.ref(`node_answers/${turma}`).on('value', (snapshot) => { renderAnswersTable(snapshot.val() || {}); });
+            database.ref(`node_published/${turma}`).on('value', (snapshot) => { renderNodesCards(snapshot.val() || {}); });
+            database.ref(`support_messages/${turma}`).on('value', (snapshot) => { renderSupportMessages(snapshot.val() || {}, 'fwSupportMessages'); });
+            database.ref(`system_logs/${turma}`).on('value', (snapshot) => { renderLogs(snapshot.val() || {}, 'logsTableBody'); });
         }
 
         function renderAnswersTable(answers) {
@@ -642,7 +793,7 @@
                 viewedByFirewall: !currentStatus,
                 viewedAt: new Date().toISOString()
             });
-            logSystemEvent(`Firewall alterou status da resposta [${answerId}] para ${!currentStatus ? 'VISTO' : 'PENDENTE'}`, `Turma ${turma}`);
+            logSystemEvent(`Firewall alterou status da resposta [${answerId}]`, `Turma ${turma}`);
         }
 
         function renderNodesCards(nodes) {
@@ -661,25 +812,29 @@
                 card.className = 'card';
                 card.style.margin = '0';
                 card.innerHTML = `
-                    <div style="font-family: var(--font-title); color: var(--neon-blue); margin-bottom: 8px;">
-                        <i class="fa-solid fa-cube"></i> Node #${key}
-                    </div>
+                    <div style="font-family: var(--font-title); color: var(--neon-blue); margin-bottom: 8px;"><i class="fa-solid fa-cube"></i> Node #${key}</div>
                     <div style="font-size: 0.9rem; color: var(--chrome-silver);"><strong>CPU Líder:</strong> ${node.cpuLeader || 'Não atribuído'}</div>
                     <div style="font-size: 0.9rem; color: var(--chrome-silver);"><strong>Integrantes:</strong> ${node.members ? node.members.length : 0}</div>
-                    <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 8px;"><strong>Tema:</strong> ${node.theme || 'Conto Base'}</div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        function renderSupportMessages(messages) {
-            const container = document.getElementById('supportMessages');
-            container.innerHTML = '';
+        /* --- MATRIX CENTRAL LOGIC (MASTER, CLUSTER, CPU, EXECUTOR) --- */
+        function listenMatrixData(turma) {
+            database.ref(`support_messages/${turma}`).on('value', (snapshot) => { renderSupportMessages(snapshot.val() || {}, 'matrixSupportMessages'); });
+            database.ref(`system_logs/${turma}`).on('value', (snapshot) => { renderLogs(snapshot.val() || {}, 'matrixLogsBody'); });
+            database.ref(`matrix_tasks/${turma}`).on('value', (snapshot) => { renderTasks(snapshot.val() || {}); });
+            database.ref(`matrix_feedback/${turma}`).on('value', (snapshot) => { renderFeedbacks(snapshot.val() || {}); });
+        }
 
+        function renderSupportMessages(messages, elementId) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
             Object.keys(messages).forEach(key => {
                 const msg = messages[key];
                 const bubble = document.createElement('div');
-                bubble.className = `chat-bubble ${msg.sender === 'Firewall' ? 'outgoing' : 'incoming'}`;
+                bubble.className = `chat-bubble ${msg.sender === currentUser.role ? 'outgoing' : 'incoming'}`;
                 bubble.innerHTML = `
                     <div style="font-size: 0.75rem; color: var(--neon-blue); font-weight: bold;">${msg.sender}</div>
                     <div>${msg.text}</div>
@@ -689,19 +844,89 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        function sendSupportReply() {
-            const input = document.getElementById('supportReplyInput');
+        function sendSupportReply(senderRole) {
+            const input = document.getElementById('fwSupportReplyInput');
             const text = input.value.trim();
             if (!text || !currentUser.turma) return;
 
             database.ref(`support_messages/${currentUser.turma}`).push({
-                sender: 'Firewall',
+                sender: senderRole,
                 text: text,
                 timestamp: new Date().toISOString()
             });
-
-            logSystemEvent(`Mensagem enviada via Suporte`, `Turma ${currentUser.turma}`);
             input.value = '';
+        }
+
+        function sendMatrixSupport() {
+            const input = document.getElementById('matrixSupportInput');
+            const text = input.value.trim();
+            if (!text || !currentUser.turma) return;
+
+            database.ref(`support_messages/${currentUser.turma}`).push({
+                sender: currentUser.role.toUpperCase(),
+                text: text,
+                timestamp: new Date().toISOString()
+            });
+            input.value = '';
+        }
+
+        function renderTasks(tasks) {
+            const container = document.getElementById('tasksList');
+            container.innerHTML = '';
+            const keys = Object.keys(tasks);
+
+            if (keys.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-dim);">Nenhuma tarefa ativa cadastrada.</p>`;
+                return;
+            }
+
+            keys.forEach(key => {
+                const task = tasks[key];
+                const item = document.createElement('div');
+                item.className = 'resource-card';
+                item.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h4 style="color: #fff;"><i class="fa-solid fa-check-square"></i> ${task.title}</h4>
+                        <span class="status-tag seen">${task.author}</span>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function addNewTask() {
+            const input = document.getElementById('newTaskInput');
+            const title = input.value.trim();
+            if (!title || !currentUser.turma) return;
+
+            database.ref(`matrix_tasks/${currentUser.turma}`).push({
+                title: title,
+                author: currentUser.role.toUpperCase(),
+                timestamp: new Date().toISOString()
+            });
+            input.value = '';
+        }
+
+        function renderFeedbacks(feedbacks) {
+            const container = document.getElementById('feedbackContainer');
+            container.innerHTML = '';
+            const keys = Object.keys(feedbacks);
+
+            if (keys.length === 0) {
+                container.innerHTML = `<p style="color: var(--text-dim);">Nenhuma devolutiva registrada nesta turma.</p>`;
+                return;
+            }
+
+            keys.forEach(key => {
+                const fb = feedbacks[key];
+                const div = document.createElement('div');
+                div.className = 'resource-card';
+                div.innerHTML = `
+                    <h4 style="color: var(--neon-blue);">${fb.title}</h4>
+                    <p style="color: var(--chrome-silver); margin-top: 5px;">${fb.content}</p>
+                `;
+                container.appendChild(div);
+            });
         }
 
         function logSystemEvent(eventDesc, origin) {
@@ -710,12 +935,13 @@
                 timestamp: new Date().toLocaleTimeString('pt-BR'),
                 event: eventDesc,
                 origin: origin,
-                status: 'REGISTRADO'
+                status: 'OK'
             });
         }
 
-        function renderLogs(logs) {
-            const tbody = document.getElementById('logsTableBody');
+        function renderLogs(logs, targetBodyId) {
+            const tbody = document.getElementById(targetBodyId);
+            if (!tbody) return;
             tbody.innerHTML = '';
             const keys = Object.keys(logs).reverse();
 
@@ -726,7 +952,6 @@
                     <td style="font-family: monospace; font-size: 0.85rem; color: var(--text-dim);">${log.timestamp}</td>
                     <td>${log.event}</td>
                     <td>${log.origin}</td>
-                    <td><span class="status-tag seen">${log.status}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
