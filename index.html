@@ -1,1334 +1,596 @@
-<!DOCTYPE html>
+<!DOCTYPE1 html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>m@ry // Plataforma Matriz Central</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>m@ry // Plataforma Pedagógica</title>
+  <style>
+    :root {
+      --bg-dark: #030814;
+      --bg-card: #0a1329;
+      --border-color: #1e293b;
+      --primary-cyan: #00f0ff;
+      --primary-blue: #0077ff;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-alert: #ff0055;
+      --accent-success: #00ff88;
+    }
 
-    <!-- Firebase SDK (Compat Version) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
 
-    <style>
-        :root {
-            --bg-deep: #050811;
-            --panel-bg: rgba(10, 16, 30, 0.88);
-            --border-chrome: #4a6fa5;
-            --neon-blue: #00f0ff;
-            --neon-glow: rgba(0, 240, 255, 0.4);
-            --chrome-silver: #c0d6e4;
-            --text-main: #e0f2fe;
-            --text-dim: #7a9bb8;
-            --alert-red: #ff3366;
-            --success-green: #00ff9d;
-            --font-title: 'Orbitron', sans-serif;
-            --font-body: 'Rajdhani', sans-serif;
-        }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: var(--font-body);
-        }
+    /* VÍDEO DE ABERTURA AJUSTADO */
+    #intro-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
 
-        body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            background-image: 
-                radial-gradient(circle at 50% 10%, rgba(0, 240, 255, 0.15), transparent 40%),
-                linear-gradient(to bottom, #020408, #080d1a);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
+    .intro-wrapper {
+      position: relative;
+      width: 90%;
+      max-width: 850px;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-        /* Intro Splash Video Overlay */
-        #introOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: var(--bg-deep);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
+    .intro-wrapper video {
+      width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(0, 240, 255, 0.15);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+    }
 
-        #introVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .btn-skip-intro {
+      margin-top: 15px;
+      align-self: flex-end;
+      background: rgba(10, 19, 41, 0.8);
+      border: 1px solid var(--primary-cyan);
+      color: var(--primary-cyan);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
 
-        #skipIntroBtn {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            background: rgba(10, 16, 30, 0.85);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 10px 20px;
-            font-family: var(--font-title);
-            font-size: 0.85rem;
-            cursor: pointer;
-            border-radius: 6px;
-            box-shadow: 0 0 12px var(--neon-glow);
-            transition: all 0.3s ease;
-        }
+    .btn-skip-intro:hover {
+      background: var(--primary-cyan);
+      color: var(--bg-dark);
+      box-shadow: 0 0 15px var(--primary-cyan);
+    }
 
-        #skipIntroBtn:hover {
-            background: var(--neon-blue);
-            color: #000;
-        }
+    /* HEADER & TIMER REGRESSIVO */
+    header {
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
 
-        /* Header */
-        header {
-            background: linear-gradient(180deg, rgba(20, 30, 50, 0.9) 0%, rgba(5, 8, 17, 0.95) 100%);
-            border-bottom: 2px solid var(--border-chrome);
-            box-shadow: 0 4px 20px var(--neon-glow);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-        .brand-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+    .logo-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary-cyan);
+      letter-spacing: 1.5px;
+    }
 
-        .brand-logo {
-            width: 48px;
-            height: 48px;
-            border-radius: 10px;
-            border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 12px var(--neon-blue);
-            object-fit: cover;
-            background: #0a101e;
-        }
+    .timer-badge {
+      background: rgba(0, 240, 255, 0.05);
+      border: 1px solid var(--primary-cyan);
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        .brand-title {
-            font-family: var(--font-title);
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: #fff;
-            text-shadow: 0 0 8px var(--neon-blue);
-        }
+    .timer-badge span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
 
-        .brand-sub {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
+    .timer-badge strong {
+      color: var(--primary-cyan);
+      font-family: monospace;
+      font-size: 1.1rem;
+    }
 
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+    .user-profile-bar {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
 
-        .filial-link-btn {
-            font-family: var(--font-title);
-            font-size: 0.8rem;
-            padding: 8px 14px;
-            border-radius: 4px;
-            background: rgba(0, 240, 255, 0.08);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-        }
+    select, input, textarea, button {
+      background-color: #0f172a;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 6px;
+      outline: none;
+    }
 
-        .filial-link-btn:hover {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 12px var(--neon-blue);
-        }
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--primary-cyan);
+    }
 
-        .user-badge {
-            font-family: var(--font-title);
-            font-size: 0.85rem;
-            padding: 6px 14px;
-            border-radius: 4px;
-            background: rgba(0, 240, 255, 0.1);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    /* NAVEGAÇÃO */
+    nav {
+      background-color: #070e20;
+      padding: 0 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+    }
 
-        .main-container {
-            flex: 1;
-            padding: 30px;
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--text-muted);
+      padding: 14px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 0;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
 
-        .card {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-chrome);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            margin-bottom: 25px;
-        }
+    .nav-btn.active {
+      color: var(--primary-cyan);
+      border-bottom-color: var(--primary-cyan);
+      background: rgba(0, 240, 255, 0.03);
+    }
 
-        .card-header {
-            font-family: var(--font-title);
-            font-size: 1.2rem;
-            color: var(--neon-blue);
-            border-bottom: 1px solid rgba(74, 111, 165, 0.4);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    /* CONTEÚDO PRINCIPAL */
+    main {
+      flex: 1;
+      padding: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+    .panel-section {
+      display: none;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--chrome-silver);
-            font-weight: 600;
-        }
+    .panel-section.active {
+      display: block;
+    }
 
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            background: rgba(5, 8, 17, 0.8);
-            border: 1px solid var(--border-chrome);
-            border-radius: 6px;
-            color: #fff;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
 
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 10px var(--neon-glow);
-        }
+    .card-title {
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+      color: var(--primary-cyan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .btn {
-            font-family: var(--font-title);
-            background: linear-gradient(135deg, #1e3a5f 0%, #0a192f 100%);
-            border: 1px solid var(--neon-blue);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
-            text-decoration: none;
-        }
+    /* FILTROS MASTER */
+    .master-controls {
+      background: rgba(0, 119, 255, 0.08);
+      border: 1px solid var(--primary-blue);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
 
-        .btn:hover {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
+    /* RASTREADOR "OLHINHO" */
+    .view-tracker {
+      display: inline-flex;
+      gap: 8px;
+      font-size: 0.85rem;
+      background: rgba(255,255,255,0.05);
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
 
-        .btn-eye {
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            background: rgba(0, 240, 255, 0.1);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .eye-tag {
+      opacity: 0.3;
+      transition: opacity 0.3s;
+    }
 
-        .btn-eye.seen {
-            background: rgba(0, 255, 157, 0.2);
-            border-color: var(--success-green);
-            color: var(--success-green);
-        }
+    .eye-tag.active {
+      opacity: 1;
+      font-weight: bold;
+    }
 
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-chrome);
-            padding-bottom: 10px;
-            flex-wrap: wrap;
-        }
+    .eye-tag.master.active { color: var(--primary-cyan); }
+    .eye-tag.firewall.active { color: #ffaa00; }
+    .eye-tag.cluster.active { color: var(--accent-success); }
 
-        .tab-btn {
-            background: transparent;
-            border: 1px solid transparent;
-            color: var(--text-dim);
-            padding: 10px 18px;
-            font-family: var(--font-title);
-            font-size: 0.9rem;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
+    /* FORMULÁRIOS E LISTAS */
+    .form-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
-        .tab-btn.active {
-            color: var(--neon-blue);
-            border-color: var(--neon-blue);
-            background: rgba(0, 240, 255, 0.1);
-            box-shadow: 0 0 10px var(--neon-glow);
-        }
+    label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
 
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+    .btn-primary {
+      background-color: var(--primary-blue);
+      color: #fff;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 10px 20px;
+      transition: background 0.2s;
+    }
 
-        .data-table th, .data-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(74, 111, 165, 0.2);
-        }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
 
-        .data-table th {
-            font-family: var(--font-title);
-            color: var(--chrome-silver);
-            background: rgba(15, 25, 45, 0.9);
-        }
+    .file-input-wrapper {
+      border: 1px dashed var(--border-color);
+      padding: 15px;
+      text-align: center;
+      border-radius: 6px;
+      background: rgba(0,0,0,0.2);
+    }
 
-        .data-table tr:hover {
-            background: rgba(0, 240, 255, 0.05);
-        }
+    .thread-box {
+      border-left: 2px solid var(--primary-cyan);
+      padding-left: 15px;
+      margin-top: 15px;
+    }
 
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 450px;
-            border: 1px solid var(--border-chrome);
-            border-radius: 8px;
-            background: rgba(5, 8, 17, 0.9);
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .chat-ticket {
-            background: rgba(15, 25, 45, 0.7);
-            border: 1px solid var(--border-chrome);
-            border-radius: 8px;
-            padding: 15px;
-        }
-
-        .chat-ticket.resolved {
-            border-color: var(--success-green);
-            opacity: 0.7;
-        }
-
-        .status-tag {
-            font-size: 0.75rem;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-family: var(--font-title);
-            text-transform: uppercase;
-        }
-
-        .status-tag.seen {
-            background: rgba(0, 255, 157, 0.2);
-            color: var(--success-green);
-            border: 1px solid var(--success-green);
-        }
-
-        .status-tag.unseen {
-            background: rgba(255, 51, 102, 0.2);
-            color: var(--alert-red);
-            border: 1px solid var(--alert-red);
-        }
-
-        .view-section {
-            display: none;
-        }
-
-        .view-section.active {
-            display: block;
-        }
-
-        .resource-card {
-            background: rgba(15, 25, 45, 0.6);
-            border: 1px solid var(--border-chrome);
-            border-radius: 8px;
-            padding: 18px;
-            margin-bottom: 15px;
-        }
-
-        .creation-panel {
-            background: rgba(0, 240, 255, 0.03);
-            border: 1px dashed var(--neon-blue);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-    </style>
+    .locked-banner {
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(255, 0, 85, 0.05);
+      border: 1px solid var(--accent-alert);
+      border-radius: 10px;
+      color: #ff88a5;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- VIDEO INTRO OVERLAY -->
-    <div id="introOverlay">
-        <video id="introVideo" autoplay muted playsinline>
-            <source src="abertura.mp4" type="video/mp4">
-        </video>
-        <button id="skipIntroBtn" onclick="finishIntro()">PULAR INTRO <i class="fa-solid fa-forward"></i></button>
+  <!-- OVERLAY DO VÍDEO DE ABERTURA -->
+  <div id-="intro-overlay" id="intro-overlay">
+    <div class="intro-wrapper">
+      <video id="intro-video" autoplay muted playsinline>
+        <source src="intro.mp4" type="video/mp4">
+        Seu navegador não suporta o vídeo de abertura.
+      </video>
+      <button class="btn-skip-intro" onclick="fecharIntro()">PULAR INTRO ➔</button>
+    </div>
+  </div>
+
+  <!-- HEADER PRINCIPAL -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-title">m@ry</div>
+      <div class="timer-badge">
+        <span>Encerramento:</span>
+        <strong id="countdown-timer">00d 00h 00m 00s</strong>
+      </div>
     </div>
 
-    <!-- HEADER MATRIZ m@ry -->
-    <header>
-        <div class="brand-container">
-            <img src="m@ry (1).jpg" alt="m@ry Logo" class="brand-logo" onerror="this.src='logo.png'">
-            <div>
-                <div class="brand-title">m@ry</div>
-                <div class="brand-sub">Plataforma Matriz Central</div>
-            </div>
-        </div>
-
-        <div class="header-actions">
-            <a href="https://yhannsimoes.github.io/node/" target="_blank" class="filial-link-btn">
-                <i class="fa-solid fa-network-wired"></i> Acessar Filial NODE
-            </a>
-
-            <div id="userInfo" class="user-badge" style="display: none;">
-                <i class="fa-solid fa-shield-halved"></i> <span id="userRoleDisplay">DESCONECTADO</span>
-                <button onclick="logout()" class="btn-eye" style="margin-left: 8px; padding: 4px 8px;" title="Encerrar Sessão"><i class="fa-solid fa-power-off"></i></button>
-            </div>
-        </div>
-    </header>
-
-    <div class="main-container">
-
-        <!-- LOGIN -->
-        <div id="loginSection" class="card view-section active" style="max-width: 450px; margin: 40px auto;">
-            <div class="card-header">
-                <span><i class="fa-solid fa-user-shield"></i> Login Matriz m@ry</span>
-            </div>
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Perfil de Acesso</label>
-                    <select id="roleSelect">
-                        <option value="master">Master (Professor)</option>
-                        <option value="firewall">Firewall (Orientador / Segurança)</option>
-                        <option value="cluster">Cluster (Monitor)</option>
-                        <option value="cpu">CPU (Líder de Node)</option>
-                        <option value="executor">Executor (Estudante)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Turma</label>
-                    <select id="turmaSelect">
-                        <option value="3A">Terceiro Ano A (3A)</option>
-                        <option value="3B">Terceiro Ano B (3B)</option>
-                        <option value="3C">Terceiro Ano C (3C)</option>
-                        <option value="3D">Terceiro Ano D (3D)</option>
-                        <option value="3E">Terceiro Ano E (3E)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Senha de Acesso</label>
-                    <input type="password" id="passInput" placeholder="Digite sua senha" required>
-                </div>
-
-                <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">
-                    <i class="fa-solid fa-right-to-bracket"></i> Inicializar Sessão
-                </button>
-            </form>
-        </div>
-
-        <!-- MÓDULO FIREWALL -->
-        <div id="firewallSection" class="view-section">
-            <div class="card">
-                <div class="card-header">
-                    <span><i class="fa-solid fa-eye"></i> Painel Firewall // Auditoria e Inspeção</span>
-                    <span id="firewallTurmaBadge" class="user-badge">TURMA: --</span>
-                </div>
-
-                <div class="nav-tabs">
-                    <button class="tab-btn active" onclick="switchTab('fwAnswersTab', event, 'fw-tab')"><i class="fa-solid fa-list-check"></i> Respostas (Olhinho)</button>
-                    <button class="tab-btn" onclick="switchTab('fwNodesTab', event, 'fw-tab')"><i class="fa-solid fa-cubes"></i> Nodes</button>
-                    <button class="tab-btn" onclick="switchTab('fwSupportTab', event, 'fw-tab')"><i class="fa-solid fa-headset"></i> Suporte</button>
-                    <button class="tab-btn" onclick="switchTab('fwLogsTab', event, 'fw-tab')"><i class="fa-solid fa-terminal"></i> Logs</button>
-                </div>
-
-                <!-- Respostas -->
-                <div id="fwAnswersTab" class="fw-tab-content">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Estudante</th>
-                                <th>Afinidade</th>
-                                <th>Habilidades</th>
-                                <th>Disponibilidade</th>
-                                <th>Status</th>
-                                <th>Sinalizar</th>
-                            </tr>
-                        </thead>
-                        <tbody id="answersTableBody"></tbody>
-                    </table>
-                </div>
-
-                <!-- Nodes -->
-                <div id="fwNodesTab" class="fw-tab-content" style="display: none;">
-                    <div id="nodesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;"></div>
-                </div>
-
-                <!-- Suporte Firewall -->
-                <div id="fwSupportTab" class="fw-tab-content" style="display: none;">
-                    <div class="chat-container">
-                        <div class="chat-messages" id="fwSupportMessages"></div>
-                    </div>
-                </div>
-
-                <!-- Logs -->
-                <div id="fwLogsTab" class="fw-tab-content" style="display: none;">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Timestamp</th>
-                                <th>Evento</th>
-                                <th>Origem</th>
-                            </tr>
-                        </thead>
-                        <tbody id="logsTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- MÓDULO PEDAGÓGICO CENTRAL (MASTER, CLUSTER, CPU, EXECUTOR) -->
-        <div id="matrixSection" class="view-section">
-            <div class="card">
-                <div class="card-header">
-                    <span id="matrixDashTitle"><i class="fa-solid fa-sitemap"></i> Matriz m@ry</span>
-                    <a href="https://yhannsimoes.github.io/node/" target="_blank" class="filial-link-btn">
-                        <i class="fa-solid fa-right-to-bracket"></i> Ir para Filial NODE
-                    </a>
-                </div>
-
-                <!-- Navegação dos 6 Módulos Centralizados -->
-                <div class="nav-tabs">
-                    <button class="tab-btn active" onclick="switchTab('modProtocols', event, 'matrix-tab')"><i class="fa-solid fa-scroll"></i> Protocols</button>
-                    <button class="tab-btn" onclick="switchTab('modTasks', event, 'matrix-tab')"><i class="fa-solid fa-tasks"></i> Tasks</button>
-                    <button class="tab-btn" onclick="switchTab('modLogs', event, 'matrix-tab')"><i class="fa-solid fa-list-ol"></i> Log</button>
-                    <button class="tab-btn" onclick="switchTab('modRepository', event, 'matrix-tab')"><i class="fa-solid fa-folder-open"></i> Repository</button>
-                    <button class="tab-btn" onclick="switchTab('modSupport', event, 'matrix-tab')"><i class="fa-solid fa-headset"></i> Support</button>
-                    <button class="tab-btn" onclick="switchTab('modFeedback', event, 'matrix-tab')"><i class="fa-solid fa-comments"></i> Feedback</button>
-                </div>
-
-                <!-- 1. PROTOCOLS -->
-                <div id="modProtocols" class="matrix-tab-content">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Protocolos de Operação Pedagógica</h3>
-
-                    <!-- Painel de Inserção (Exclusivo Master / Firewall) -->
-                    <div id="protocolAdminPanel" class="creation-panel" style="display: none;">
-                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-plus-circle"></i> Cadastrar Novo Protocolo</h4>
-                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
-                            <input type="text" id="protoTitle" placeholder="Título do Protocolo (ex: Protocolo #03 - Entregas)">
-                            <input type="text" id="protoCategory" placeholder="Categoria / Âmbito (ex: Filial NODE)">
-                        </div>
-                        <div class="form-group">
-                            <textarea id="protoDesc" rows="2" placeholder="Descrição detalhada das diretrizes..."></textarea>
-                        </div>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="url" id="protoLink" placeholder="Link do Anexo/Documento (Google Drive, PDF, etc.)">
-                            <button class="btn" onclick="publishProtocol()"><i class="fa-solid fa-upload"></i> Publicar Protocolo</button>
-                        </div>
-                    </div>
-
-                    <div id="protocolsList"></div>
-                </div>
-
-                <!-- 2. TASKS -->
-                <div id="modTasks" class="matrix-tab-content" style="display: none;">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Matriz de Tarefas & Entregáveis</h3>
-
-                    <!-- Criador de Tarefas (Master / CPU) -->
-                    <div id="taskAdminPanel" class="creation-panel" style="display: none;">
-                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-calendar-plus"></i> Criar Nova Tarefa / Entregável</h4>
-                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-                            <input type="text" id="taskTitle" placeholder="Título da Tarefa">
-                            <select id="taskTarget">
-                                <option value="Toda a Turma">Toda a Turma</option>
-                                <option value="Node 01">Node 01</option>
-                                <option value="Node 02">Node 02</option>
-                                <option value="Apenas CPUs">Apenas CPUs</option>
-                                <option value="Executores">Executores</option>
-                            </select>
-                            <input type="datetime-local" id="taskDeadline">
-                        </div>
-                        <div class="form-group">
-                            <textarea id="taskDesc" rows="2" placeholder="Instruções detalhadas do entregável..."></textarea>
-                        </div>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="url" id="taskLink" placeholder="Link de Apoio / Modelo (Google Drive, PDF, etc.)">
-                            <button class="btn" onclick="publishTask()"><i class="fa-solid fa-check-circle"></i> Publicar Tarefa</button>
-                        </div>
-                    </div>
-
-                    <div id="tasksList"></div>
-                </div>
-
-                <!-- 3. LOG -->
-                <div id="modLogs" class="matrix-tab-content" style="display: none;">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Logs de Atividades em Tempo Real</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Horário</th>
-                                <th>Ação / Evento</th>
-                                <th>Origem</th>
-                            </tr>
-                        </thead>
-                        <tbody id="matrixLogsBody"></tbody>
-                    </table>
-                </div>
-
-                <!-- 4. REPOSITORY (REGISTRO DAS DUAS OBRAS) -->
-                <div id="modRepository" class="matrix-tab-content" style="display: none;">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Registro Central das Obras</h3>
-
-                    <!-- Painel de Edição Master -->
-                    <div id="repoAdminPanel" class="creation-panel" style="display: none;">
-                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-pen-to-square"></i> Atualizar Registro das Obras (Exclusivo Master)</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <!-- Edit Obra 1 -->
-                            <div style="border-right: 1px solid var(--border-chrome); padding-right: 15px;">
-                                <h5 style="color: var(--chrome-silver); margin-bottom: 8px;">Obra 01</h5>
-                                <input type="text" id="editObra1Title" placeholder="Título da Obra 01" style="margin-bottom: 8px;">
-                                <textarea id="editObra1Desc" rows="2" placeholder="Sinopse / Diretriz Central" style="margin-bottom: 8px;"></textarea>
-                                <input type="text" id="editObra1Eixos" placeholder="Eixos Mapeados" style="margin-bottom: 8px;">
-                                <input type="url" id="editObra1Link" placeholder="Link do Material/Texto">
-                            </div>
-                            <!-- Edit Obra 2 -->
-                            <div>
-                                <h5 style="color: var(--chrome-silver); margin-bottom: 8px;">Obra 02</h5>
-                                <input type="text" id="editObra2Title" placeholder="Título da Obra 02" style="margin-bottom: 8px;">
-                                <textarea id="editObra2Desc" rows="2" placeholder="Sinopse / Diretriz Central" style="margin-bottom: 8px;"></textarea>
-                                <input type="text" id="editObra2Eixos" placeholder="Eixos Mapeados" style="margin-bottom: 8px;">
-                                <input type="url" id="editObra2Link" placeholder="Link do Material/Texto">
-                            </div>
-                        </div>
-                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="saveRepositoryObras()"><i class="fa-solid fa-save"></i> Salvar Obras no Repositório</button>
-                    </div>
-
-                    <!-- Cards Fixos Obra 01 e Obra 02 -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
-                        <div class="resource-card" style="border-top: 3px solid var(--neon-blue);">
-                            <span class="status-tag seen" style="margin-bottom: 10px; display: inline-block;">OBRA 01</span>
-                            <h3 id="obra1TitleDisplay" style="color: #fff; margin-bottom: 8px;">Carregando Obra 01...</h3>
-                            <p id="obra1DescDisplay" style="color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">-</p>
-                            <div style="font-size: 0.85rem; color: var(--chrome-silver); margin-bottom: 15px;">
-                                <strong>Eixos Relacionados:</strong> <span id="obra1EixosDisplay">-</span>
-                            </div>
-                            <a id="obra1LinkDisplay" href="#" target="_blank" class="btn" style="width: 100%;"><i class="fa-solid fa-book-open"></i> Acessar Material da Obra 01</a>
-                        </div>
-
-                        <div class="resource-card" style="border-top: 3px solid var(--neon-blue);">
-                            <span class="status-tag seen" style="margin-bottom: 10px; display: inline-block;">OBRA 02</span>
-                            <h3 id="obra2TitleDisplay" style="color: #fff; margin-bottom: 8px;">Carregando Obra 02...</h3>
-                            <p id="obra2DescDisplay" style="color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">-</p>
-                            <div style="font-size: 0.85rem; color: var(--chrome-silver); margin-bottom: 15px;">
-                                <strong>Eixos Relacionados:</strong> <span id="obra2EixosDisplay">-</span>
-                            </div>
-                            <a id="obra2LinkDisplay" href="#" target="_blank" class="btn" style="width: 100%;"><i class="fa-solid fa-book-open"></i> Acessar Material da Obra 02</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5. SUPPORT (RECEPÇÃO MASTER OU ENVIO DEMAIS) -->
-                <div id="modSupport" class="matrix-tab-content" style="display: none;">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Central de Suporte & Comunicação</h3>
-
-                    <!-- Visão Master: Mesa de Recepção de Chamados -->
-                    <div id="masterSupportInbox" style="display: none;">
-                        <h4 style="color: var(--chrome-silver); margin-bottom: 15px;"><i class="fa-solid fa-inbox"></i> Chamados Recebidos</h4>
-                        <div id="masterTicketsContainer" class="chat-messages" style="height: auto; max-height: 500px;"></div>
-                    </div>
-
-                    <!-- Visão Demais Perfis: Form de Envio para o Master -->
-                    <div id="clientSupportPanel" style="display: none;">
-                        <div class="chat-container">
-                            <div class="chat-messages" id="matrixSupportMessages"></div>
-                            <div class="chat-input-row">
-                                <input type="text" id="matrixSupportInput" placeholder="Descreva sua dúvida ou solicitação para a mesa Master...">
-                                <button class="btn" onclick="sendClientSupport()"><i class="fa-solid fa-paper-plane"></i> Enviar ao Master</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 6. FEEDBACK -->
-                <div id="modFeedback" class="matrix-tab-content" style="display: none;">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Devolutivas & Avaliação Pedagógica</h3>
-                    
-                    <!-- Form Envio Devolutiva Master -->
-                    <div id="feedbackAdminPanel" class="creation-panel" style="display: none;">
-                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-comment-dots"></i> Publicar Devolutiva</h4>
-                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
-                            <input type="text" id="fbTitle" placeholder="Título da Devolutiva">
-                            <input type="text" id="fbTarget" placeholder="Destinatário (ex: Node 01, Aluno X)">
-                        </div>
-                        <div class="form-group">
-                            <textarea id="fbContent" rows="3" placeholder="Insira o parecer ou devolutiva pedagógica..."></textarea>
-                        </div>
-                        <button class="btn" onclick="publishFeedback()"><i class="fa-solid fa-share"></i> Enviar Devolutiva</button>
-                    </div>
-
-                    <div id="feedbackContainer"></div>
-                </div>
-
-            </div>
-        </div>
-
+    <div class="user-profile-bar">
+      <label for="user-role-select">Perfil de Acesso:</label>
+      <select id="user-role-select" onchange="alternarPerfil(this.value)">
+        <option value="MASTER">MASTER (Global)</option>
+        <option value="FIREWALL">FIREWALL (Orientador)</option>
+        <option value="CLUSTER">CLUSTER (Monitor)</option>
+        <option value="CPU">CPU (Node Líder)</option>
+        <option value="EXECUTOR">EXECUTOR (Estudante)</option>
+      </select>
     </div>
-
-    <script>
-        // CONFIGURAÇÃO DO FIREBASE
-        const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyForMaryPlatformNodeSecular",
-            authDomain: "mary-node-secular.firebaseapp.com",
-            databaseURL: "https://mary-node-secular-default-rtdb.firebaseio.com",
-            projectId: "mary-node-secular",
-            storageBucket: "mary-node-secular.appspot.com",
-            messagingSenderId: "000000000000",
-            appId: "1:000000000000:web:000000000000"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        let currentUser = { role: null, turma: null, authenticated: false };
-
-        const FIREWALL_PASSWORDS = {
-            "3A": "orientador3a",
-            "3B": "orientador3b",
-            "3C": "orientador3c",
-            "3D": "orientador3d",
-            "3E": "orientador3e"
-        };
-
-        // Intro Video Handler
-        const introVideo = document.getElementById('introVideo');
-        const introOverlay = document.getElementById('introOverlay');
-
-        function finishIntro() {
-            if (!introOverlay) return;
-            introOverlay.style.opacity = '0';
-            introOverlay.style.visibility = 'hidden';
-            setTimeout(() => { introOverlay.style.display = 'none'; }, 800);
-        }
-
-        if (introVideo) {
-            introVideo.onended = finishIntro;
-            setTimeout(finishIntro, 12500);
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') finishIntro();
-        });
-
-        // Authentication Handler
-        function handleLogin(e) {
-            e.preventDefault();
-            const role = document.getElementById('roleSelect').value;
-            const turma = document.getElementById('turmaSelect').value;
-            const pass = document.getElementById('passInput').value.trim();
-
-            if (role === 'firewall') {
-                if (pass === FIREWALL_PASSWORDS[turma]) {
-                    initSession(role, turma);
-                } else {
-                    alert(`Senha incorreta para o Firewall da turma ${turma}.`);
-                }
-            } else {
-                initSession(role, turma);
-            }
-        }
-
-        function initSession(role, turma) {
-            currentUser = { role, turma, authenticated: true };
-
-            document.getElementById('loginSection').classList.remove('active');
-            document.getElementById('userInfo').style.display = 'flex';
-            document.getElementById('userRoleDisplay').innerText = `${role.toUpperCase()} [${turma}]`;
-
-            logSystemEvent(`Login efetuado: ${role.toUpperCase()}`, `Turma ${turma}`);
-
-            if (role === 'firewall') {
-                document.getElementById('firewallSection').classList.add('active');
-                document.getElementById('firewallTurmaBadge').innerText = `TURMA: ${turma}`;
-                listenFirewallData(turma);
-            } else {
-                document.getElementById('matrixSection').classList.add('active');
-                document.getElementById('matrixDashTitle').innerHTML = `<i class="fa-solid fa-sitemap"></i> Painel Matriz ${role.toUpperCase()} // Turma ${turma}`;
-                
-                // Configurar visibilidade por perfil
-                setupRolePermissions(role);
-                listenMatrixData(turma);
-            }
-        }
-
-        function setupRolePermissions(role) {
-            // Protocols admin panel
-            document.getElementById('protocolAdminPanel').style.display = (role === 'master' || role === 'firewall') ? 'block' : 'none';
-            // Tasks admin panel
-            document.getElementById('taskAdminPanel').style.display = (role === 'master' || role === 'cpu') ? 'block' : 'none';
-            // Repository admin panel
-            document.getElementById('repoAdminPanel').style.display = (role === 'master') ? 'block' : 'none';
-            // Support view layout
-            if (role === 'master') {
-                document.getElementById('masterSupportInbox').style.display = 'block';
-                document.getElementById('clientSupportPanel').style.display = 'none';
-            } else {
-                document.getElementById('masterSupportInbox').style.display = 'none';
-                document.getElementById('clientSupportPanel').style.display = 'block';
-            }
-            // Feedback admin panel
-            document.getElementById('feedbackAdminPanel').style.display = (role === 'master') ? 'block' : 'none';
-        }
-
-        function logout() {
-            currentUser = { role: null, turma: null, authenticated: false };
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('loginSection').classList.add('active');
-            document.getElementById('userInfo').style.display = 'none';
-            document.getElementById('passInput').value = '';
-        }
-
-        function switchTab(targetId, evt, groupClass) {
-            const isFw = groupClass === 'fw-tab';
-            const contentSelector = isFw ? '.fw-tab-content' : '.matrix-tab-content';
-            
-            document.querySelectorAll(contentSelector).forEach(el => el.style.display = 'none');
-            evt.currentTarget.parentElement.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById(targetId).style.display = 'block';
-            evt.currentTarget.classList.add('active');
-        }
-
-        /* --- FIREWALL LOGIC --- */
-        function listenFirewallData(turma) {
-            database.ref(`node_answers/${turma}`).on('value', (snapshot) => { renderAnswersTable(snapshot.val() || {}); });
-            database.ref(`node_published/${turma}`).on('value', (snapshot) => { renderNodesCards(snapshot.val() || {}); });
-            database.ref(`support_messages/${turma}`).on('value', (snapshot) => { renderSupportMessages(snapshot.val() || {}, 'fwSupportMessages'); });
-            database.ref(`system_logs/${turma}`).on('value', (snapshot) => { renderLogs(snapshot.val() || {}, 'logsTableBody'); });
-        }
-
-        function renderAnswersTable(answers) {
-            const tbody = document.getElementById('answersTableBody');
-            tbody.innerHTML = '';
-            const keys = Object.keys(answers);
-
-            if (keys.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-dim);">Nenhuma resposta registrada.</td></tr>`;
-                return;
-            }
-
-            keys.forEach(id => {
-                const item = answers[id];
-                const isSeen = item.viewedByFirewall === true;
-                const tr = document.createElement('tr');
-
-                tr.innerHTML = `
-                    <td><strong>${item.studentName || 'Estudante ' + id}</strong></td>
-                    <td>${item.eixoAfinidade || 'Geral'}</td>
-                    <td>${item.eixoHabilidades || 'Padrão'}</td>
-                    <td>${item.eixoDisponibilidade || 'Integral'}</td>
-                    <td>
-                        <span class="status-tag ${isSeen ? 'seen' : 'unseen'}">
-                            ${isSeen ? '<i class="fa-solid fa-check-double"></i> Visto' : '<i class="fa-solid fa-clock"></i> Pendente'}
-                        </span>
-                    </td>
-                    <td>
-                        <button class="btn-eye ${isSeen ? 'seen' : ''}" onclick="toggleViewedStatus('${id}', ${isSeen})">
-                            <i class="fa-solid ${isSeen ? 'fa-eye-slash' : 'fa-eye'}"></i> ${isSeen ? 'Sinalizado' : 'Marcar Visto'}
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function toggleViewedStatus(answerId, currentStatus) {
-            const turma = currentUser.turma;
-            database.ref(`node_answers/${turma}/${answerId}`).update({
-                viewedByFirewall: !currentStatus,
-                viewedAt: new Date().toISOString()
-            });
-            logSystemEvent(`Firewall alterou validação [${answerId}]`, `Turma ${turma}`);
-        }
-
-        function renderNodesCards(nodes) {
-            const container = document.getElementById('nodesContainer');
-            container.innerHTML = '';
-            const keys = Object.keys(nodes);
-
-            if (keys.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-dim);">Nenhum Node alocado.</p>`;
-                return;
-            }
-
-            keys.forEach(key => {
-                const node = nodes[key];
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.style.margin = '0';
-                card.innerHTML = `
-                    <div style="font-family: var(--font-title); color: var(--neon-blue); margin-bottom: 8px;"><i class="fa-solid fa-cube"></i> Node #${key}</div>
-                    <div style="font-size: 0.9rem; color: var(--chrome-silver);"><strong>CPU Líder:</strong> ${node.cpuLeader || 'Não atribuído'}</div>
-                    <div style="font-size: 0.9rem; color: var(--chrome-silver);"><strong>Integrantes:</strong> ${node.members ? node.members.length : 0}</div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        /* --- MATRIX DATA LISTENERS & HANDLERS --- */
-        function listenMatrixData(turma) {
-            database.ref(`matrix_protocols/${turma}`).on('value', (snapshot) => { renderProtocols(snapshot.val() || {}); });
-            database.ref(`matrix_tasks/${turma}`).on('value', (snapshot) => { renderTasks(snapshot.val() || {}); });
-            database.ref(`system_logs/${turma}`).on('value', (snapshot) => { renderLogs(snapshot.val() || {}, 'matrixLogsBody'); });
-            database.ref(`matrix_repository/${turma}`).on('value', (snapshot) => { renderRepository(snapshot.val() || {}); });
-            database.ref(`support_messages/${turma}`).on('value', (snapshot) => { renderSupportData(snapshot.val() || {}); });
-            database.ref(`matrix_feedback/${turma}`).on('value', (snapshot) => { renderFeedbacks(snapshot.val() || {}); });
-        }
-
-        /* 1. PROTOCOLS */
-        function publishProtocol() {
-            const title = document.getElementById('protoTitle').value.trim();
-            const cat = document.getElementById('protoCategory').value.trim();
-            const desc = document.getElementById('protoDesc').value.trim();
-            const link = document.getElementById('protoLink').value.trim();
-
-            if (!title || !desc || !currentUser.turma) {
-                alert('Preencha pelo menos o Título e a Descrição do Protocolo.');
-                return;
-            }
-
-            database.ref(`matrix_protocols/${currentUser.turma}`).push({
-                title: title,
-                category: cat || 'Geral',
-                desc: desc,
-                link: link || '',
-                author: currentUser.role.toUpperCase(),
-                timestamp: new Date().toLocaleDateString('pt-BR')
-            });
-
-            document.getElementById('protoTitle').value = '';
-            document.getElementById('protoCategory').value = '';
-            document.getElementById('protoDesc').value = '';
-            document.getElementById('protoLink').value = '';
-
-            logSystemEvent(`Novo Protocolo criado: "${title}"`, `Turma ${currentUser.turma}`);
-        }
-
-        function renderProtocols(protocols) {
-            const container = document.getElementById('protocolsList');
-            container.innerHTML = '';
-            const keys = Object.keys(protocols);
-
-            if (keys.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-dim);">Nenhum protocolo cadastrado para esta turma.</p>`;
-                return;
-            }
-
-            keys.reverse().forEach(key => {
-                const item = protocols[key];
-                const card = document.createElement('div');
-                card.className = 'resource-card';
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
-                        <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-shield-cat"></i> ${item.title}</h4>
-                        <span class="status-tag seen">${item.category}</span>
-                    </div>
-                    <p style="color: var(--text-main); line-height: 1.4; margin-bottom: 12px;">${item.desc}</p>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size: 0.8rem; color: var(--text-dim);">Autor: ${item.author} | ${item.timestamp}</span>
-                        ${item.link ? `<a href="${item.link}" target="_blank" class="btn" style="padding: 4px 12px; font-size: 0.8rem;"><i class="fa-solid fa-paperclip"></i> Abrir Anexo / Documento</a>` : ''}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        /* 2. TASKS */
-        function publishTask() {
-            const title = document.getElementById('taskTitle').value.trim();
-            const target = document.getElementById('taskTarget').value;
-            const deadline = document.getElementById('taskDeadline').value;
-            const desc = document.getElementById('taskDesc').value.trim();
-            const link = document.getElementById('taskLink').value.trim();
-
-            if (!title || !desc || !currentUser.turma) {
-                alert('Preencha o Título e as Instruções da Tarefa.');
-                return;
-            }
-
-            database.ref(`matrix_tasks/${currentUser.turma}`).push({
-                title: title,
-                target: target,
-                deadline: deadline || 'Sem prazo fixado',
-                desc: desc,
-                link: link || '',
-                author: currentUser.role.toUpperCase(),
-                timestamp: new Date().toISOString()
-            });
-
-            document.getElementById('taskTitle').value = '';
-            document.getElementById('taskDesc').value = '';
-            document.getElementById('taskLink').value = '';
-            document.getElementById('taskDeadline').value = '';
-
-            logSystemEvent(`Nova Tarefa publicada: "${title}" [Alvo: ${target}]`, `Turma ${currentUser.turma}`);
-        }
-
-        function renderTasks(tasks) {
-            const container = document.getElementById('tasksList');
-            container.innerHTML = '';
-            const keys = Object.keys(tasks);
-
-            if (keys.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-dim);">Nenhuma tarefa pendente no momento.</p>`;
-                return;
-            }
-
-            keys.reverse().forEach(taskId => {
-                const task = tasks[taskId];
-                const card = document.createElement('div');
-                card.className = 'resource-card';
-                
-                const deadlineFormatted = task.deadline !== 'Sem prazo fixado' ? new Date(task.deadline).toLocaleString('pt-BR') : 'Sem prazo limite';
-
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
-                        <h4 style="color: #fff;"><i class="fa-solid fa-list-check"></i> ${task.title}</h4>
-                        <span class="status-tag unseen">Destinado a: ${task.target}</span>
-                    </div>
-                    <p style="color: var(--chrome-silver); margin-bottom: 12px; line-height: 1.4;">${task.desc}</p>
-                    
-                    <div style="background: rgba(5,8,17,0.6); padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
-                        <span><i class="fa-solid fa-hourglass-half" style="color: var(--neon-blue);"></i> <strong>Prazo:</strong> ${deadlineFormatted}</span>
-                        ${task.link ? `<a href="${task.link}" target="_blank" style="color: var(--neon-blue);"><i class="fa-solid fa-link"></i> Arquivo de Apoio</a>` : ''}
-                    </div>
-
-                    ${currentUser.role === 'executor' ? `
-                        <div style="margin-top: 10px; border-top: 1px dashed var(--border-chrome); padding-top: 10px;">
-                            <label style="font-size: 0.85rem;">Enviar Solução (URL do arquivo/trabalho):</label>
-                            <div style="display: flex; gap: 8px; margin-top: 4px;">
-                                <input type="url" id="subInput_${taskId}" placeholder="https://drive.google.com/..." style="padding: 6px;">
-                                <button class="btn" style="padding: 6px 14px;" onclick="submitTaskWork('${taskId}')"><i class="fa-solid fa-paper-plane"></i> Entregar</button>
-                            </div>
-                        </div>
-                    ` : ''}
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function submitTaskWork(taskId) {
-            const input = document.getElementById(`subInput_${taskId}`);
-            const link = input.value.trim();
-            if (!link) {
-                alert('Cole a URL da sua entrega.');
-                return;
-            }
-
-            database.ref(`task_submissions/${currentUser.turma}/${taskId}`).push({
-                student: currentUser.role.toUpperCase(),
-                workUrl: link,
-                submittedAt: new Date().toISOString()
-            });
-
-            alert('Entregável submetido com sucesso!');
-            input.value = '';
-            logSystemEvent(`Entregável enviado para tarefa [${taskId}]`, `Turma ${currentUser.turma}`);
-        }
-
-        /* 3. REPOSITORY (REGISTRO DAS 2 OBRAS) */
-        function saveRepositoryObras() {
-            const o1 = {
-                title: document.getElementById('editObra1Title').value.trim() || 'Obra Central 01',
-                desc: document.getElementById('editObra1Desc').value.trim() || 'Sinopse e diretrizes da primeira obra.',
-                eixos: document.getElementById('editObra1Eixos').value.trim() || 'Eixo A / Eixo B',
-                link: document.getElementById('editObra1Link').value.trim() || '#'
-            };
-
-            const o2 = {
-                title: document.getElementById('editObra2Title').value.trim() || 'Obra Central 02',
-                desc: document.getElementById('editObra2Desc').value.trim() || 'Sinopse e diretrizes da segunda obra.',
-                eixos: document.getElementById('editObra2Eixos').value.trim() || 'Eixo C / Eixo D',
-                link: document.getElementById('editObra2Link').value.trim() || '#'
-            };
-
-            database.ref(`matrix_repository/${currentUser.turma}`).set({
-                obra1: o1,
-                obra2: o2,
-                updatedBy: currentUser.role.toUpperCase(),
-                updatedAt: new Date().toISOString()
-            });
-
-            alert('Registro das duas obras atualizado com sucesso!');
-            logSystemEvent(`Repositório de Obras atualizado pelo Master`, `Turma ${currentUser.turma}`);
-        }
-
-        function renderRepository(repoData) {
-            const o1 = repoData.obra1 || {
-                title: 'Obra Central 01',
-                desc: 'Nenhum registro cadastrado para a Obra 01 nesta turma.',
-                eixos: 'Não definido',
-                link: '#'
-            };
-
-            const o2 = repoData.obra2 || {
-                title: 'Obra Central 02',
-                desc: 'Nenhum registro cadastrado para a Obra 02 nesta turma.',
-                eixos: 'Não definido',
-                link: '#'
-            };
-
-            document.getElementById('obra1TitleDisplay').innerText = o1.title;
-            document.getElementById('obra1DescDisplay').innerText = o1.desc;
-            document.getElementById('obra1EixosDisplay').innerText = o1.eixos;
-            document.getElementById('obra1LinkDisplay').href = o1.link;
-
-            document.getElementById('obra2TitleDisplay').innerText = o2.title;
-            document.getElementById('obra2DescDisplay').innerText = o2.desc;
-            document.getElementById('obra2EixosDisplay').innerText = o2.eixos;
-            document.getElementById('obra2LinkDisplay').href = o2.link;
-
-            // Preencher form do admin Master caso esteja vazio
-            if (currentUser.role === 'master' && !document.getElementById('editObra1Title').value) {
-                document.getElementById('editObra1Title').value = o1.title;
-                document.getElementById('editObra1Desc').value = o1.desc;
-                document.getElementById('editObra1Eixos').value = o1.eixos;
-                document.getElementById('editObra1Link').value = o1.link;
-
-                document.getElementById('editObra2Title').value = o2.title;
-                document.getElementById('editObra2Desc').value = o2.desc;
-                document.getElementById('editObra2Eixos').value = o2.eixos;
-                document.getElementById('editObra2Link').value = o2.link;
-            }
-        }
-
-        /* 4. SUPPORT (RECEPÇÃO MASTER E ENVIO DEMAIS) */
-        function sendClientSupport() {
-            const input = document.getElementById('matrixSupportInput');
-            const text = input.value.trim();
-            if (!text || !currentUser.turma) return;
-
-            database.ref(`support_messages/${currentUser.turma}`).push({
-                sender: currentUser.role.toUpperCase(),
-                text: text,
-                status: 'aberto',
-                timestamp: new Date().toLocaleTimeString('pt-BR')
-            });
-
-            input.value = '';
-        }
-
-        function replyAsMaster(msgId) {
-            const replyInput = document.getElementById(`replyInput_${msgId}`);
-            const replyText = replyInput.value.trim();
-            if (!replyText) return;
-
-            database.ref(`support_messages/${currentUser.turma}/${msgId}`).update({
-                masterReply: replyText,
-                status: 'respondido',
-                repliedAt: new Date().toLocaleTimeString('pt-BR')
-            });
-
-            logSystemEvent(`Master respondeu chamado de suporte [${msgId}]`, `Turma ${currentUser.turma}`);
-        }
-
-        function renderSupportData(messages) {
-            const keys = Object.keys(messages);
-
-            // Se for MASTER: Renderizar a caixa de recepção de chamados
-            if (currentUser.role === 'master') {
-                const container = document.getElementById('masterTicketsContainer');
-                container.innerHTML = '';
-
-                if (keys.length === 0) {
-                    container.innerHTML = `<p style="color: var(--text-dim);">Nenhum chamado de suporte recebido nesta turma.</p>`;
-                    return;
-                }
-
-                keys.reverse().forEach(msgId => {
-                    const msg = messages[msgId];
-                    const card = document.createElement('div');
-                    card.className = `chat-ticket ${msg.status === 'respondido' ? 'resolved' : ''}`;
-                    
-                    card.innerHTML = `
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-                            <strong style="color: var(--neon-blue);"><i class="fa-solid fa-user-circle"></i> ${msg.sender}</strong>
-                            <span class="status-tag ${msg.status === 'respondido' ? 'seen' : 'unseen'}">${msg.status || 'aberto'}</span>
-                        </div>
-                        <p style="color: #fff; margin-bottom: 10px;">${msg.text}</p>
-                        <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 10px;">Recebido às ${msg.timestamp}</div>
-
-                        ${msg.masterReply ? `
-                            <div style="background: rgba(0,240,255,0.08); border-left: 2px solid var(--neon-blue); padding: 8px; font-size: 0.9rem; margin-top: 8px;">
-                                <strong style="color: var(--neon-blue);">Sua Resposta:</strong> ${msg.masterReply}
-                            </div>
-                        ` : `
-                            <div style="display:flex; gap: 8px; margin-top: 8px;">
-                                <input type="text" id="replyInput_${msgId}" placeholder="Responder este chamado..." style="padding: 6px;">
-                                <button class="btn" style="padding: 6px 12px;" onclick="replyAsMaster('${msgId}')"><i class="fa-solid fa-reply"></i> Responder</button>
-                            </div>
-                        `}
-                    `;
-                    container.appendChild(card);
-                });
-            } else {
-                // Se for DEMAIS PERFIS: Renderizar o chat tradicional
-                renderSupportMessages(messages, 'matrixSupportMessages');
-            }
-        }
-
-        function renderSupportMessages(messages, elementId) {
-            const container = document.getElementById(elementId);
-            if (!container) return;
-            container.innerHTML = '';
-            
-            Object.keys(messages).forEach(key => {
-                const msg = messages[key];
-                const bubble = document.createElement('div');
-                bubble.className = `chat-ticket`;
-                bubble.style.marginBottom = '10px';
-                bubble.innerHTML = `
-                    <div style="font-size: 0.75rem; color: var(--neon-blue); font-weight: bold;">${msg.sender} - ${msg.timestamp}</div>
-                    <div style="color: #fff; margin-top: 4px;">${msg.text}</div>
-                    ${msg.masterReply ? `
-                        <div style="background: rgba(0,255,157,0.1); border-left: 2px solid var(--success-green); padding: 6px; margin-top: 6px; font-size: 0.85rem; color: var(--success-green);">
-                            <strong>Resposta do Master:</strong> ${msg.masterReply}
-                        </div>
-                    ` : ''}
-                `;
-                container.appendChild(bubble);
-            });
-            container.scrollTop = container.scrollHeight;
-        }
-
-        /* 5. FEEDBACK */
-        function publishFeedback() {
-            const title = document.getElementById('fbTitle').value.trim();
-            const target = document.getElementById('fbTarget').value.trim();
-            const content = document.getElementById('fbContent').value.trim();
-
-            if (!title || !content || !currentUser.turma) {
-                alert('Preencha o Título e o Conteúdo da Devolutiva.');
-                return;
-            }
-
-            database.ref(`matrix_feedback/${currentUser.turma}`).push({
-                title: title,
-                target: target || 'Geral',
-                content: content,
-                author: currentUser.role.toUpperCase(),
-                timestamp: new Date().toLocaleDateString('pt-BR')
-            });
-
-            document.getElementById('fbTitle').value = '';
-            document.getElementById('fbTarget').value = '';
-            document.getElementById('fbContent').value = '';
-
-            logSystemEvent(`Devolutiva publicada: "${title}"`, `Turma ${currentUser.turma}`);
-        }
-
-        function renderFeedbacks(feedbacks) {
-            const container = document.getElementById('feedbackContainer');
-            container.innerHTML = '';
-            const keys = Object.keys(feedbacks);
-
-            if (keys.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-dim);">Nenhuma devolutiva registrada nesta turma.</p>`;
-                return;
-            }
-
-            keys.reverse().forEach(key => {
-                const fb = feedbacks[key];
-                const div = document.createElement('div');
-                div.className = 'resource-card';
-                div.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
-                        <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-comment-dots"></i> ${fb.title}</h4>
-                        <span class="status-tag seen">Alvo: ${fb.target}</span>
-                    </div>
-                    <p style="color: var(--chrome-silver); margin-bottom: 10px; line-height: 1.4;">${fb.content}</p>
-                    <span style="font-size: 0.75rem; color: var(--text-dim);">Autor: ${fb.author} | Data: ${fb.timestamp}</span>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        /* LOG SYSTEM */
-        function logSystemEvent(eventDesc, origin) {
-            if (!currentUser.turma) return;
-            database.ref(`system_logs/${currentUser.turma}`).push({
-                timestamp: new Date().toLocaleTimeString('pt-BR'),
-                event: eventDesc,
-                origin: origin
-            });
-        }
-
-        function renderLogs(logs, targetBodyId) {
-            const tbody = document.getElementById(targetBodyId);
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            const keys = Object.keys(logs).reverse();
-
-            keys.forEach(key => {
-                const log = logs[key];
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="font-family: monospace; font-size: 0.85rem; color: var(--text-dim);">${log.timestamp}</td>
-                    <td>${log.event}</td>
-                    <td>${log.origin}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-    </script>
-</body>
-</html>
+  </header>
+
+  <!-- FILTROS EXCLUSIVOS MASTER -->
+  <div id="master-global-controls" class="master-controls" style="margin: 15px 30px 0 30px;">
+    <strong>PAINEL MASTER:</strong>
+    <label>Filtrar Visualização da Turma:</label>
+    <select id="master-view-turma" onchange="atualizarFiltrosMaster()">
+      <option value="TODAS">Todas as Turmas (1 a 5)</option>
+      <option value="TURMA_1">Turma 1</option>
+      <option value="TURMA_2">Turma 2</option>
+      <option value="TURMA_3">Turma 3</option>
+      <option value="TURMA_4">Turma 4</option>
+      <option value="TURMA_5">Turma 5</option>
+    </select>
+  </div>
+
+  <!-- MENU DE NAVEGAÇÃO -->
+  <nav>
+    <button class="nav-btn active" onclick="trocarAba('protocols')">PROTOCOLS</button>
+    <button class="nav-btn" onclick="trocarAba('tasks')">TASKS</button>
+    <button class="nav-btn" onclick="trocarAba('log')">LOG (Diário)</button>
+    <button class="nav-btn" onclick="trocarAba('repository')">REPOSITORY (Obras)</button>
+    <button class="nav-btn" onclick="trocarAba('suporte')">SUPORTE</button>
+    <button class="nav-btn" onclick="trocarAba('feedback')">FEEDBACK (360º)</button>
+  </nav>
+
+  <!-- CONTEÚDO DAS ABAS -->
+  <main>
+
+    <!-- ABA 1: PROTOCOLS -->
+    <section id="sec-protocols" class="panel-section active">
+      <div class="card" id="card-create-protocol">
+        <div class="card-title">Publicar Novo Protocolo Diretivo</div>
+        <div class="master-controls">
+          <label>Destino do Envio:</label>
+          <select id="proto-target-turma">
+            <option value="ALL">Todas as Turmas</option>
+            <option value="TURMA_1">Turma 1</option>
+            <option value="TURMA_2">Turma 2</option>
+          </select>
+          <select id="proto-target-node">
+            <option value="ALL">Todos os Nodes</option>
+            <option value="NODE_1">Node Alpha</option>
+            <option value="NODE_2">Node Beta</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Título do Protocolo</label>
+          <input type="text" placeholder="Ex: Protocolo de Segurança e Rede">
+        </div>
+        <div class="form-group">
+          <label>Instruções Gerais</label>
+          <textarea rows="3" placeholder="Orientações pedagógicas..."></textarea>
+        </div>
+        <div class="form-group file-input-wrapper">
+          <label>Anexo de Suporte (PDF, Word, PPT, HTML):</label><br>
+          <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.html">
+        </div>
+        <button class="btn-primary">PUBLICAR PROTOCOLO</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Protocolos Ativos</div>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Exibindo diretrizes vigentes para sua turma e node.</p>
+      </div>
+    </section>
+
+    <!-- ABA 2: TASKS -->
+    <section id="sec-tasks" class="panel-section">
+      <div class="card" id="card-create-task">
+        <div class="card-title">Criar e Atribuir Tarefa</div>
+        <div class="master-controls">
+          <label>Atribuir Para Perfil Especial:</label>
+          <select id="task-target-role">
+            <option value="ALL">Todos do Node/Turma</option>
+            <option value="CLUSTER">Apenas CLUSTERS (Monitores)</option>
+            <option value="CPU">Apenas CPUs (Líderes)</option>
+            <option value="EXECUTOR">Apenas EXECUTORS</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Título da Tarefa</label>
+          <input type="text" placeholder="Ex: Relatório do Ciclo Pedagógico">
+        </div>
+        <div class="form-group file-input-wrapper">
+          <label>Documento de Apoio (Anexo PDF/Word/PPT/HTML ou Link Externo):</label><br>
+          <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.html">
+          <input type="url" placeholder="https://link-externo-drive.com" style="margin-top: 8px; width: 100%;">
+        </div>
+        <button class="btn-primary">ATRIBUIR TAREFA</button>
+      </div>
+
+      <div class="card" onclick="registrarLeitura('task1')">
+        <div class="card-title">
+          <span>Task #01 - Entrega do Modelo Dimensional</span>
+          <div class="view-tracker">
+            <span class="eye-tag master" id="task1-eye-master">👁️ MASTER</span>
+            <span class="eye-tag firewall" id="task1-eye-firewall">👁️ FIREWALL</span>
+            <span class="eye-tag cluster" id="task1-eye-cluster">👁️ CLUSTER</span>
+          </div>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 12px;">Elaboração e revisão das peças do projeto de exposição.</p>
+        <div class="file-input-wrapper">
+          <label>Sua Resposta / Envio de Arquivo:</label><br>
+          <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.html">
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 3: LOG (DIÁRIO) -->
+    <section id="sec-log" class="panel-section">
+      <div class="card" onclick="registrarLeitura('log1')">
+        <div class="card-title">
+          <span>Diário Operacional do Node (LOG)</span>
+          <div class="view-tracker">
+            <span class="eye-tag master" id="log1-eye-master">👁️ MASTER</span>
+            <span class="eye-tag firewall" id="log1-eye-firewall">👁️ FIREWALL</span>
+            <span class="eye-tag cluster" id="log1-eye-cluster">👁️ CLUSTER</span>
+          </div>
+        </div>
+        <div id="log-editor-area">
+          <div class="form-group">
+            <label>Registro Diário (Exclusivo CPU):</label>
+            <textarea rows="4" placeholder="Descreva os avanços e atividades executadas hoje..."></textarea>
+          </div>
+          <button class="btn-primary">SALVAR REGISTRO DE LOG</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 4: REPOSITORY -->
+    <section id="sec-repository" class="panel-section">
+      <div class="card" onclick="registrarLeitura('repo1')">
+        <div class="card-title">
+          <span>Repositório de Obras e Produção</span>
+          <div class="view-tracker">
+            <span class="eye-tag master" id="repo1-eye-master">👁️ MASTER</span>
+            <span class="eye-tag firewall" id="repo1-eye-firewall">👁️ FIREWALL</span>
+            <span class="eye-tag cluster" id="repo1-eye-cluster">👁️ CLUSTER</span>
+          </div>
+        </div>
+        <p style="color: var(--text-muted);">Acervo das obras e registros das plataformas filiais (Nodes).</p>
+      </div>
+    </section>
+
+    <!-- ABA 5: SUPORTE (COMUNICAÇÃO TEXTUAL ASSÍNCRONA) -->
+    <section id="sec-suporte" class="panel-section">
+      <div class="card">
+        <div class="card-title">Canal Oficial de Suporte e Dúvidas</div>
+        <div class="form-group">
+          <label>Destinatário da Mensagem:</label>
+          <select id="suporte-destinatario">
+            <option value="MASTER">MASTER (Orientação Geral)</option>
+            <option value="FIREWALL">FIREWALL (Professor Orientador)</option>
+            <option value="CLUSTER">CLUSTER (Monitor da Turma)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Assunto</label>
+          <input type="text" placeholder="Resumo do chamado ou dúvida">
+        </div>
+        <div class="form-group">
+          <label>Mensagem (Apenas Texto Puro)</label>
+          <textarea rows="4" placeholder="Escreva sua dúvida ou solicitação..."></textarea>
+        </div>
+        <button class="btn-primary">ENVIAR COMUNICADO</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Caixa de Entrada / Chamados Recebidos</div>
+        <div class="thread-box">
+          <strong>Remetente: Node Alpha (EXECUTOR)</strong> | <small>Para: FIREWALL</small>
+          <p style="margin: 8px 0;">Dúvida quanto à formatação do relatório pedagógico do ciclo 2.</p>
+          <button class="btn-primary" style="padding: 4px 10px; font-size: 0.8rem;">RESPONDER THREAD</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 6: FEEDBACK (FORMULÁRIO DE AVALIAÇÃO 360º) -->
+    <section id="sec-feedback" class="panel-section">
+      <div id="feedback-locked-container" class="locked-banner">
+        <h2>🔒 Módulo de Feedback Bloqueado</h2>
+        <p style="margin-top: 10px;">O Formulário de Avaliação Pedagógica 360º será liberado automaticamente ao término da exposição em <strong>04 de Setembro de 2026</strong>.</p>
+      </div>
+
+      <div id="feedback-form-container" class="card" style="display: none; margin-top: 20px;">
+        <div class="card-title">Formulário de Avaliação da Experiência Pedagógica (360º)</div>
+        <div class="form-group">
+          <label>Como você avalia a dinâmica de cooperação no seu Node?</label>
+          <select>
+            <option>Excelente</option>
+            <option>Boa</option>
+            <option>Regular</option>
+            <option>Insuficiente</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Comentários e Percepções Gerais sobre a Exposição:</label>
+          <textarea rows="4" placeholder="Sua avaliação detalhada..."></textarea>
+        </div>
+        <button class="btn-primary">SUBMETER AVALIAÇÃO FINAL</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // TIMER REGRESSIVO PARA 04/SETEMBRO/2026
+    const targetDate = new Date("2026-09-04T00:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        document.getElementById("countdown-timer").innerText = "MOSTRA CONCLUÍDA";
+        liberarFeedback();
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      Para ajustar o vídeo da introdução, centralizá-lo e limitar o tamanho para manter a resolução sem esticar, você deve aplicar **Flexbox** no container da introdução e definir dimensões máximas (`max-width` e `max-height`) para o elemento `<video>`.
+
+Substitua ou adicione o seguinte trecho no seu CSS (no arquivo de estilos do seu projeto):
+
+```css
+/* Container da tela de introdução */
+.intro-container, #intro-screen { /* Adapte para a classe ou ID do seu container */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #0b132b; /* Cor do fundo azul padrão da plataforma */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* O elemento do vídeo */
+.intro-container video, #intro-video { /* Adapte para a classe ou ID do seu video */
+    width: 85%;
+    max-width: 720px;   /* Limita a largura para o vídeo não esticar */
+    max-height: 75vh;   /* Limita a altura proporcional à tela */
+    height: auto;
+    object-fit: contain; /* Garante que o vídeo mantenha as proporções sem cortar */
+    border-radius: 12px; /* Opcional: bordas suaves para um acabamento elegante */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); /* Opcional: destaca o vídeo do fundo */
+}
