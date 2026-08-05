@@ -54,14 +54,14 @@
             overflow-x: hidden;
         }
 
-        /* Intro Splash Video Overlay */
+       /* Intro Splash Video Overlay */
         #introOverlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: var(--bg-deep);
+            background-color: #ffffff; /* Fundo 100% branco */
             z-index: 9999;
             display: flex;
             justify-content: center;
@@ -70,30 +70,38 @@
         }
 
         #introVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            max-width: 60vw; /* Tamanho reduzido sem perder resolução */
+            max-height: 60vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border: none; /* Remove qualquer moldura ou linha */
+            outline: none;
+            box-shadow: none; /* Garante ausência de sombras ao redor */
+            background-color: transparent;
         }
 
         #skipIntroBtn {
             position: absolute;
             bottom: 30px;
             right: 30px;
-            background: rgba(10, 16, 30, 0.85);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 10px 20px;
+            background: var(--neon-blue); /* Azul do tema (#00f0ff) */
+            color: #050811; /* Texto escuro para contraste sobre o azul */
+            border: none;
+            padding: 12px 22px;
             font-family: var(--font-title);
             font-size: 0.85rem;
+            font-weight: 700;
             cursor: pointer;
             border-radius: 6px;
-            box-shadow: 0 0 12px var(--neon-glow);
+            box-shadow: 0 4px 14px rgba(0, 240, 255, 0.35);
             transition: all 0.3s ease;
         }
 
         #skipIntroBtn:hover {
-            background: var(--neon-blue);
-            color: #000;
+            background: #00b8e6;
+            color: #ffffff;
+            transform: translateY(-2px);
         }
 
         /* Header */
