@@ -553,6 +553,48 @@
             font-size: 0.85rem;
         }
     </style>
+    
+    /* Banner Countdown */
+        .countdown-card {
+            background: linear-gradient(135deg, rgba(10, 16, 30, 0.95), rgba(0, 240, 255, 0.12));
+            border: 1px solid var(--neon-blue);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 0 15px var(--neon-glow);
+        }
+        .countdown-title {
+            font-family: var(--font-title);
+            font-size: 0.9rem;
+            color: var(--neon-blue);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+        .countdown-unit {
+            background: rgba(5, 8, 17, 0.85);
+            border: 1px solid var(--border-chrome);
+            padding: 8px 12px;
+            border-radius: 6px;
+            min-width: 65px;
+        }
+        .countdown-num {
+            font-family: var(--font-title);
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 8px var(--neon-blue);
+        }
+        .countdown-lbl {
+            font-size: 0.68rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
 </head>
 <body>
 
@@ -599,6 +641,16 @@
     </header>
 
     <div class="main-container">
+        <!-- BANNER DE CONTAGEM REGRESSIVA -->
+        <div id="countdownBanner" class="countdown-card" style="display: none;">
+            <div class="countdown-title"><i class="fa-solid fa-hourglass-start"></i> CONTAGEM REGRESSIVA // 04 DE SETEMBRO</div>
+            <div class="countdown-timer">
+                <div class="countdown-unit"><div class="countdown-num" id="cdDays">00</div><div class="countdown-lbl">Dias</div></div>
+                <div class="countdown-unit"><div class="countdown-num" id="cdHours">00</div><div class="countdown-lbl">Horas</div></div>
+                <div class="countdown-unit"><div class="countdown-num" id="cdMinutes">00</div><div class="countdown-lbl">Minutos</div></div>
+                <div class="countdown-unit"><div class="countdown-num" id="cdSeconds">00</div><div class="countdown-lbl">Segundos</div></div>
+            </div>
+        </div>
 
         <!-- LOGIN SECTION -->
         <div id="loginSection" class="card view-section active" style="max-width: 450px; margin: 40px auto;">
@@ -1000,7 +1052,44 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') finishIntro();
         });
+// Lógica do Contador Regressivo (04 de Setembro)
+        let countdownInterval = null;
 
+        function startCountdown() {
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            function updateTimer() {
+                const now = new Date();
+                let targetDate = new Date(now.getFullYear(), 8, 4, 0, 0, 0); // Mês 8 = Setembro
+
+                if (now > targetDate) {
+                    targetDate.setFullYear(targetDate.getFullYear() + 1);
+                }
+
+                const diff = targetDate - now;
+
+                if (diff <= 0) {
+                    document.getElementById('countdownBanner').innerHTML = `
+                        <div class="countdown-title" style="color: var(--success-green);">
+                            <i class="fa-solid fa-flag-checkered"></i> O DIA 04 DE SETEMBRO CHEGOU!
+                        </div>`;
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('cdDays').innerText = String(days).padStart(2, '0');
+                document.getElementById('cdHours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('cdMinutes').innerText = String(minutes).padStart(2, '0');
+                document.getElementById('cdSeconds').innerText = String(seconds).padStart(2, '0');
+            }
+
+            updateTimer();
+            countdownInterval = setInterval(updateTimer, 1000);
+        }
         // Alterna campo de turma no formulário de login
         function toggleLoginTurmaGroup() {
             const role = document.getElementById('roleSelect').value;
@@ -1068,6 +1157,8 @@
             currentUser = { role, turma, authenticated: true };
 
             document.getElementById('loginSection').classList.remove('active');
+            document.getElementById('countdownBanner').style.display = 'block';
+            startCountdown();
             document.getElementById('userInfo').style.display = 'flex';
             
             if (role === 'master') {
