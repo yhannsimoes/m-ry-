@@ -18,6 +18,54 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <style>
+        /* ===== ESTILO DO CONTADOR ===== */
+        .countdown-card {
+            background: rgba(10, 16, 30, 0.9) !important;
+            border: 1px solid #00f0ff !important;
+            border-radius: 12px !important;
+            padding: 15px !important;
+            margin: 15px auto !important;
+            max-width: 500px !important;
+            text-align: center !important;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3) !important;
+        }
+        .countdown-title {
+            font-size: 0.85rem !important;
+            font-weight: bold !important;
+            color: #00f0ff !important;
+            letter-spacing: 1.5px !important;
+            margin-bottom: 10px !important;
+        }
+        .countdown-timer {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 10px !important;
+        }
+        .countdown-unit {
+            background: rgba(5, 8, 17, 0.9) !important;
+            border: 1px solid rgba(0, 240, 255, 0.4) !important;
+            padding: 8px 10px !important;
+            border-radius: 6px !important;
+            min-width: 65px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+        }
+        .countdown-num {
+            font-size: 1.4rem !important;
+            font-weight: 900 !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 8px #00f0ff !important;
+            line-height: 1 !important;
+        }
+        .countdown-lbl {
+            font-size: 0.65rem !important;
+            color: #7a9bb8 !important;
+            text-transform: uppercase !important;
+            margin-top: 4px !important;
+        }
         :root {
             --bg-deep: #050811;
             --panel-bg: rgba(10, 16, 30, 0.88);
@@ -697,15 +745,27 @@
 
     <div class="main-container">
         <!-- BANNER DE CONTAGEM REGRESSIVA -->
-        <div id="countdownBanner" class="countdown-card" style="display: none;">
-            <div class="countdown-title"><i class="fa-solid fa-hourglass-start"></i> CONTAGEM REGRESSIVA // 04 DE SETEMBRO</div>
-            <div class="countdown-timer">
-                <div class="countdown-unit"><div class="countdown-num" id="cdDays">00</div><div class="countdown-lbl">Dias</div></div>
-                <div class="countdown-unit"><div class="countdown-num" id="cdHours">00</div><div class="countdown-lbl">Horas</div></div>
-                <div class="countdown-unit"><div class="countdown-num" id="cdMinutes">00</div><div class="countdown-lbl">Minutos</div></div>
-                <div class="countdown-unit"><div class="countdown-num" id="cdSeconds">00</div><div class="countdown-lbl">Segundos</div></div>
+       <div id="countdownBanner" class="countdown-card" style="display: none;">
+        <div class="countdown-title"><i class="fa-solid fa-hourglass-start"></i> CONTAGEM REGRESSIVA // 04 DE SETEMBRO</div>
+        <div class="countdown-timer">
+            <div class="countdown-unit">
+                <span class="countdown-num" id="cdDays">00</span>
+                <span class="countdown-lbl">Dias</span>
+            </div>
+            <div class="countdown-unit">
+                <span class="countdown-num" id="cdHours">00</span>
+                <span class="countdown-lbl">Horas</span>
+            </div>
+            <div class="countdown-unit">
+                <span class="countdown-num" id="cdMinutes">00</span>
+                <span class="countdown-lbl">Minutos</span>
+            </div>
+            <div class="countdown-unit">
+                <span class="countdown-num" id="cdSeconds">00</span>
+                <span class="countdown-lbl">Segundos</span>
             </div>
         </div>
+    </div>
 
         <!-- LOGIN SECTION -->
         <div id="loginSection" class="card view-section active" style="max-width: 450px; margin: 40px auto;">
