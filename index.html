@@ -108,7 +108,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: #ffffff; /* Fundo 100% branco */
+            background-color: #ffffff;
             z-index: 9999;
             display: flex;
             justify-content: center;
@@ -117,14 +117,14 @@
         }
 
         #introVideo {
-            max-width: 60vw; /* Tamanho reduzido sem perder resolução */
+            max-width: 60vw;
             max-height: 60vh;
             width: auto;
             height: auto;
             object-fit: contain;
-            border: none; /* Remove qualquer moldura ou linha */
+            border: none;
             outline: none;
-            box-shadow: none; /* Garante ausência de sombras ao redor */
+            box-shadow: none;
             background-color: transparent;
         }
 
@@ -132,8 +132,8 @@
             position: absolute;
             bottom: 30px;
             right: 30px;
-            background: var(--neon-blue); /* Azul do tema (#00f0ff) */
-            color: #050811; /* Texto escuro para contraste sobre o azul */
+            background: var(--neon-blue);
+            color: #050811;
             border: none;
             padding: 12px 22px;
             font-family: var(--font-title);
@@ -238,35 +238,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .master-turma-picker {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(15, 25, 45, 0.9);
-            border: 1px solid var(--neon-blue);
-            padding: 4px 10px;
-            border-radius: 6px;
-            box-shadow: 0 0 10px var(--neon-glow);
-        }
-
-        .master-turma-picker label {
-            font-family: var(--font-title);
-            font-size: 0.75rem;
-            color: var(--neon-blue);
-            margin: 0;
-            white-space: nowrap;
-        }
-
-        .master-turma-picker select {
-            width: auto;
-            padding: 4px 8px;
-            font-size: 0.85rem;
-            background: rgba(5, 8, 17, 0.9);
-            color: #fff;
-            border: 1px solid var(--border-chrome);
-            border-radius: 4px;
         }
 
         .main-container {
@@ -386,10 +357,16 @@
             text-decoration: none;
         }
 
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             background: var(--neon-blue);
             color: #000;
             box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: var(--text-dim);
         }
 
         /* Eye Audit Component */
@@ -598,49 +575,8 @@
             padding: 10px;
             margin-top: 10px;
             font-size: 0.85rem;
-             /* Banner Countdown */
-        .countdown-card {
-            background: linear-gradient(135deg, rgba(10, 16, 30, 0.95), rgba(0, 240, 255, 0.12));
-            border: 1px solid var(--neon-blue);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 25px;
-            text-align: center;
-            box-shadow: 0 0 15px var(--neon-glow);
         }
-        .countdown-title {
-            font-family: var(--font-title);
-            font-size: 0.9rem;
-            color: var(--neon-blue);
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-        .countdown-timer {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-        }
-        .countdown-unit {
-            background: rgba(5, 8, 17, 0.85);
-            border: 1px solid var(--border-chrome);
-            padding: 8px 12px;
-            border-radius: 6px;
-            min-width: 65px;
-        }
-        .countdown-num {
-            font-family: var(--font-title);
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 8px var(--neon-blue);
-        }
-        .countdown-lbl {
-            font-size: 0.68rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-        }
-        }
-        /* BANNER COUNTDOWN STYLES */
+
         #countdownBanner {
             background: rgba(10, 16, 30, 0.85) !important;
             border: 1px solid var(--neon-blue) !important;
@@ -709,7 +645,7 @@
         <button id="skipIntroBtn" onclick="finishIntro()">PULAR INTRO <i class="fa-solid fa-forward"></i></button>
     </div>
 
-    <!-- HEADER MATRIZ m@ry -->
+    <!-- HEADER MATRIZ m@ry (SEM SELETOR DE TURMA NO TOPO) -->
     <header>
         <div class="brand-container">
             <img src="m@ry (1).jpg" alt="m@ry Logo" class="brand-logo" onerror="this.src='logo.png'">
@@ -720,18 +656,6 @@
         </div>
 
         <div class="header-actions">
-            <!-- Master Turma Dynamic Selector Header -->
-            <div id="masterHeaderTurmaPicker" class="master-turma-picker" style="display: none;">
-                <label><i class="fa-solid fa-filter"></i> TURMA MASTER:</label>
-                <select id="masterGlobalTurmaSelect" onchange="changeMasterTurma(this.value)">
-                    <option value="3A">3º Ano A (3A)</option>
-                    <option value="3B">3º Ano B (3B)</option>
-                    <option value="3C">3º Ano C (3C)</option>
-                    <option value="3D">3º Ano D (3D)</option>
-                    <option value="3E">3º Ano E (3E)</option>
-                </select>
-            </div>
-
             <a href="https://yhannsimoes.github.io/node/" target="_blank" class="filial-link-btn">
                 <i class="fa-solid fa-network-wired"></i> Acessar Filial NODE
             </a>
@@ -767,7 +691,7 @@
         </div>
     </div>
 
-        <!-- LOGIN SECTION -->
+        <!-- LOGIN SECTION DINÂMICO -->
         <div id="loginSection" class="card view-section active" style="max-width: 450px; margin: 40px auto;">
             <div class="card-header">
                 <span><i class="fa-solid fa-user-shield"></i> Login Matriz m@ry</span>
@@ -786,13 +710,24 @@
 
                 <div class="form-group" id="loginTurmaGroup" style="display: none;">
                     <label>Turma</label>
-                    <select id="turmaSelect">
-                        <option value="3A">Terceiro Ano A (3A)</option>
-                        <option value="3B">Terceiro Ano B (3B)</option>
-                        <option value="3C">Terceiro Ano C (3C)</option>
-                        <option value="3D">Terceiro Ano D (3D)</option>
-                        <option value="3E">Terceiro Ano E (3E)</option>
+                    <select id="turmaSelect" onchange="updateDynamicLoginFields()">
+                        <option value="3A">3º Ano A</option>
+                        <option value="3B">3º Ano B</option>
+                        <option value="3C">3º Ano C</option>
+                        <option value="3D">3º Ano D</option>
+                        <option value="3E">3º Ano E</option>
                     </select>
+                </div>
+
+                <!-- LOGIN DINÂMICO: BANCO FILIAL NODES -->
+                <div class="form-group" id="loginStudentGroup" style="display: none;">
+                    <label><i class="fa-solid fa-user-graduate"></i> Estudante Cadastrado (Filial Nodes)</label>
+                    <select id="studentSelect"></select>
+                </div>
+
+                <div class="form-group" id="loginCpuGroup" style="display: none;">
+                    <label><i class="fa-solid fa-microchip"></i> Node Liderado (CPU)</label>
+                    <select id="cpuNodeSelect"></select>
                 </div>
 
                 <div class="form-group">
@@ -811,7 +746,16 @@
             <div class="card">
                 <div class="card-header">
                     <span><i class="fa-solid fa-eye"></i> Painel Firewall // Auditoria e Inspeção</span>
-                    <span id="firewallTurmaBadge" class="user-badge">TURMA: --</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label style="margin:0; font-size: 0.85rem;"><i class="fa-solid fa-filter"></i> TURMA:</label>
+                        <select id="fwTurmaSelect" onchange="changeSectionTurma(this.value)" style="width: auto; padding: 4px 8px; font-size: 0.85rem;">
+                            <option value="3A">3º Ano A</option>
+                            <option value="3B">3º Ano B</option>
+                            <option value="3C">3º Ano C</option>
+                            <option value="3D">3º Ano D</option>
+                            <option value="3E">3º Ano E</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="nav-tabs">
@@ -821,7 +765,6 @@
                     <button class="tab-btn" onclick="switchTab('fwLogsTab', event, 'fw-tab')"><i class="fa-solid fa-terminal"></i> Logs</button>
                 </div>
 
-                <!-- Respostas -->
                 <div id="fwAnswersTab" class="fw-tab-content">
                     <table class="data-table">
                         <thead>
@@ -837,19 +780,16 @@
                     </table>
                 </div>
 
-                <!-- Nodes Filial -->
                 <div id="fwNodesTab" class="fw-tab-content" style="display: none;">
                     <div id="nodesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px;"></div>
                 </div>
 
-                <!-- Suporte Firewall -->
                 <div id="fwSupportTab" class="fw-tab-content" style="display: none;">
                     <div class="chat-container">
                         <div class="chat-messages" id="fwSupportMessages"></div>
                     </div>
                 </div>
 
-                <!-- Logs -->
                 <div id="fwLogsTab" class="fw-tab-content" style="display: none;">
                     <table class="data-table">
                         <thead>
@@ -873,6 +813,14 @@
                     <span id="matrixDashTitle"><i class="fa-solid fa-sitemap"></i> Matriz m@ry</span>
                     
                     <div style="display: flex; gap: 10px; align-items: center;">
+                        <label style="margin:0; font-size: 0.85rem;"><i class="fa-solid fa-layer-group"></i> TURMA SEÇÃO:</label>
+                        <select id="matrixTurmaSelect" onchange="changeSectionTurma(this.value)" style="width: auto; padding: 4px 8px; font-size: 0.85rem;">
+                            <option value="3A">3º Ano A</option>
+                            <option value="3B">3º Ano B</option>
+                            <option value="3C">3º Ano C</option>
+                            <option value="3D">3º Ano D</option>
+                            <option value="3E">3º Ano E</option>
+                        </select>
                         <a href="https://yhannsimoes.github.io/node/" target="_blank" class="filial-link-btn">
                             <i class="fa-solid fa-right-to-bracket"></i> Ir para Filial NODE
                         </a>
@@ -891,7 +839,20 @@
 
                 <!-- 1. PROTOCOLS -->
                 <div id="modProtocols" class="matrix-tab-content">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Protocolos de Operação Pedagógica</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="color: var(--neon-blue); margin: 0;">Protocolos de Operação Pedagógica</h3>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="margin:0; font-size: 0.85rem;"><i class="fa-solid fa-filter"></i> Filtrar Turma:</label>
+                            <select id="protocolTurmaFilter" onchange="renderProtocolsWithFilter(this.value)" style="width: auto; padding: 4px 8px;">
+                                <option value="ALL">Todas as Turmas</option>
+                                <option value="3A">3º Ano A</option>
+                                <option value="3B">3º Ano B</option>
+                                <option value="3C">3º Ano C</option>
+                                <option value="3D">3º Ano D</option>
+                                <option value="3E">3º Ano E</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <!-- Painel de Inserção (Master / Firewall) -->
                     <div id="protocolAdminPanel" class="creation-panel" style="display: none;">
@@ -918,20 +879,56 @@
                     <div id="protocolsList"></div>
                 </div>
 
-                <!-- 2. TASKS -->
+                <!-- 2. TASKS (SELETORES INDEPENDENTES, REGRA CPU E SEPARAÇÃO DATA/HORA) -->
                 <div id="modTasks" class="matrix-tab-content" style="display: none;">
                     <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Matriz de Tarefas & Entregáveis</h3>
 
-                    <!-- Criador de Tarefas (Master / CPU) -->
+                    <!-- Criador de Tarefas (CPU / Master) -->
                     <div id="taskAdminPanel" class="creation-panel" style="display: none;">
                         <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-calendar-plus"></i> Criar Nova Tarefa / Entregável</h4>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                            <div>
+                                <label style="font-size: 0.8rem;">Turma Alvo</label>
+                                <select id="taskTurmaSelect" onchange="updateTaskClusterInfo(this.value)">
+                                    <option value="3A">3º Ano A</option>
+                                    <option value="3B">3º Ano B</option>
+                                    <option value="3C">3º Ano C</option>
+                                    <option value="3D">3º Ano D</option>
+                                    <option value="3E">3º Ano E</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8rem;">Cluster Responsável</label>
+                                <input type="text" id="taskClusterDisplay" readonly style="background: rgba(255,255,255,0.05); color: var(--neon-blue);" value="Debora Laura Oliveira da Silva">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8rem;">Destino</label>
+                                <select id="taskTargetSelect" onchange="handleTaskTargetChange(this.value)">
+                                    <option value="Apenas CPUs">Apenas CPUs</option>
+                                    <option value="Todos os Executores">Todos os Executores</option>
+                                    <option value="Para os Nodes">Para os Nodes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- AVISO AUTOMÁTICO SE DESTINO FOR PARA OS NODES -->
+                        <div id="cpuNoticeBanner" style="display:none; background: rgba(255, 183, 3, 0.15); border: 1px solid var(--warning-amber); border-radius: 6px; padding: 10px; margin-bottom: 10px; color: var(--warning-amber); font-weight: bold; font-size: 0.9rem;">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Responsável pela resposta: CPU
+                        </div>
+
                         <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
                             <input type="text" id="taskTitle" placeholder="Título da Tarefa">
-                            <select id="taskTarget">
-                                <!-- Populado dinamicamente com base no Manual X -->
-                            </select>
-                            <input type="datetime-local" id="taskDeadline">
+                            <div>
+                                <label style="font-size: 0.75rem; margin-bottom: 2px;">Data de Entrega</label>
+                                <input type="date" id="taskDueDate">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; margin-bottom: 2px;">Limite de Hora</label>
+                                <input type="time" id="taskDueTime">
+                            </div>
                         </div>
+
                         <div class="form-group">
                             <textarea id="taskDesc" rows="2" placeholder="Instruções detalhadas do entregável..."></textarea>
                         </div>
@@ -943,7 +940,7 @@
                                 <span id="taskFileName" class="file-name-indicator">Nenhum arquivo selecionado</span>
                             </div>
                         </div>
-                        <button class="btn" style="width: 100%;" onclick="publishTask()"><i class="fa-solid fa-check-circle"></i> Publicar Tarefa</button>
+                        <button class="btn" id="publishTaskBtn" style="width: 100%;" onclick="publishTask()"><i class="fa-solid fa-check-circle"></i> Publicar Tarefa</button>
                     </div>
 
                     <div id="tasksList"></div>
@@ -965,35 +962,38 @@
                     </table>
                 </div>
 
-                <!-- 4. REPOSITORY (REGISTRO DAS DUAS OBRAS) -->
+                <!-- 4. REPOSITORY (REGISTRO DAS DUAS OBRAS // PERMISSÃO PERFIL CPU VS MASTER) -->
                 <div id="modRepository" class="matrix-tab-content" style="display: none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                         <h3 style="color: var(--neon-blue); margin: 0;">Registro Central das Obras (Manual X)</h3>
                         <div id="repoEyeAuditContainer" class="eye-audit-container"></div>
                     </div>
 
-                    <!-- Painel de Edição Master -->
+                    <!-- Alerta de apenas leitura para Perfil Master -->
+                    <div id="repoMasterNotice" style="display: none; background: rgba(0, 240, 255, 0.1); border: 1px solid var(--neon-blue); padding: 10px; border-radius: 6px; margin-bottom: 15px; color: var(--neon-blue);">
+                        <i class="fa-solid fa-circle-info"></i> <strong>Modo de Consulta (Perfil Master):</strong> Apenas visualização do registro de arquivos. Publicações e alterações são de responsabilidade do perfil CPU.
+                    </div>
+
+                    <!-- Painel de Publicação e Edição das Obras -->
                     <div id="repoAdminPanel" class="creation-panel" style="display: none;">
-                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-pen-to-square"></i> Atualizar Registro de Obras (Exclusivo Master)</h4>
+                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-pen-to-square"></i> Publicação / Atualização de Arquivos e Obras</h4>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                            <!-- Edit Obra 1 -->
                             <div style="border-right: 1px solid var(--border-chrome); padding-right: 15px;">
                                 <h5 style="color: var(--chrome-silver); margin-bottom: 8px;">OBRA 1: Arte Plástica / Física</h5>
                                 <input type="text" id="editObra1Title" placeholder="Título da Obra 01" style="margin-bottom: 8px;">
                                 <textarea id="editObra1Desc" rows="2" placeholder="Sinopse / Diretriz Central" style="margin-bottom: 8px;"></textarea>
-                                <input type="text" id="editObra1Eixos" placeholder="Modalidades (Pintura, Escultura, Assemblage...)" style="margin-bottom: 8px;">
-                                <input type="url" id="editObra1Link" placeholder="Link do Material de Referência">
+                                <input type="text" id="editObra1Eixos" placeholder="Modalidades (Pintura, Escultura...)" style="margin-bottom: 8px;">
+                                <input type="url" id="editObra1Link" placeholder="Link do Material / Arquivo">
                             </div>
-                            <!-- Edit Obra 2 -->
                             <div>
                                 <h5 style="color: var(--chrome-silver); margin-bottom: 8px;">OBRA 2: Arte Digital Interativa</h5>
                                 <input type="text" id="editObra2Title" placeholder="Título da Obra 02" style="margin-bottom: 8px;">
                                 <textarea id="editObra2Desc" rows="2" placeholder="Sinopse / Diretriz Central" style="margin-bottom: 8px;"></textarea>
-                                <input type="text" id="editObra2Eixos" placeholder="Modalidades (Jogo, Robótica, RA, Código...)" style="margin-bottom: 8px;">
-                                <input type="url" id="editObra2Link" placeholder="Link do Material de Referência">
+                                <input type="text" id="editObra2Eixos" placeholder="Modalidades (Jogo, Robótica, RA...)" style="margin-bottom: 8px;">
+                                <input type="url" id="editObra2Link" placeholder="Link do Material / Arquivo">
                             </div>
                         </div>
-                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="saveRepositoryObras()"><i class="fa-solid fa-save"></i> Salvar Obras no Repositório</button>
+                        <button class="btn" id="saveRepoBtn" style="width: 100%; margin-top: 15px;" onclick="saveRepositoryObras()"><i class="fa-solid fa-save"></i> Salvar Arquivos no Repositório</button>
                     </div>
 
                     <!-- Cards Fixos Obra 01 e Obra 02 -->
@@ -1020,17 +1020,15 @@
                     </div>
                 </div>
 
-                <!-- 5. SUPPORT (CANAL PRINCIPAL DE COMUNICAÇÃO) -->
+                <!-- 5. SUPPORT -->
                 <div id="modSupport" class="matrix-tab-content" style="display: none;">
                     <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Central de Suporte & Comunicação Direta</h3>
 
-                    <!-- Visão Master: Mesa de Recepção de Chamados -->
                     <div id="masterSupportInbox" style="display: none;">
                         <h4 style="color: var(--chrome-silver); margin-bottom: 15px;"><i class="fa-solid fa-inbox"></i> Chamados Recebidos</h4>
                         <div id="masterTicketsContainer" class="chat-messages" style="height: auto; max-height: 500px;"></div>
                     </div>
 
-                    <!-- Visão Demais Perfis: Form de Envio para o Master -->
                     <div id="clientSupportPanel" style="display: none;">
                         <div class="chat-container">
                             <div class="chat-messages" id="matrixSupportMessages"></div>
@@ -1042,7 +1040,7 @@
                     </div>
                 </div>
 
-                <!-- 6. FEEDBACK (EM BREVE) -->
+                <!-- 6. FEEDBACK -->
                 <div id="modFeedback" class="matrix-tab-content" style="display: none;">
                     <div class="coming-soon-box">
                         <i class="fa-solid fa-hourglass-half" style="font-size: 3.5rem; color: var(--neon-blue); margin-bottom: 15px;"></i>
@@ -1060,7 +1058,7 @@
     </div>
 
     <script>
-        // BASE DE DADOS COMPLETA INTEGRADA DO "MANUAL X" (3º ANO A ao 3º ANO E)
+        // BASE DE DADOS INTEGRADA DO MANUAL X
         const MANUAL_X_DATA = {
             "3A": {
                 story: 'Robbie',
@@ -1124,7 +1122,6 @@
             }
         };
 
-        // CONFIGURAÇÃO DO FIREBASE (CONECTADO À BASE DA FILIAL NODE)
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForMaryPlatformNodeSecular",
             authDomain: "mary-node-secular.firebaseapp.com",
@@ -1138,7 +1135,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let currentUser = { role: null, turma: '3A', authenticated: false };
+        let currentUser = { role: null, turma: '3A', authenticated: false, name: '' };
 
         const FIREWALL_PASSWORDS = {
             "3A": "orientador3a",
@@ -1148,7 +1145,7 @@
             "3E": "orientador3e"
         };
 
-        // Intro Video Handler
+        // Intro Video
         const introVideo = document.getElementById('introVideo');
         const introOverlay = document.getElementById('introOverlay');
 
@@ -1167,15 +1164,15 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') finishIntro();
         });
-// Lógica do Contador Regressivo (04 de Setembro)
-        let countdownInterval = null;
 
+        // Contagem Regressiva
+        let countdownInterval = null;
         function startCountdown() {
             if (countdownInterval) clearInterval(countdownInterval);
 
             function updateTimer() {
                 const now = new Date();
-                let targetDate = new Date(now.getFullYear(), 8, 4, 0, 0, 0); // Mês 8 = Setembro
+                let targetDate = new Date(now.getFullYear(), 8, 4, 0, 0, 0);
 
                 if (now > targetDate) {
                     targetDate.setFullYear(targetDate.getFullYear() + 1);
@@ -1205,15 +1202,198 @@
             updateTimer();
             countdownInterval = setInterval(updateTimer, 1000);
         }
-        // Alterna campo de turma no formulário de login
+
+        // LÓGICA DE CAMPOS DINÂMICOS NO LOGIN
         function toggleLoginTurmaGroup() {
             const role = document.getElementById('roleSelect').value;
             const turmaGroup = document.getElementById('loginTurmaGroup');
             turmaGroup.style.display = (role === 'master') ? 'none' : 'block';
+            updateDynamicLoginFields();
+        }
+
+        function updateDynamicLoginFields() {
+            const role = document.getElementById('roleSelect').value;
+            const turma = document.getElementById('turmaSelect').value;
+            const studentGroup = document.getElementById('loginStudentGroup');
+            const cpuGroup = document.getElementById('loginCpuGroup');
+            const studentSelect = document.getElementById('studentSelect');
+            const cpuSelect = document.getElementById('cpuNodeSelect');
+
+            studentGroup.style.display = (role === 'executor') ? 'block' : 'none';
+            cpuGroup.style.display = (role === 'cpu') ? 'block' : 'none';
+
+            const data = MANUAL_X_DATA[turma];
+            if (!data) return;
+
+            if (role === 'executor') {
+                studentSelect.innerHTML = '';
+                data.nodes.forEach(n => {
+                    const opt = document.createElement('option');
+                    opt.value = n.cpu;
+                    opt.innerText = `${n.cpu} (Node 0${n.id} - ${n.nickname})`;
+                    studentSelect.appendChild(opt);
+                });
+            } else if (role === 'cpu') {
+                cpuSelect.innerHTML = '';
+                data.nodes.forEach(n => {
+                    const opt = document.createElement('option');
+                    opt.value = `Node 0${n.id} (${n.nickname})`;
+                    opt.innerText = `Node 0${n.id}: ${n.nickname} (Líder: ${n.cpu})`;
+                    cpuSelect.appendChild(opt);
+                });
+            }
         }
         toggleLoginTurmaGroup();
 
-        // Helper para upload de arquivos em Base64
+        function handleLogin(e) {
+            e.preventDefault();
+            const role = document.getElementById('roleSelect').value;
+            const pass = document.getElementById('passInput').value.trim();
+            let turma = document.getElementById('turmaSelect').value;
+
+            if (role === 'master') {
+                turma = '3A';
+                initSession(role, turma);
+            } else if (role === 'firewall') {
+                if (pass === FIREWALL_PASSWORDS[turma]) {
+                    initSession(role, turma);
+                } else {
+                    alert(`Senha incorreta para o Firewall da turma ${turma}.`);
+                }
+            } else {
+                initSession(role, turma);
+            }
+        }
+
+        function initSession(role, turma) {
+            currentUser = { role, turma, authenticated: true };
+
+            document.getElementById('loginSection').classList.remove('active');
+            document.getElementById('countdownBanner').style.display = 'block';
+            startCountdown();
+            document.getElementById('userInfo').style.display = 'flex';
+            
+            document.getElementById('userRoleDisplay').innerText = `${role.toUpperCase()} [${turma}]`;
+
+            // Atualiza seletores de seção
+            document.getElementById('matrixTurmaSelect').value = turma;
+            document.getElementById('fwTurmaSelect').value = turma;
+            document.getElementById('taskTurmaSelect').value = turma;
+
+            updateTaskClusterInfo(turma);
+            logSystemEvent(`Login efetuado: ${role.toUpperCase()}`, `Turma ${turma}`);
+
+            if (role === 'firewall') {
+                document.getElementById('firewallSection').classList.add('active');
+                listenFirewallData(turma);
+            } else {
+                document.getElementById('matrixSection').classList.add('active');
+                updateMatrixTitle();
+                setupRolePermissions(role);
+                listenMatrixData(turma);
+            }
+        }
+
+        function changeSectionTurma(newTurma) {
+            detachCurrentListeners(currentUser.turma);
+            currentUser.turma = newTurma;
+            
+            document.getElementById('matrixTurmaSelect').value = newTurma;
+            document.getElementById('fwTurmaSelect').value = newTurma;
+            document.getElementById('taskTurmaSelect').value = newTurma;
+
+            updateTaskClusterInfo(newTurma);
+            updateMatrixTitle();
+            logSystemEvent(`Navegação de seção alterada para turma ${newTurma}`, currentUser.role.toUpperCase());
+
+            if (document.getElementById('firewallSection').classList.contains('active')) {
+                listenFirewallData(newTurma);
+            } else {
+                listenMatrixData(newTurma);
+            }
+        }
+
+        function updateTaskClusterInfo(turma) {
+            const display = document.getElementById('taskClusterDisplay');
+            if (display && MANUAL_X_DATA[turma]) {
+                display.value = MANUAL_X_DATA[turma].cluster;
+            }
+        }
+
+        function handleTaskTargetChange(val) {
+            const notice = document.getElementById('cpuNoticeBanner');
+            notice.style.display = (val === 'Para os Nodes') ? 'block' : 'none';
+        }
+
+        function updateMatrixTitle() {
+            const tData = MANUAL_X_DATA[currentUser.turma];
+            document.getElementById('matrixDashTitle').innerHTML = 
+                `<i class="fa-solid fa-sitemap"></i> Painel Matriz ${currentUser.role.toUpperCase()} // Turma ${currentUser.turma} (${tData.story})`;
+        }
+
+        function detachCurrentListeners(turma) {
+            if (!turma) return;
+            database.ref(`node_answers/${turma}`).off();
+            database.ref(`node_published/${turma}`).off();
+            database.ref(`support_messages/${turma}`).off();
+            database.ref(`system_logs/${turma}`).off();
+            database.ref(`matrix_protocols/${turma}`).off();
+            database.ref(`matrix_tasks/${turma}`).off();
+            database.ref(`matrix_repository/${turma}`).off();
+        }
+
+        /* PERMISSÕES AJUSTADAS: MASTER VISUALIZAÇÃO, CPU PUBLICAÇÃO */
+        function setupRolePermissions(role) {
+            document.getElementById('protocolAdminPanel').style.display = (role === 'master' || role === 'firewall') ? 'block' : 'none';
+            document.getElementById('taskAdminPanel').style.display = (role === 'cpu' || role === 'master') ? 'block' : 'none';
+            
+            const repoPanel = document.getElementById('repoAdminPanel');
+            const repoMasterNotice = document.getElementById('repoMasterNotice');
+            const saveRepoBtn = document.getElementById('saveRepoBtn');
+
+            if (role === 'cpu') {
+                repoPanel.style.display = 'block';
+                saveRepoBtn.disabled = false;
+                repoMasterNotice.style.display = 'none';
+            } else if (role === 'master') {
+                repoPanel.style.display = 'block';
+                saveRepoBtn.disabled = true; // Botão de publicação bloqueado para Master
+                repoMasterNotice.style.display = 'block';
+            } else {
+                repoPanel.style.display = 'none';
+                repoMasterNotice.style.display = 'none';
+            }
+
+            if (role === 'master') {
+                document.getElementById('masterSupportInbox').style.display = 'block';
+                document.getElementById('clientSupportPanel').style.display = 'none';
+            } else {
+                document.getElementById('masterSupportInbox').style.display = 'none';
+                document.getElementById('clientSupportPanel').style.display = 'block';
+            }
+        }
+
+        function logout() {
+            detachCurrentListeners(currentUser.turma);
+            currentUser = { role: null, turma: '3A', authenticated: false };
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('loginSection').classList.add('active');
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('passInput').value = '';
+        }
+
+        function switchTab(targetId, evt, groupClass) {
+            const isFw = groupClass === 'fw-tab';
+            const contentSelector = isFw ? '.fw-tab-content' : '.matrix-tab-content';
+            
+            document.querySelectorAll(contentSelector).forEach(el => el.style.display = 'none');
+            evt.currentTarget.parentElement.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(targetId).style.display = 'block';
+            evt.currentTarget.classList.add('active');
+        }
+
+        // Base64 & Upload Helpers
         function readFileAsBase64(fileInputId, callback) {
             const input = document.getElementById(fileInputId);
             if (!input || !input.files || !input.files[0]) {
@@ -1221,7 +1401,7 @@
             }
             const file = input.files[0];
             if (file.size > 8 * 1024 * 1024) {
-                alert('Arquivo excede o limite de 8MB. Escolha um arquivo menor.');
+                alert('Arquivo excede o limite de 8MB.');
                 return callback(null);
             }
             const reader = new FileReader();
@@ -1247,157 +1427,7 @@
             }
         }
 
-        // Authentication Handler
-        function handleLogin(e) {
-            e.preventDefault();
-            const role = document.getElementById('roleSelect').value;
-            const pass = document.getElementById('passInput').value.trim();
-            let turma = document.getElementById('turmaSelect').value;
-
-            if (role === 'master') {
-                turma = document.getElementById('masterGlobalTurmaSelect').value || '3A';
-                initSession(role, turma);
-            } else if (role === 'firewall') {
-                if (pass === FIREWALL_PASSWORDS[turma]) {
-                    initSession(role, turma);
-                } else {
-                    alert(`Senha incorreta para o Firewall da turma ${turma}.`);
-                }
-            } else {
-                initSession(role, turma);
-            }
-        }
-
-        function initSession(role, turma) {
-            currentUser = { role, turma, authenticated: true };
-
-            document.getElementById('loginSection').classList.remove('active');
-            document.getElementById('countdownBanner').style.display = 'block';
-            startCountdown();
-            document.getElementById('userInfo').style.display = 'flex';
-            
-            if (role === 'master') {
-                document.getElementById('masterHeaderTurmaPicker').style.display = 'flex';
-                document.getElementById('masterGlobalTurmaSelect').value = turma;
-                document.getElementById('userRoleDisplay').innerText = `MASTER [DINÂMICO]`;
-            } else {
-                document.getElementById('masterHeaderTurmaPicker').style.display = 'none';
-                document.getElementById('userRoleDisplay').innerText = `${role.toUpperCase()} [${turma}]`;
-            }
-
-            populateTaskTargetDropdown(turma);
-            logSystemEvent(`Login efetuado: ${role.toUpperCase()}`, `Turma ${turma}`);
-
-            if (role === 'firewall') {
-                document.getElementById('firewallSection').classList.add('active');
-                document.getElementById('firewallTurmaBadge').innerText = `TURMA: ${turma}`;
-                listenFirewallData(turma);
-            } else {
-                document.getElementById('matrixSection').classList.add('active');
-                updateMatrixTitle();
-                setupRolePermissions(role);
-                listenMatrixData(turma);
-            }
-        }
-
-        function changeMasterTurma(newTurma) {
-            if (currentUser.role !== 'master') return;
-            detachCurrentListeners(currentUser.turma);
-            
-            currentUser.turma = newTurma;
-            logSystemEvent(`Master alterou visão para turma ${newTurma}`, `Master Global`);
-            
-            populateTaskTargetDropdown(newTurma);
-            updateMatrixTitle();
-            listenMatrixData(newTurma);
-            if (document.getElementById('firewallSection').classList.contains('active')) {
-                listenFirewallData(newTurma);
-            }
-        }
-
-        function populateTaskTargetDropdown(turma) {
-            const select = document.getElementById('taskTarget');
-            if (!select) return;
-            select.innerHTML = '';
-
-            const tData = MANUAL_X_DATA[turma];
-            if (!tData) return;
-
-            const opts = [
-                { val: 'Toda a Turma', label: `Toda a Turma (${turma})` },
-                { val: 'Cluster', label: `Cluster (Monitor: ${tData.cluster})` },
-                { val: 'Apenas CPUs', label: 'Apenas CPUs (Líderes de Node)' },
-                { val: 'Executores', label: 'Todos os Executores' }
-            ];
-
-            tData.nodes.forEach(n => {
-                opts.push({
-                    val: `Node 0${n.id} (${n.nickname})`,
-                    label: `Node 0${n.id}: ${n.nickname} (CPU: ${n.cpu})`
-                });
-            });
-
-            opts.forEach(o => {
-                const optEl = document.createElement('option');
-                optEl.value = o.val;
-                optEl.innerText = o.label;
-                select.appendChild(optEl);
-            });
-        }
-
-        function updateMatrixTitle() {
-            const tData = MANUAL_X_DATA[currentUser.turma];
-            document.getElementById('matrixDashTitle').innerHTML = 
-                `<i class="fa-solid fa-sitemap"></i> Painel Matriz ${currentUser.role.toUpperCase()} // Turma ${currentUser.turma} (${tData.story})`;
-        }
-
-        function detachCurrentListeners(turma) {
-            if (!turma) return;
-            database.ref(`node_answers/${turma}`).off();
-            database.ref(`node_published/${turma}`).off();
-            database.ref(`support_messages/${turma}`).off();
-            database.ref(`system_logs/${turma}`).off();
-            database.ref(`matrix_protocols/${turma}`).off();
-            database.ref(`matrix_tasks/${turma}`).off();
-            database.ref(`matrix_repository/${turma}`).off();
-        }
-
-        function setupRolePermissions(role) {
-            document.getElementById('protocolAdminPanel').style.display = (role === 'master' || role === 'firewall') ? 'block' : 'none';
-            document.getElementById('taskAdminPanel').style.display = (role === 'master' || role === 'cpu') ? 'block' : 'none';
-            document.getElementById('repoAdminPanel').style.display = (role === 'master') ? 'block' : 'none';
-            
-            if (role === 'master') {
-                document.getElementById('masterSupportInbox').style.display = 'block';
-                document.getElementById('clientSupportPanel').style.display = 'none';
-            } else {
-                document.getElementById('masterSupportInbox').style.display = 'none';
-                document.getElementById('clientSupportPanel').style.display = 'block';
-            }
-        }
-
-        function logout() {
-            detachCurrentListeners(currentUser.turma);
-            currentUser = { role: null, turma: '3A', authenticated: false };
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('loginSection').classList.add('active');
-            document.getElementById('userInfo').style.display = 'none';
-            document.getElementById('masterHeaderTurmaPicker').style.display = 'none';
-            document.getElementById('passInput').value = '';
-        }
-
-        function switchTab(targetId, evt, groupClass) {
-            const isFw = groupClass === 'fw-tab';
-            const contentSelector = isFw ? '.fw-tab-content' : '.matrix-tab-content';
-            
-            document.querySelectorAll(contentSelector).forEach(el => el.style.display = 'none');
-            evt.currentTarget.parentElement.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById(targetId).style.display = 'block';
-            evt.currentTarget.classList.add('active');
-        }
-
-        /* --- AUDITORIA MULTIPERFIL "OLHINHO" (MASTER, CLUSTER, FIREWALL) --- */
+        /* AUDITORIA OLHINHO */
         function toggleEyeAudit(pathNode, itemId) {
             const allowedRoles = ['master', 'cluster', 'firewall'];
             if (!allowedRoles.includes(currentUser.role)) {
@@ -1446,7 +1476,6 @@
             return html;
         }
 
-        /* --- HELPER DE ANEXOS (LINK OU BASE64 LOCAL) --- */
         function renderAttachmentButton(url, fileObj, label = 'Acessar Anexo') {
             if (!url && !fileObj) return '';
             
@@ -1459,18 +1488,9 @@
             }
 
             if (url) {
-                const lower = url.toLowerCase();
-                let iconClass = 'fa-link';
-
-                if (lower.includes('drive.google.com')) iconClass = 'fa-brands fa-google-drive';
-                else if (lower.endsWith('.pdf')) iconClass = 'fa-file-pdf';
-                else if (lower.endsWith('.doc') || lower.endsWith('.docx')) iconClass = 'fa-file-word';
-                else if (lower.endsWith('.xls') || lower.endsWith('.xlsx')) iconClass = 'fa-file-excel';
-                else if (lower.endsWith('.png') || lower.endsWith('.jpg') || lower.endsWith('.jpeg')) iconClass = 'fa-file-image';
-
                 return `
                     <a href="${url}" target="_blank" class="attachment-badge">
-                        <i class="fa-solid ${iconClass}"></i> ${label}
+                        <i class="fa-solid fa-link"></i> ${label}
                     </a>
                 `;
             }
@@ -1478,12 +1498,20 @@
             return '';
         }
 
-        /* --- FIREWALL LOGIC & MAPEAMENTO DO MANUAL X --- */
+        /* DATA LISTENERS */
         function listenFirewallData(turma) {
-            database.ref(`node_answers/${turma}`).on('value', (snapshot) => { renderAnswersTable(snapshot.val() || {}); });
-            database.ref(`node_published/${turma}`).on('value', (snapshot) => { renderNodesCards(snapshot.val() || {}, turma); });
-            database.ref(`support_messages/${turma}`).on('value', (snapshot) => { renderSupportMessages(snapshot.val() || {}, 'fwSupportMessages'); });
-            database.ref(`system_logs/${turma}`).on('value', (snapshot) => { renderLogs(snapshot.val() || {}, 'logsTableBody'); });
+            database.ref(`node_answers/${turma}`).on('value', (s) => renderAnswersTable(s.val() || {}));
+            database.ref(`node_published/${turma}`).on('value', (s) => renderNodesCards(s.val() || {}, turma));
+            database.ref(`support_messages/${turma}`).on('value', (s) => renderSupportMessages(s.val() || {}, 'fwSupportMessages'));
+            database.ref(`system_logs/${turma}`).on('value', (s) => renderLogs(s.val() || {}, 'logsTableBody'));
+        }
+
+        function listenMatrixData(turma) {
+            database.ref(`matrix_protocols/${turma}`).on('value', (s) => renderProtocols(s.val() || {}));
+            database.ref(`matrix_tasks/${turma}`).on('value', (s) => renderTasks(s.val() || {}));
+            database.ref(`system_logs/${turma}`).on('value', (s) => renderLogs(s.val() || {}, 'matrixLogsBody'));
+            database.ref(`matrix_repository/${turma}`).on('value', (s) => renderRepository(s.val() || {}, turma));
+            database.ref(`support_messages/${turma}`).on('value', (s) => renderSupportData(s.val() || {}));
         }
 
         function renderAnswersTable(answers) {
@@ -1511,7 +1539,6 @@
             });
         }
 
-        /* INTEGRAÇÃO EM TEMPO REAL COM OS NODES REAIS DO MANUAL X */
         function renderNodesCards(firebaseNodes, turma) {
             const container = document.getElementById('nodesContainer');
             container.innerHTML = '';
@@ -1550,16 +1577,7 @@
             });
         }
 
-        /* --- MATRIX DATA LISTENERS & HANDLERS --- */
-        function listenMatrixData(turma) {
-            database.ref(`matrix_protocols/${turma}`).on('value', (snapshot) => { renderProtocols(snapshot.val() || {}); });
-            database.ref(`matrix_tasks/${turma}`).on('value', (snapshot) => { renderTasks(snapshot.val() || {}); });
-            database.ref(`system_logs/${turma}`).on('value', (snapshot) => { renderLogs(snapshot.val() || {}, 'matrixLogsBody'); });
-            database.ref(`matrix_repository/${turma}`).on('value', (snapshot) => { renderRepository(snapshot.val() || {}, turma); });
-            database.ref(`support_messages/${turma}`).on('value', (snapshot) => { renderSupportData(snapshot.val() || {}); });
-        }
-
-        /* 1. PROTOCOLS */
+        /* 1. PROTOCOLS COM FILTRO DINÂMICO */
         function publishProtocol() {
             const title = document.getElementById('protoTitle').value.trim();
             const cat = document.getElementById('protoCategory').value.trim();
@@ -1567,7 +1585,7 @@
             const link = document.getElementById('protoLink').value.trim();
 
             if (!title || !desc || !currentUser.turma) {
-                alert('Preencha pelo menos o Título e a Descrição do Protocolo.');
+                alert('Preencha o Título e a Descrição do Protocolo.');
                 return;
             }
 
@@ -1579,6 +1597,7 @@
                     link: link || '',
                     fileObj: fileObj || null,
                     author: currentUser.role.toUpperCase(),
+                    turma: currentUser.turma,
                     timestamp: new Date().toLocaleDateString('pt-BR')
                 });
 
@@ -1594,52 +1613,76 @@
         }
 
         function renderProtocols(protocols) {
-            const container = document.getElementById('protocolsList');
-            container.innerHTML = '';
-            const keys = Object.keys(protocols);
-
-            if (keys.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-dim);">Nenhum protocolo cadastrado para esta turma.</p>`;
-                return;
-            }
-
-            keys.reverse().forEach(key => {
-                const item = protocols[key];
-                const card = document.createElement('div');
-                card.className = 'resource-card';
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
-                        <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-shield-cat"></i> ${item.title}</h4>
-                        <span class="status-tag seen">${item.category}</span>
-                    </div>
-                    <p style="color: var(--text-main); line-height: 1.4; margin-bottom: 12px;">${item.desc}</p>
-                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px;">
-                        <span style="font-size: 0.8rem; color: var(--text-dim);">Autor: ${item.author} | ${item.timestamp}</span>
-                        ${renderAttachmentButton(item.link, item.fileObj, 'Abrir Anexo do Protocolo')}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+            const filterVal = document.getElementById('protocolTurmaFilter').value;
+            renderProtocolsWithFilter(filterVal, protocols);
         }
 
-        /* 2. TASKS */
+        function renderProtocolsWithFilter(filterVal, rawProtocols) {
+            const container = document.getElementById('protocolsList');
+            container.innerHTML = '';
+
+            const processProtocols = (protocols) => {
+                const keys = Object.keys(protocols);
+                if (keys.length === 0) {
+                    container.innerHTML = `<p style="color: var(--text-dim);">Nenhum protocolo cadastrado.</p>`;
+                    return;
+                }
+
+                keys.reverse().forEach(key => {
+                    const item = protocols[key];
+                    if (filterVal !== 'ALL' && item.turma && item.turma !== filterVal) return;
+
+                    const card = document.createElement('div');
+                    card.className = 'resource-card';
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                            <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-shield-cat"></i> ${item.title}</h4>
+                            <span class="status-tag seen">${item.category} [${item.turma || currentUser.turma}]</span>
+                        </div>
+                        <p style="color: var(--text-main); line-height: 1.4; margin-bottom: 12px;">${item.desc}</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px;">
+                            <span style="font-size: 0.8rem; color: var(--text-dim);">Autor: ${item.author} | ${item.timestamp}</span>
+                            ${renderAttachmentButton(item.link, item.fileObj, 'Abrir Anexo do Protocolo')}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            };
+
+            if (rawProtocols) {
+                processProtocols(rawProtocols);
+            } else {
+                database.ref(`matrix_protocols/${currentUser.turma}`).once('value', snapshot => {
+                    processProtocols(snapshot.val() || {});
+                });
+            }
+        }
+
+        /* 2. TASKS COM DATA E HORA SEPARADAS E ALERTA CPU */
         function publishTask() {
+            const targetTurma = document.getElementById('taskTurmaSelect').value;
+            const targetCluster = document.getElementById('taskClusterDisplay').value;
+            const targetDest = document.getElementById('taskTargetSelect').value;
+            const dueDate = document.getElementById('taskDueDate').value;
+            const dueTime = document.getElementById('taskDueTime').value;
             const title = document.getElementById('taskTitle').value.trim();
-            const target = document.getElementById('taskTarget').value;
-            const deadline = document.getElementById('taskDeadline').value;
             const desc = document.getElementById('taskDesc').value.trim();
             const link = document.getElementById('taskLink').value.trim();
 
-            if (!title || !desc || !currentUser.turma) {
-                alert('Preencha o Título e as Instruções da Tarefa.');
+            if (!title || !desc) {
+                alert('Preencha o Título e a Descrição da Tarefa.');
                 return;
             }
 
+            const deadlineText = (dueDate && dueTime) ? `${dueDate} às ${dueTime}` : (dueDate || 'Sem prazo fixado');
+
             readFileAsBase64('taskFileInput', (fileObj) => {
-                database.ref(`matrix_tasks/${currentUser.turma}`).push({
+                database.ref(`matrix_tasks/${targetTurma}`).push({
                     title: title,
-                    target: target,
-                    deadline: deadline || 'Sem prazo fixado',
+                    targetTurma: targetTurma,
+                    targetCluster: targetCluster,
+                    targetDest: targetDest,
+                    deadline: deadlineText,
                     desc: desc,
                     link: link || '',
                     fileObj: fileObj || null,
@@ -1650,11 +1693,12 @@
                 document.getElementById('taskTitle').value = '';
                 document.getElementById('taskDesc').value = '';
                 document.getElementById('taskLink').value = '';
-                document.getElementById('taskDeadline').value = '';
+                document.getElementById('taskDueDate').value = '';
+                document.getElementById('taskDueTime').value = '';
                 document.getElementById('taskFileInput').value = '';
                 updateFileIndicator('taskFileInput', 'taskFileName');
 
-                logSystemEvent(`Nova Tarefa publicada: "${title}" [Alvo: ${target}]`, `Turma ${currentUser.turma}`);
+                logSystemEvent(`Nova Tarefa publicada: "${title}" [Turma: ${targetTurma} | Destino: ${targetDest}]`, `Turma ${targetTurma}`);
             });
         }
 
@@ -1664,7 +1708,7 @@
             const keys = Object.keys(tasks);
 
             if (keys.length === 0) {
-                container.innerHTML = `<p style="color: var(--text-dim);">Nenhuma tarefa pendente no momento.</p>`;
+                container.innerHTML = `<p style="color: var(--text-dim);">Nenhuma tarefa pendente para esta turma.</p>`;
                 return;
             }
 
@@ -1672,29 +1716,28 @@
                 const task = tasks[taskId];
                 const card = document.createElement('div');
                 card.className = 'resource-card';
-                
-                const deadlineFormatted = task.deadline !== 'Sem prazo fixado' ? new Date(task.deadline).toLocaleString('pt-BR') : 'Sem prazo limite';
 
                 card.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
                         <h4 style="color: #fff;"><i class="fa-solid fa-list-check"></i> ${task.title}</h4>
                         <div style="display:flex; align-items:center; gap: 10px;">
-                            <span class="status-tag unseen">Destinado a: ${task.target}</span>
+                            <span class="status-tag unseen">Destino: ${task.targetDest || task.target}</span>
                             ${renderEyeAuditGroup('matrix_tasks', taskId, task.verifications)}
                         </div>
                     </div>
                     <p style="color: var(--chrome-silver); margin-bottom: 12px; line-height: 1.4;">${task.desc}</p>
                     
                     <div style="background: rgba(5,8,17,0.6); padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                        <span><i class="fa-solid fa-hourglass-half" style="color: var(--neon-blue);"></i> <strong>Prazo:</strong> ${deadlineFormatted}</span>
-                        ${renderAttachmentButton(task.link, task.fileObj, 'Material / Anexo de Apoio')}
+                        <span><i class="fa-solid fa-hourglass-half" style="color: var(--neon-blue);"></i> <strong>Prazo:</strong> ${task.deadline}</span>
+                        <span><strong>Cluster:</strong> ${task.targetCluster || '-'}</span>
+                        ${renderAttachmentButton(task.link, task.fileObj, 'Material de Apoio')}
                     </div>
 
                     ${currentUser.role === 'executor' || currentUser.role === 'cpu' ? `
                         <div style="margin-top: 10px; border-top: 1px dashed var(--border-chrome); padding-top: 10px;">
                             <label style="font-size: 0.85rem; margin-bottom: 6px;">Enviar Entregável (Arquivo ou Link):</label>
                             <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px;">
-                                <input type="url" id="subInput_${taskId}" placeholder="Cole a URL do trabalho (Drive, GitHub...)" style="padding: 6px;">
+                                <input type="url" id="subInput_${taskId}" placeholder="Cole a URL do trabalho" style="padding: 6px;">
                                 <div class="file-upload-box" style="padding: 4px 8px;">
                                     <label for="fileSub_${taskId}" class="file-upload-label" style="padding: 4px 8px; font-size: 0.75rem;"><i class="fa-solid fa-upload"></i> Arquivo</label>
                                     <input type="file" id="fileSub_${taskId}" onchange="updateFileIndicator('fileSub_${taskId}', 'lblSub_${taskId}')">
@@ -1732,19 +1775,24 @@
             });
         }
 
-        /* 3. REPOSITORY (REGISTRO DAS 2 OBRAS) */
+        /* 3. REPOSITORY (APENAS CPU PUBLICA, MASTER APENAS LEITURA) */
         function saveRepositoryObras() {
+            if (currentUser.role === 'master') {
+                alert('Ação Bloqueada: O Perfil Master possui permissão apenas de visualização/consulta no Repositório.');
+                return;
+            }
+
             const o1 = {
                 title: document.getElementById('editObra1Title').value.trim() || 'OBRA 1: Arte Plástica / Física',
                 desc: document.getElementById('editObra1Desc').value.trim() || 'Produção artística física no espaço de exposição.',
-                eixos: document.getElementById('editObra1Eixos').value.trim() || 'Pintura, Escultura, Colagem, Assemblage, Instalação 3D',
+                eixos: document.getElementById('editObra1Eixos').value.trim() || 'Pintura, Escultura, Colagem',
                 link: document.getElementById('editObra1Link').value.trim() || '#'
             };
 
             const o2 = {
                 title: document.getElementById('editObra2Title').value.trim() || 'OBRA 2: Arte Digital Interativa',
                 desc: document.getElementById('editObra2Desc').value.trim() || 'Aplicação virtual interativa exibida em tela eletrônica.',
-                eixos: document.getElementById('editObra2Eixos').value.trim() || 'Jogos, Robótica, Realidade Aumentada, Arte Gerativa',
+                eixos: document.getElementById('editObra2Eixos').value.trim() || 'Jogos, Robótica, RA',
                 link: document.getElementById('editObra2Link').value.trim() || '#'
             };
 
@@ -1755,8 +1803,8 @@
                 updatedAt: new Date().toISOString()
             });
 
-            alert('Registro das obras atualizado com sucesso!');
-            logSystemEvent(`Repositório de Obras atualizado pelo Master`, `Turma ${currentUser.turma}`);
+            alert('Arquivos da obra salvos no Repositório!');
+            logSystemEvent(`Repositório atualizado pela CPU`, `Turma ${currentUser.turma}`);
         }
 
         function renderRepository(repoSnapshot, turma) {
@@ -1791,7 +1839,7 @@
             document.getElementById('obra2EixosDisplay').innerText = o2.eixos;
             document.getElementById('obra2FileLinkArea').innerHTML = renderAttachmentButton(o2.link, null, 'Material da Obra 02');
 
-            if (currentUser.role === 'master' && !document.getElementById('editObra1Title').value) {
+            if (currentUser.role === 'cpu' && !document.getElementById('editObra1Title').value) {
                 document.getElementById('editObra1Title').value = o1.title;
                 document.getElementById('editObra1Desc').value = o1.desc;
                 document.getElementById('editObra1Eixos').value = o1.eixos;
@@ -1804,7 +1852,7 @@
             }
         }
 
-        /* 4. SUPPORT (CANAL PRINCIPAL DE COMUNICAÇÃO) */
+        /* 4. SUPPORT */
         function sendClientSupport() {
             const input = document.getElementById('matrixSupportInput');
             const text = input.value.trim();
@@ -1831,7 +1879,7 @@
                 repliedAt: new Date().toLocaleTimeString('pt-BR')
             });
 
-            logSystemEvent(`Master respondeu chamado de suporte [${msgId}]`, `Turma ${currentUser.turma}`);
+            logSystemEvent(`Master respondeu chamado [${msgId}]`, `Turma ${currentUser.turma}`);
         }
 
         function renderSupportData(messages) {
@@ -1842,7 +1890,7 @@
                 container.innerHTML = '';
 
                 if (keys.length === 0) {
-                    container.innerHTML = `<p style="color: var(--text-dim);">Nenhum chamado de suporte recebido nesta turma.</p>`;
+                    container.innerHTML = `<p style="color: var(--text-dim);">Nenhum chamado recebido nesta turma.</p>`;
                     return;
                 }
 
@@ -1901,7 +1949,7 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        /* LOG SYSTEM COM AUDITORIA OLHINHO */
+        /* LOGS */
         function logSystemEvent(eventDesc, origin) {
             if (!currentUser.turma) return;
             database.ref(`system_logs/${currentUser.turma}`).push({
@@ -1937,5 +1985,3 @@
     </script>
 </body>
 </html>
-
-```
