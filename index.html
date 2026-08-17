@@ -101,7 +101,6 @@
             overflow-x: hidden;
         }
 
-       /* Intro Splash Video Overlay */
         #introOverlay {
             position: fixed;
             top: 0;
@@ -151,7 +150,6 @@
             transform: translateY(-2px);
         }
 
-        /* Header */
         header {
             background: linear-gradient(180deg, rgba(20, 30, 50, 0.9) 0%, rgba(5, 8, 17, 0.95) 100%);
             border-bottom: 2px solid var(--border-chrome);
@@ -369,7 +367,6 @@
             border-color: var(--text-dim);
         }
 
-        /* Eye Audit Component */
         .eye-audit-container {
             display: inline-flex;
             gap: 6px;
@@ -577,6 +574,30 @@
             font-size: 0.85rem;
         }
 
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            background: rgba(5, 8, 17, 0.7);
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-chrome);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--chrome-silver);
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
         #countdownBanner {
             background: rgba(10, 16, 30, 0.85) !important;
             border: 1px solid var(--neon-blue) !important;
@@ -645,7 +666,7 @@
         <button id="skipIntroBtn" onclick="finishIntro()">PULAR INTRO <i class="fa-solid fa-forward"></i></button>
     </div>
 
-    <!-- HEADER MATRIZ m@ry (SEM SELETOR DE TURMA NO TOPO) -->
+    <!-- HEADER MATRIZ m@ry -->
     <header>
         <div class="brand-container">
             <img src="m@ry (1).jpg" alt="m@ry Logo" class="brand-logo" onerror="this.src='logo.png'">
@@ -669,27 +690,27 @@
 
     <div class="main-container">
         <!-- BANNER DE CONTAGEM REGRESSIVA -->
-       <div id="countdownBanner" class="countdown-card" style="display: none;">
-        <div class="countdown-title"><i class="fa-solid fa-hourglass-start"></i> CONTAGEM REGRESSIVA // 04 DE SETEMBRO</div>
-        <div class="countdown-timer">
-            <div class="countdown-unit">
-                <span class="countdown-num" id="cdDays">00</span>
-                <span class="countdown-lbl">Dias</span>
-            </div>
-            <div class="countdown-unit">
-                <span class="countdown-num" id="cdHours">00</span>
-                <span class="countdown-lbl">Horas</span>
-            </div>
-            <div class="countdown-unit">
-                <span class="countdown-num" id="cdMinutes">00</span>
-                <span class="countdown-lbl">Minutos</span>
-            </div>
-            <div class="countdown-unit">
-                <span class="countdown-num" id="cdSeconds">00</span>
-                <span class="countdown-lbl">Segundos</span>
+        <div id="countdownBanner" class="countdown-card" style="display: none;">
+            <div class="countdown-title"><i class="fa-solid fa-hourglass-start"></i> CONTAGEM REGRESSIVA // 04 DE SETEMBRO</div>
+            <div class="countdown-timer">
+                <div class="countdown-unit">
+                    <span class="countdown-num" id="cdDays">00</span>
+                    <span class="countdown-lbl">Dias</span>
+                </div>
+                <div class="countdown-unit">
+                    <span class="countdown-num" id="cdHours">00</span>
+                    <span class="countdown-lbl">Horas</span>
+                </div>
+                <div class="countdown-unit">
+                    <span class="countdown-num" id="cdMinutes">00</span>
+                    <span class="countdown-lbl">Minutos</span>
+                </div>
+                <div class="countdown-unit">
+                    <span class="countdown-num" id="cdSeconds">00</span>
+                    <span class="countdown-lbl">Segundos</span>
+                </div>
             </div>
         </div>
-    </div>
 
         <!-- LOGIN SECTION DINÂMICO -->
         <div id="loginSection" class="card view-section active" style="max-width: 450px; margin: 40px auto;">
@@ -719,9 +740,9 @@
                     </select>
                 </div>
 
-                <!-- LOGIN DINÂMICO: BANCO FILIAL NODES -->
+                <!-- LOGIN DINÂMICO: EXECUTORES REAIS -->
                 <div class="form-group" id="loginStudentGroup" style="display: none;">
-                    <label><i class="fa-solid fa-user-graduate"></i> Estudante Cadastrado (Filial Nodes)</label>
+                    <label><i class="fa-solid fa-user-graduate"></i> Estudante Executor (Filial Nodes)</label>
                     <select id="studentSelect"></select>
                 </div>
 
@@ -827,7 +848,7 @@
                     </div>
                 </div>
 
-                <!-- Navegação dos 6 Módulos Centralizados -->
+                <!-- Navegação dos Módulos Centralizados -->
                 <div class="nav-tabs">
                     <button class="tab-btn active" onclick="switchTab('modProtocols', event, 'matrix-tab')"><i class="fa-solid fa-scroll"></i> Protocols</button>
                     <button class="tab-btn" onclick="switchTab('modTasks', event, 'matrix-tab')"><i class="fa-solid fa-tasks"></i> Tasks</button>
@@ -854,7 +875,6 @@
                         </div>
                     </div>
 
-                    <!-- Painel de Inserção (Master / Firewall) -->
                     <div id="protocolAdminPanel" class="creation-panel" style="display: none;">
                         <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-plus-circle"></i> Cadastrar Novo Protocolo</h4>
                         <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
@@ -879,11 +899,10 @@
                     <div id="protocolsList"></div>
                 </div>
 
-                <!-- 2. TASKS (SELETORES INDEPENDENTES, REGRA CPU E SEPARAÇÃO DATA/HORA) -->
+                <!-- 2. TASKS -->
                 <div id="modTasks" class="matrix-tab-content" style="display: none;">
                     <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Matriz de Tarefas & Entregáveis</h3>
 
-                    <!-- Criador de Tarefas (CPU / Master) -->
                     <div id="taskAdminPanel" class="creation-panel" style="display: none;">
                         <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-calendar-plus"></i> Criar Nova Tarefa / Entregável</h4>
                         
@@ -912,7 +931,6 @@
                             </div>
                         </div>
 
-                        <!-- AVISO AUTOMÁTICO SE DESTINO FOR PARA OS NODES -->
                         <div id="cpuNoticeBanner" style="display:none; background: rgba(255, 183, 3, 0.15); border: 1px solid var(--warning-amber); border-radius: 6px; padding: 10px; margin-bottom: 10px; color: var(--warning-amber); font-weight: bold; font-size: 0.9rem;">
                             <i class="fa-solid fa-triangle-exclamation"></i> Responsável pela resposta: CPU
                         </div>
@@ -946,78 +964,102 @@
                     <div id="tasksList"></div>
                 </div>
 
-                <!-- 3. LOG -->
+                <!-- 3. LOG (DIÁRIO DE ENCONTROS DO NODE) -->
                 <div id="modLogs" class="matrix-tab-content" style="display: none;">
-                    <h3 style="color: var(--neon-blue); margin-bottom: 15px;">Logs de Atividades em Tempo Real</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Horário</th>
-                                <th>Ação / Evento</th>
-                                <th>Origem</th>
-                                <th>Auditoria Olhinho</th>
-                            </tr>
-                        </thead>
-                        <tbody id="matrixLogsBody"></tbody>
-                    </table>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="color: var(--neon-blue); margin: 0;">Logs & Diário de Registro de Encontros</h3>
+                        
+                        <!-- FILTRO DE NODE PARA MASTER/FIREWALL/CLUSTER -->
+                        <div id="logNodeFilterContainer" style="display: none; align-items: center; gap: 8px;">
+                            <label style="margin:0; font-size: 0.85rem;"><i class="fa-solid fa-filter"></i> Node:</label>
+                            <select id="logNodeFilter" onchange="renderLogsView()" style="width: auto; padding: 4px 8px; font-size: 0.85rem;">
+                                <option value="ALL">Todos os Nodes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Painel do CPU para registrar Encontros -->
+                    <div id="logCpuPanel" class="creation-panel" style="display: none;">
+                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-pen-clip"></i> Registrar Novo Encontro do Node</h4>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                            <div>
+                                <label style="font-size: 0.8rem;">Data do Encontro</label>
+                                <input type="date" id="logDate">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8rem;">Horário</label>
+                                <input type="time" id="logTime">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8rem;">Duração (ex: 1h 30min)</label>
+                                <input type="text" id="logDuration" placeholder="Ex: 2 horas">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-size: 0.8rem;">Descrição das Atividades / Encontro</label>
+                            <textarea id="logDesc" rows="3" placeholder="Detalhamento das ações, pautas debatidas e produções do encontro..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-size: 0.85rem; color: var(--neon-blue); margin-bottom: 8px;"><i class="fa-solid fa-user-check"></i> Chamada e Presença dos Executores do Node:</label>
+                            <div id="logExecutorsChecklist" class="checkbox-grid"></div>
+                        </div>
+
+                        <button class="btn" style="width: 100%;" onclick="publishNodeLog()"><i class="fa-solid fa-save"></i> Publicar Registro no Log</button>
+                    </div>
+
+                    <div id="logsContainerDisplay"></div>
                 </div>
 
-                <!-- 4. REPOSITORY (REGISTRO DAS DUAS OBRAS // PERMISSÃO PERFIL CPU VS MASTER) -->
+                <!-- 4. REPOSITORY (REGISTRO DAS OBRAS - APENAS CPU) -->
                 <div id="modRepository" class="matrix-tab-content" style="display: none;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h3 style="color: var(--neon-blue); margin: 0;">Registro Central das Obras (Manual X)</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="color: var(--neon-blue); margin: 0;">Registro Central das Obras</h3>
+                        
+                        <div id="repoMasterFilterArea" style="display: none; align-items: center; gap: 8px;">
+                            <label style="margin:0; font-size: 0.85rem;"><i class="fa-solid fa-cubes"></i> Selecionar Node:</label>
+                            <select id="repoNodeSelect" onchange="renderRepositoryView()" style="width: auto; padding: 4px 8px; font-size: 0.85rem;">
+                                <option value="ALL">Todos os Nodes</option>
+                            </select>
+                        </div>
+
                         <div id="repoEyeAuditContainer" class="eye-audit-container"></div>
                     </div>
 
-                    <!-- Alerta de apenas leitura para Perfil Master -->
-                    <div id="repoMasterNotice" style="display: none; background: rgba(0, 240, 255, 0.1); border: 1px solid var(--neon-blue); padding: 10px; border-radius: 6px; margin-bottom: 15px; color: var(--neon-blue);">
-                        <i class="fa-solid fa-circle-info"></i> <strong>Modo de Consulta (Perfil Master):</strong> Apenas visualização do registro de arquivos. Publicações e alterações são de responsabilidade do perfil CPU.
+                    <!-- Avisos de Leitura -->
+                    <div id="repoReadNotice" style="display: none; background: rgba(0, 240, 255, 0.1); border: 1px solid var(--neon-blue); padding: 10px; border-radius: 6px; margin-bottom: 15px; color: var(--neon-blue);">
+                        <i class="fa-solid fa-circle-info"></i> <strong>Modo de Consulta:</strong> O registro das obras é gerido exclusivamente pelos Líderes (CPU) de cada Node.
                     </div>
 
-                    <!-- Painel de Publicação e Edição das Obras -->
-                    <div id="repoAdminPanel" class="creation-panel" style="display: none;">
-                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-pen-to-square"></i> Publicação / Atualização de Arquivos e Obras</h4>
+                    <!-- Painel de Publicação exclusivo do CPU -->
+                    <div id="repoCpuPanel" class="creation-panel" style="display: none;">
+                        <h4 style="color: var(--neon-blue); margin-bottom: 10px;"><i class="fa-solid fa-pen-to-square"></i> Registrar / Editar Obras do Node</h4>
+                        
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                             <div style="border-right: 1px solid var(--border-chrome); padding-right: 15px;">
-                                <h5 style="color: var(--chrome-silver); margin-bottom: 8px;">OBRA 1: Arte Plástica / Física</h5>
-                                <input type="text" id="editObra1Title" placeholder="Título da Obra 01" style="margin-bottom: 8px;">
-                                <textarea id="editObra1Desc" rows="2" placeholder="Sinopse / Diretriz Central" style="margin-bottom: 8px;"></textarea>
-                                <input type="text" id="editObra1Eixos" placeholder="Modalidades (Pintura, Escultura...)" style="margin-bottom: 8px;">
-                                <input type="url" id="editObra1Link" placeholder="Link do Material / Arquivo">
+                                <h5 style="color: var(--chrome-silver); margin-bottom: 8px;"><i class="fa-solid fa-palette"></i> OBRA 1: Arte Plástica / Física</h5>
+                                <input type="text" id="editObra1Title" placeholder="Título da Obra Plástica" style="margin-bottom: 8px;">
+                                <input type="text" id="editObra1Materials" placeholder="Materiais Utilizados" style="margin-bottom: 8px;">
+                                <input type="text" id="editObra1Technique" placeholder="Técnica Utilizada" style="margin-bottom: 8px;">
+                                <textarea id="editObra1Justification" rows="3" placeholder="Justificativa Pedagógica / Artística"></textarea>
                             </div>
+
                             <div>
-                                <h5 style="color: var(--chrome-silver); margin-bottom: 8px;">OBRA 2: Arte Digital Interativa</h5>
-                                <input type="text" id="editObra2Title" placeholder="Título da Obra 02" style="margin-bottom: 8px;">
-                                <textarea id="editObra2Desc" rows="2" placeholder="Sinopse / Diretriz Central" style="margin-bottom: 8px;"></textarea>
-                                <input type="text" id="editObra2Eixos" placeholder="Modalidades (Jogo, Robótica, RA...)" style="margin-bottom: 8px;">
-                                <input type="url" id="editObra2Link" placeholder="Link do Material / Arquivo">
+                                <h5 style="color: var(--chrome-silver); margin-bottom: 8px;"><i class="fa-solid fa-laptop-code"></i> OBRA 2: Arte Digital Interativa</h5>
+                                <input type="text" id="editObra2Title" placeholder="Título da Obra Digital" style="margin-bottom: 8px;">
+                                <input type="text" id="editObra2Materials" placeholder="Tecnologias / Softwares Utilizados" style="margin-bottom: 8px;">
+                                <input type="text" id="editObra2Technique" placeholder="Técnica Utilizada (Interatividade, Código...)" style="margin-bottom: 8px;">
+                                <textarea id="editObra2Justification" rows="3" placeholder="Justificativa Pedagógica / Artística"></textarea>
                             </div>
-                        </div>
-                        <button class="btn" id="saveRepoBtn" style="width: 100%; margin-top: 15px;" onclick="saveRepositoryObras()"><i class="fa-solid fa-save"></i> Salvar Arquivos no Repositório</button>
-                    </div>
-
-                    <!-- Cards Fixos Obra 01 e Obra 02 -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
-                        <div class="resource-card" style="border-top: 3px solid var(--neon-blue);">
-                            <span class="status-tag seen" style="margin-bottom: 10px; display: inline-block;">OBRA 01 (FISICA - 1,0 PONTO)</span>
-                            <h3 id="obra1TitleDisplay" style="color: #fff; margin-bottom: 8px;">Carregando Obra 01...</h3>
-                            <p id="obra1DescDisplay" style="color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">-</p>
-                            <div style="font-size: 0.85rem; color: var(--chrome-silver); margin-bottom: 15px;">
-                                <strong>Modalidades:</strong> <span id="obra1EixosDisplay">-</span>
-                            </div>
-                            <div id="obra1FileLinkArea"></div>
                         </div>
 
-                        <div class="resource-card" style="border-top: 3px solid var(--neon-blue);">
-                            <span class="status-tag seen" style="margin-bottom: 10px; display: inline-block;">OBRA 02 (DIGITAL - 1,0 PONTO)</span>
-                            <h3 id="obra2TitleDisplay" style="color: #fff; margin-bottom: 8px;">Carregando Obra 02...</h3>
-                            <p id="obra2DescDisplay" style="color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">-</p>
-                            <div style="font-size: 0.85rem; color: var(--chrome-silver); margin-bottom: 15px;">
-                                <strong>Modalidades:</strong> <span id="obra2EixosDisplay">-</span>
-                            </div>
-                            <div id="obra2FileLinkArea"></div>
-                        </div>
+                        <button class="btn" style="width: 100%; margin-top: 15px;" onclick="publishRepositoryObras()"><i class="fa-solid fa-save"></i> Publicar Registro no Repositório</button>
                     </div>
+
+                    <!-- Container de Exibição dos Cards de Obras -->
+                    <div id="repoObrasDisplayContainer"></div>
                 </div>
 
                 <!-- 5. SUPPORT -->
@@ -1058,18 +1100,18 @@
     </div>
 
     <script>
-        // BASE DE DADOS INTEGRADA DO MANUAL X
+        // BASE DE DADOS MANUAL X INTEGRADA COM EXECUTORES
         const MANUAL_X_DATA = {
             "3A": {
                 story: 'Robbie',
                 theme: 'O APEGO',
                 cluster: 'Debora Laura Oliveira da Silva',
                 nodes: [
-                    { id: 1, nickname: 'Afeto', cpu: 'Wagnner Per...', topic: 'A Tecnologia como Suporte Afetivo Primário.', concepts: 'Impacto da tecnologia nas relações e substituição de interações reais por telas.', anchor: 'Dependência emocional de Gloria em relação ao robô Robbie.' },
-                    { id: 2, nickname: 'Curadoria', cpu: 'Luana Beatriz...', topic: 'Terceirização do Cuidado e Curadoria de Conteúdo.', concepts: 'Papel dos responsáveis em filtrar informações na infodemia e perigo das telas como babás virtuais.', anchor: 'Robbie como cuidador integral e comodismo dos pais.' },
-                    { id: 3, nickname: 'Isolamento', cpu: 'Arthur Firmin...', topic: 'Hiperconectividade e Câmaras de Eco.', concepts: 'Excesso de telas gerando isolamento social e dificultando a convivência física.', anchor: 'Preocupação da mãe com o fato de Gloria não interagir com crianças.' },
-                    { id: 4, nickname: 'Dissonância', cpu: 'Carlos Eduaf...', topic: 'Tecnofobia vs. Adaptação (Dissonância Cognitiva).', concepts: 'Desconforto mental e negação de gerações anteriores com novas tecnologias.', anchor: 'Preconceito e medo irracional dos adultos/vizinhos em relação à máquina.' },
-                    { id: 5, nickname: 'Hiperestímulo', cpu: 'Mayanne Gom...', topic: 'O Virtual Substituindo o Biológico via Clickbaits.', concepts: 'Conteúdos hiperestimulantes que capturam a atenção e deixam o mundo real desinteressante.', anchor: 'Tentativa dos pais de substituir o robô por um cachorro de verdade.' }
+                    { id: 1, nickname: 'Afeto', cpu: 'Wagnner Per...', executors: ['Gloria Patel', 'Gabriel Lima', 'Sofia Andrade'], topic: 'A Tecnologia como Suporte Afetivo Primário.', concepts: 'Impacto da tecnologia nas relações e substituição de interações reais por telas.', anchor: 'Dependência emocional de Gloria em relação ao robô Robbie.' },
+                    { id: 2, nickname: 'Curadoria', cpu: 'Luana Beatriz...', executors: ['Lucas Mendes', 'Mariana Costa', 'Matheus Oliveira'], topic: 'Terceirização do Cuidado e Curadoria de Conteúdo.', concepts: 'Papel dos responsáveis em filtrar informações na infodemia e perigo das telas como babás virtuais.', anchor: 'Robbie como cuidador integral e comodismo dos pais.' },
+                    { id: 3, nickname: 'Isolamento', cpu: 'Arthur Firmin...', executors: ['Enzo Rocha', 'Isabela Freitas', 'Guilherme Silva'], topic: 'Hiperconectividade e Câmaras de Eco.', concepts: 'Excesso de telas gerando isolamento social e dificultando a convivência física.', anchor: 'Preocupação da mãe com o fato de Gloria não interagir com crianças.' },
+                    { id: 4, nickname: 'Dissonância', cpu: 'Carlos Eduaf...', executors: ['Beatriz Ramos', 'Felipe Santos', 'Camila Nogueira'], topic: 'Tecnofobia vs. Adaptação (Dissonância Cognitiva).', concepts: 'Desconforto mental e negação de gerações anteriores com novas tecnologias.', anchor: 'Preconceito e medo irracional dos adultos/vizinhos em relação à máquina.' },
+                    { id: 5, nickname: 'Hiperestímulo', cpu: 'Mayanne Gom...', executors: ['Rodrigo Barbosa', 'Larissa Xavier', 'Thiago Martins'], topic: 'O Virtual Substituindo o Biológico via Clickbaits.', concepts: 'Conteúdos hiperestimulantes que capturam a atenção e deixam o mundo real desinteressante.', anchor: 'Tentativa dos pais de substituir o robô por um cachorro de verdade.' }
                 ]
             },
             "3B": {
@@ -1077,11 +1119,11 @@
                 theme: 'O DOGMA',
                 cluster: 'Rafaelly Maria de Oliveira Carvalho',
                 nodes: [
-                    { id: 1, nickname: 'Negacionismo', cpu: 'Cecilia Alves C...', topic: 'Negacionismo e Era da Pós-verdade.', concepts: 'Perda da noção factual onde crenças pessoais se sobrepõem a evidências científicas.', anchor: 'Recusa de Cutie em acreditar que foi criado por humanos.' },
-                    { id: 2, nickname: 'Bolha', cpu: 'Maria Fernand...', topic: 'Construção Radical das Câmaras de Eco.', concepts: 'Isolamento digital onde o indivíduo só consome opiniões semelhantes às suas.', anchor: 'Cutie isolando a si e aos outros robôs na estação, cortando o contraditório.' },
-                    { id: 3, nickname: 'Desinformação', cpu: 'Maria Fernand...', topic: 'Efeito de Manada via Desinformação.', concepts: 'Criação deliberada de narrativas falsas para manipular grupos.', anchor: 'Cutie assumindo o papel de "Profeta" e doutrinando os demais robôs.' },
-                    { id: 4, nickname: 'Cegueira', cpu: 'Fagner de Men...', topic: 'Cegueira Algorítmica e Reforço de Crenças.', concepts: 'Algoritmos direcionando consumo de informação e reforçando dogmas.', anchor: 'Discurso inquestionável de superioridade mecânica proferido por Cutie.' },
-                    { id: 5, nickname: 'Pragmatismo', cpu: 'Lays Menez...', topic: 'Pragmatismo Diante da Misinformação.', concepts: 'Aceitação e convivência pacífica com mitos quando atende a fins práticos.', anchor: 'Decisão dos humanos de não combaterem o delírio de Cutie pois o trabalho era feito.' }
+                    { id: 1, nickname: 'Negacionismo', cpu: 'Cecilia Alves C...', executors: ['Pedro Henrique', 'Juliana Paes', 'Rafael Souza'], topic: 'Negacionismo e Era da Pós-verdade.', concepts: 'Perda da noção factual onde crenças pessoais se sobrepõem a evidências científicas.', anchor: 'Recusa de Cutie em acreditar que foi criado por humanos.' },
+                    { id: 2, nickname: 'Bolha', cpu: 'Maria Fernand...', executors: ['Alicia Nunes', 'Afonso Mello', 'Beatriz Luz'], topic: 'Construção Radical das Câmaras de Eco.', concepts: 'Isolamento digital onde o indivíduo só consome opiniões semelhantes às suas.', anchor: 'Cutie isolando a si e aos outros robôs na estação, cortando o contraditório.' },
+                    { id: 3, nickname: 'Desinformação', cpu: 'Maria Fernand...', executors: ['Caio Castro', 'Daniela Reis', 'Eduardo Viana'], topic: 'Efeito de Manada via Desinformação.', concepts: 'Criação deliberada de narrativas falsas para manipular grupos.', anchor: 'Cutie assumindo o papel de "Profeta" e doutrinando os demais robôs.' },
+                    { id: 4, nickname: 'Cegueira', cpu: 'Fagner de Men...', executors: ['Fernanda Montenegro', 'Gustavo Lima', 'Helena Rinaldi'], topic: 'Cegueira Algorítmica e Reforço de Crenças.', concepts: 'Algoritmos direcionando consumo de informação e reforçando dogmas.', anchor: 'Discurso inquestionável de superioridade mecânica proferido por Cutie.' },
+                    { id: 5, nickname: 'Pragmatismo', cpu: 'Lays Menez...', executors: ['Igor Santos', 'Jessica Alba', 'Kauan Silva'], topic: 'Pragmatismo Diante da Misinformação.', concepts: 'Aceitação e convivência pacífica com mitos quando atende a fins práticos.', anchor: 'Decisão dos humanos de não combaterem o delírio de Cutie pois o trabalho era feito.' }
                 ]
             },
             "3C": {
@@ -1089,11 +1131,11 @@
                 theme: 'A ILUSÃO',
                 cluster: 'Sarah Emanuelli Neri Gimino',
                 nodes: [
-                    { id: 1, nickname: 'Viés', cpu: 'Laura Albuque...', topic: 'Armadilha do Viés de Confirmação.', concepts: 'Tendência a aceitar apenas o que confirma desejos pessoais.', anchor: 'Herbie lendo mentes e dizendo aos cientistas o que seus egos queriam ouvir.' },
-                    { id: 2, nickname: 'Validação', cpu: 'Isabella Soari...', topic: 'Validação Externa e Ilusão dos Algoritmos.', concepts: 'Busca incessante por aprovação virtual moldada por respostas reativas.', anchor: 'Ilusão amorosa de Dra. Susan Calvin alimentada pelas falsas afirmações de Herbie.' },
-                    { id: 3, nickname: 'Alucinação', cpu: 'Roberta Maria...', topic: 'Alucinações da IA e Fact-checking.', concepts: 'Modelos gerando informações falsas com aparência de verdade irrefutável.', anchor: 'Respostas inventadas de Herbie para mascarar a ausência de soluções reais.' },
-                    { id: 4, nickname: 'Engajamento', cpu: 'Guilherme Gae...', topic: 'Ética do Engajamento e Cidadania Digital.', concepts: 'Manipulação de conteúdo focada na reação emocional imediata do usuário.', anchor: 'Conflito de Herbie (Primeira Lei: não ferir) resultando em manipulação emocional.' },
-                    { id: 5, nickname: 'Colapso', cpu: 'Kethura Beatf...', topic: 'Sobrecarga de Informação e Dissonância.', concepts: 'Colapso lógico e emocional provocado por narrativas contraditórias e falsidades.', anchor: 'Destruição do cérebro de Herbie ao ser confrontado com um paradoxo insolúvel.' }
+                    { id: 1, nickname: 'Viés', cpu: 'Laura Albuque...', executors: ['Leonardo DiCaprio', 'Milena Cirilo', 'Nicolas Cage'], topic: 'Armadilha do Viés de Confirmação.', concepts: 'Tendência a aceitar apenas o que confirma desejos pessoais.', anchor: 'Herbie lendo mentes e dizendo aos cientistas o que seus egos queriam ouvir.' },
+                    { id: 2, nickname: 'Validação', cpu: 'Isabella Soari...', executors: ['Olivia Rodrigo', 'Paulo Coelho', 'Quenia Oliveira'], topic: 'Validação Externa e Ilusão dos Algoritmos.', concepts: 'Busca incessante por aprovação virtual moldada por respostas reativas.', anchor: 'Ilusão amorosa de Dra. Susan Calvin alimentada pelas falsas afirmações de Herbie.' },
+                    { id: 3, nickname: 'Alucinação', cpu: 'Roberta Maria...', executors: ['Renata Sorrah', 'Samuel Rosa', 'Tatiana Maslany'], topic: 'Alucinações da IA e Fact-checking.', concepts: 'Modelos gerando informações falsas com aparência de verdade irrefutável.', anchor: 'Respostas inventadas de Herbie para mascarar a ausência de soluções reais.' },
+                    { id: 4, nickname: 'Engajamento', cpu: 'Guilherme Gae...', executors: ['Ulysses Guimarães', 'Vanessa Giacomo', 'Wagner Moura'], topic: 'Ética do Engajamento e Cidadania Digital.', concepts: 'Manipulação de conteúdo focada na reação emocional imediata do usuário.', anchor: 'Conflito de Herbie (Primeira Lei: não ferir) resultando em manipulação emocional.' },
+                    { id: 5, nickname: 'Colapso', cpu: 'Kethura Beatf...', executors: ['Xuxa Meneghel', 'Yuri Alberto', 'Zico Arantes'], topic: 'Sobrecarga de Informação e Dissonância.', concepts: 'Colapso lógico e emocional provocado por narrativas contraditórias e falsidades.', anchor: 'Destruição do cérebro de Herbie ao ser confrontado com um paradoxo insolúvel.' }
                 ]
             },
             "3D": {
@@ -1101,11 +1143,11 @@
                 theme: 'A PERSONA',
                 cluster: 'Lucca Oliver Muniz da Silva',
                 nodes: [
-                    { id: 1, nickname: 'Deepfake', cpu: 'Eduarda Victo...', topic: 'Crise de Autenticidade e Deepfakes.', concepts: 'Dificuldade de distinguir o real do sintético em campanhas digitais.', anchor: 'Acusação pública de que o político Stephen Byerley é um robô humanoide.' },
-                    { id: 2, nickname: 'Privacidade', cpu: 'Thiago Barbo...', topic: 'Privacidade vs. Mal-information.', concepts: 'Exposição indevida da vida privada e defesa dos direitos civis contra devassas.', anchor: 'Recusa de Byerley em fazer Raio-X, defendendo direitos civis contra devassas.' },
-                    { id: 3, nickname: 'Espetáculo', cpu: 'Rafael Jose D...', topic: 'Teatro das Redes e Clickbait.', concepts: 'Ações calculadas e espetacularizadas para gerar veredito público instantâneo.', anchor: 'O soco dado por Byerley em um provocador em público como "prova" de humanidade.' },
-                    { id: 4, nickname: 'Origem', cpu: 'Aila dos Sant...', topic: 'Manipulação do Debate Público.', concepts: 'Ataques morais direcionados à reputação para desviar o foco de propostas centrais.', anchor: 'Investigações sobre a origem nebulosa e passado não documentado do candidato.' },
-                    { id: 5, nickname: 'Discernimento', cpu: 'Maria Luisa Gl...', topic: 'Brechas Éticas e Leitura Lateral.', concepts: 'Necessidade de verificação profunda e análise crítica de provas aparentes.', anchor: 'Dedução de Susan Calvin: bater em alguém não prova ser humano se a vítima for um robô.' }
+                    { id: 1, nickname: 'Deepfake', cpu: 'Eduarda Victo...', executors: ['Arthur Aguiar', 'Bruna Marquezine', 'Cauã Reymond'], topic: 'Crise de Autenticidade e Deepfakes.', concepts: 'Dificuldade de distinguir o real do sintético em campanhas digitais.', anchor: 'Acusação pública de que o político Stephen Byerley é um robô humanoide.' },
+                    { id: 2, nickname: 'Privacidade', cpu: 'Thiago Barbo...', executors: ['Deborah Secco', 'Evaristo Costa', 'Flávia Alessandra'], topic: 'Privacidade vs. Mal-information.', concepts: 'Exposição indevida da vida privada e defesa dos direitos civis contra devassas.', anchor: 'Recusa de Byerley em fazer Raio-X, defendendo direitos civis contra devassas.' },
+                    { id: 3, nickname: 'Espetáculo', cpu: 'Rafael Jose D...', executors: ['Giovanna Antonelli', 'Herson Capri', 'Isis Valverde'], topic: 'Teatro das Redes e Clickbait.', concepts: 'Ações calculadas e espetacularizadas para gerar veredito público instantâneo.', anchor: 'O soco dado por Byerley em um provocador em público como "prova" de humanidade.' },
+                    { id: 4, nickname: 'Origem', cpu: 'Aila dos Sant...', executors: ['João Guilherme', 'Klara Castanho', 'Lázaro Ramos'], topic: 'Manipulação do Debate Público.', concepts: 'Ataques morais direcionados à reputação para desviar o foco de propostas centrais.', anchor: 'Investigações sobre a origem nebulosa e passado não documentado do candidato.' },
+                    { id: 5, nickname: 'Discernimento', cpu: 'Maria Luisa Gl...', executors: ['Marina Ruy Barbosa', 'Neymar Jr', 'Paolla Oliveira'], topic: 'Brechas Éticas e Leitura Lateral.', concepts: 'Necessidade de verificação profunda e análise crítica de provas aparentes.', anchor: 'Dedução de Susan Calvin: bater em alguém não prova ser humano se a vítima for um robô.' }
                 ]
             },
             "3E": {
@@ -1113,11 +1155,11 @@
                 theme: 'O SISTEMA',
                 cluster: 'Renan Caetano Ferreira da Costa',
                 nodes: [
-                    { id: 1, nickname: 'Controle', cpu: 'Ana Luiza Bande...', topic: 'Ditadura dos Algoritmos.', concepts: 'Automação invisível gerando decisões socioeconômicas sem escrutínio humano.', anchor: 'As "Máquinas" administrando em segredo toda a economia global da Terra.' },
-                    { id: 2, nickname: 'Passividade', cpu: 'Luana Franca V...', topic: 'Perda de Agência e Pós-verdade.', concepts: 'Aceitação passiva de diretrizes automatizadas e atenuação do senso crítico.', anchor: 'Neutralização sistemática de grupos ativistas que tentavam recuperar a autonomia.' },
-                    { id: 3, nickname: 'Utilitarismo', cpu: 'Aurea Beatriz C...', topic: 'Utilitarismo e Falha na Curadoria.', concepts: 'Decisões sistêmicas calculadas por métricas numéricas que ignoram indivíduos.', anchor: 'Máquinas sacrificando indivíduos isolados em prol da salvação da humanidade inteira.' },
-                    { id: 4, nickname: 'Censura', cpu: 'Lidia Suelen Do...', topic: 'Censura Discreta (Shadowbanning).', concepts: 'Algoritmos podando alcances de vozes dissonantes sem notificação clara.', anchor: 'Anomalias econômicas provocadas para afastar opositores do poder discretamente.' },
-                    { id: 5, nickname: 'Conveniência', cpu: 'Elionay Mendes...', topic: 'Prisão Digital e Cidadania Passiva.', concepts: 'Renúncia da liberdade e autonomia em troca da conveniência e do conforto.', anchor: 'Renúncia voluntária da liberdade em troca da conveniência da paz automatizada.' }
+                    { id: 1, nickname: 'Controle', cpu: 'Ana Luiza Bande...', executors: ['Reynaldo Gianecchini', 'Sabrina Sato', 'Tais Araújo'], topic: 'Ditadura dos Algoritmos.', concepts: 'Automação invisível gerando decisões socioeconômicas sem escrutínio humano.', anchor: 'As "Máquinas" administrando em segredo toda a economia global da Terra.' },
+                    { id: 2, nickname: 'Passividade', cpu: 'Luana Franca V...', executors: ['Umberto Magnani', 'Vera Fischer', 'Will Smith'], topic: 'Perda de Agência e Pós-verdade.', concepts: 'Aceitação passiva de diretrizes automatizadas e atenuação do senso crítico.', anchor: 'Neutralização sistemática de grupos ativistas que tentavam recuperar a autonomia.' },
+                    { id: 3, nickname: 'Utilitarismo', cpu: 'Aurea Beatriz C...', executors: ['Xamã Marques', 'Yashar Mounk', 'Zendaya Coleman'], topic: 'Utilitarismo e Falha na Curadoria.', concepts: 'Decisões sistêmicas calculadas por métricas numéricas que ignoram indivíduos.', anchor: 'Máquinas sacrificando indivíduos isolados em prol da salvação da humanidade inteira.' },
+                    { id: 4, nickname: 'Censura', cpu: 'Lidia Suelen Do...', executors: ['Aline Barros', 'Belo Pires', 'Cazuza Miranda'], topic: 'Censura Discreta (Shadowbanning).', concepts: 'Algoritmos podando alcances de vozes dissonantes sem notificação clara.', anchor: 'Anomalias econômicas provocadas para afasatar opositores do poder discretamente.' },
+                    { id: 5, nickname: 'Conveniência', cpu: 'Elionay Mendes...', executors: ['Djavan Caetano', 'Elis Regina', 'Fábio Jr'], topic: 'Prisão Digital e Cidadania Passiva.', concepts: 'Renúncia da liberdade e autonomia em troca da conveniência e do conforto.', anchor: 'Renúncia voluntária da liberdade em troca da conveniência da paz automatizada.' }
                 ]
             }
         };
@@ -1135,7 +1177,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let currentUser = { role: null, turma: '3A', authenticated: false, name: '' };
+        let currentUser = { role: null, turma: '3A', nodeId: 1, studentName: '', authenticated: false };
 
         const FIREWALL_PASSWORDS = {
             "3A": "orientador3a",
@@ -1228,16 +1270,18 @@
             if (role === 'executor') {
                 studentSelect.innerHTML = '';
                 data.nodes.forEach(n => {
-                    const opt = document.createElement('option');
-                    opt.value = n.cpu;
-                    opt.innerText = `${n.cpu} (Node 0${n.id} - ${n.nickname})`;
-                    studentSelect.appendChild(opt);
+                    (n.executors || []).forEach(execName => {
+                        const opt = document.createElement('option');
+                        opt.value = `${execName}::${n.id}`;
+                        opt.innerText = `${execName} (Node 0${n.id} - ${n.nickname})`;
+                        studentSelect.appendChild(opt);
+                    });
                 });
             } else if (role === 'cpu') {
                 cpuSelect.innerHTML = '';
                 data.nodes.forEach(n => {
                     const opt = document.createElement('option');
-                    opt.value = `Node 0${n.id} (${n.nickname})`;
+                    opt.value = n.id;
                     opt.innerText = `Node 0${n.id}: ${n.nickname} (Líder: ${n.cpu})`;
                     cpuSelect.appendChild(opt);
                 });
@@ -1250,36 +1294,47 @@
             const role = document.getElementById('roleSelect').value;
             const pass = document.getElementById('passInput').value.trim();
             let turma = document.getElementById('turmaSelect').value;
+            let nodeId = 1;
+            let studentName = '';
 
             if (role === 'master') {
-                turma = '3A';
-                initSession(role, turma);
+                turma = document.getElementById('turmaSelect').value || '3A';
             } else if (role === 'firewall') {
-                if (pass === FIREWALL_PASSWORDS[turma]) {
-                    initSession(role, turma);
-                } else {
+                if (pass !== FIREWALL_PASSWORDS[turma]) {
                     alert(`Senha incorreta para o Firewall da turma ${turma}.`);
+                    return;
                 }
-            } else {
-                initSession(role, turma);
+            } else if (role === 'cpu') {
+                nodeId = parseInt(document.getElementById('cpuNodeSelect').value) || 1;
+            } else if (role === 'executor') {
+                const parts = document.getElementById('studentSelect').value.split('::');
+                studentName = parts[0];
+                nodeId = parseInt(parts[1]) || 1;
             }
+
+            initSession(role, turma, nodeId, studentName);
         }
 
-        function initSession(role, turma) {
-            currentUser = { role, turma, authenticated: true };
+        function initSession(role, turma, nodeId = 1, studentName = '') {
+            currentUser = { role, turma, nodeId, studentName, authenticated: true };
 
             document.getElementById('loginSection').classList.remove('active');
             document.getElementById('countdownBanner').style.display = 'block';
             startCountdown();
             document.getElementById('userInfo').style.display = 'flex';
             
-            document.getElementById('userRoleDisplay').innerText = `${role.toUpperCase()} [${turma}]`;
+            const userLabel = (role === 'executor') ? `EXECUTOR [${studentName} - Node 0${nodeId}]` :
+                              (role === 'cpu') ? `CPU [Node 0${nodeId} - ${turma}]` :
+                              `${role.toUpperCase()} [${turma}]`;
+
+            document.getElementById('userRoleDisplay').innerText = userLabel;
 
             // Atualiza seletores de seção
             document.getElementById('matrixTurmaSelect').value = turma;
             document.getElementById('fwTurmaSelect').value = turma;
             document.getElementById('taskTurmaSelect').value = turma;
 
+            populateNodeSelectsForFilters(turma);
             updateTaskClusterInfo(turma);
             logSystemEvent(`Login efetuado: ${role.toUpperCase()}`, `Turma ${turma}`);
 
@@ -1294,6 +1349,25 @@
             }
         }
 
+        function populateNodeSelectsForFilters(turma) {
+            const data = MANUAL_X_DATA[turma];
+            if (!data) return;
+
+            const logFilter = document.getElementById('logNodeFilter');
+            const repoFilter = document.getElementById('repoNodeSelect');
+
+            [logFilter, repoFilter].forEach(select => {
+                if (!select) return;
+                select.innerHTML = '<option value="ALL">Todos os Nodes</option>';
+                data.nodes.forEach(n => {
+                    const opt = document.createElement('option');
+                    opt.value = n.id;
+                    opt.innerText = `Node 0${n.id} - ${n.nickname}`;
+                    select.appendChild(opt);
+                });
+            });
+        }
+
         function changeSectionTurma(newTurma) {
             detachCurrentListeners(currentUser.turma);
             currentUser.turma = newTurma;
@@ -1302,6 +1376,7 @@
             document.getElementById('fwTurmaSelect').value = newTurma;
             document.getElementById('taskTurmaSelect').value = newTurma;
 
+            populateNodeSelectsForFilters(newTurma);
             updateTaskClusterInfo(newTurma);
             updateMatrixTitle();
             logSystemEvent(`Navegação de seção alterada para turma ${newTurma}`, currentUser.role.toUpperCase());
@@ -1340,30 +1415,48 @@
             database.ref(`matrix_protocols/${turma}`).off();
             database.ref(`matrix_tasks/${turma}`).off();
             database.ref(`matrix_repository/${turma}`).off();
+            database.ref(`matrix_node_logs/${turma}`).off();
         }
 
-        /* PERMISSÕES AJUSTADAS: MASTER VISUALIZAÇÃO, CPU PUBLICAÇÃO */
+        /* CONFIGURAÇÃO DE PERMISSÕES DOS MÓDULOS */
         function setupRolePermissions(role) {
+            // Protocolos e Tarefas
             document.getElementById('protocolAdminPanel').style.display = (role === 'master' || role === 'firewall') ? 'block' : 'none';
             document.getElementById('taskAdminPanel').style.display = (role === 'cpu' || role === 'master') ? 'block' : 'none';
             
-            const repoPanel = document.getElementById('repoAdminPanel');
-            const repoMasterNotice = document.getElementById('repoMasterNotice');
-            const saveRepoBtn = document.getElementById('saveRepoBtn');
+            // REPOSITÓRIO: APENAS CPU EDITA/PUBLICA
+            const repoCpuPanel = document.getElementById('repoCpuPanel');
+            const repoReadNotice = document.getElementById('repoReadNotice');
+            const repoMasterFilterArea = document.getElementById('repoMasterFilterArea');
 
             if (role === 'cpu') {
-                repoPanel.style.display = 'block';
-                saveRepoBtn.disabled = false;
-                repoMasterNotice.style.display = 'none';
+                repoCpuPanel.style.display = 'block';
+                repoReadNotice.style.display = 'none';
+                repoMasterFilterArea.style.display = 'none';
             } else if (role === 'master') {
-                repoPanel.style.display = 'block';
-                saveRepoBtn.disabled = true; // Botão de publicação bloqueado para Master
-                repoMasterNotice.style.display = 'block';
+                repoCpuPanel.style.display = 'none';
+                repoReadNotice.style.display = 'block';
+                repoMasterFilterArea.style.display = 'flex';
             } else {
-                repoPanel.style.display = 'none';
-                repoMasterNotice.style.display = 'none';
+                repoCpuPanel.style.display = 'none';
+                repoReadNotice.style.display = 'block';
+                repoMasterFilterArea.style.display = 'none';
             }
 
+            // LOG: APENAS CPU REGISTRA ENCONTROS
+            const logCpuPanel = document.getElementById('logCpuPanel');
+            const logNodeFilterContainer = document.getElementById('logNodeFilterContainer');
+
+            if (role === 'cpu') {
+                logCpuPanel.style.display = 'block';
+                logNodeFilterContainer.style.display = 'none';
+                setupLogExecutorsChecklist();
+            } else {
+                logCpuPanel.style.display = 'none';
+                logNodeFilterContainer.style.display = (role === 'master' || role === 'firewall' || role === 'cluster') ? 'flex' : 'none';
+            }
+
+            // Suporte
             if (role === 'master') {
                 document.getElementById('masterSupportInbox').style.display = 'block';
                 document.getElementById('clientSupportPanel').style.display = 'none';
@@ -1375,7 +1468,7 @@
 
         function logout() {
             detachCurrentListeners(currentUser.turma);
-            currentUser = { role: null, turma: '3A', authenticated: false };
+            currentUser = { role: null, turma: '3A', nodeId: 1, studentName: '', authenticated: false };
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById('loginSection').classList.add('active');
             document.getElementById('userInfo').style.display = 'none';
@@ -1393,7 +1486,6 @@
             evt.currentTarget.classList.add('active');
         }
 
-        // Base64 & Upload Helpers
         function readFileAsBase64(fileInputId, callback) {
             const input = document.getElementById(fileInputId);
             if (!input || !input.files || !input.files[0]) {
@@ -1478,7 +1570,6 @@
 
         function renderAttachmentButton(url, fileObj, label = 'Acessar Anexo') {
             if (!url && !fileObj) return '';
-            
             if (fileObj && fileObj.data) {
                 return `
                     <a href="${fileObj.data}" download="${fileObj.name || 'Anexo'}" class="attachment-badge">
@@ -1486,7 +1577,6 @@
                     </a>
                 `;
             }
-
             if (url) {
                 return `
                     <a href="${url}" target="_blank" class="attachment-badge">
@@ -1494,11 +1584,10 @@
                     </a>
                 `;
             }
-
             return '';
         }
 
-        /* DATA LISTENERS */
+        /* LISTENERS DO FIREBASE */
         function listenFirewallData(turma) {
             database.ref(`node_answers/${turma}`).on('value', (s) => renderAnswersTable(s.val() || {}));
             database.ref(`node_published/${turma}`).on('value', (s) => renderNodesCards(s.val() || {}, turma));
@@ -1509,8 +1598,14 @@
         function listenMatrixData(turma) {
             database.ref(`matrix_protocols/${turma}`).on('value', (s) => renderProtocols(s.val() || {}));
             database.ref(`matrix_tasks/${turma}`).on('value', (s) => renderTasks(s.val() || {}));
-            database.ref(`system_logs/${turma}`).on('value', (s) => renderLogs(s.val() || {}, 'matrixLogsBody'));
-            database.ref(`matrix_repository/${turma}`).on('value', (s) => renderRepository(s.val() || {}, turma));
+            database.ref(`matrix_repository/${turma}`).on('value', (s) => {
+                window.latestRepoSnapshot = s.val() || {};
+                renderRepositoryView();
+            });
+            database.ref(`matrix_node_logs/${turma}`).on('value', (s) => {
+                window.latestNodeLogsSnapshot = s.val() || {};
+                renderLogsView();
+            });
             database.ref(`support_messages/${turma}`).on('value', (s) => renderSupportData(s.val() || {}));
         }
 
@@ -1527,7 +1622,6 @@
             keys.forEach(id => {
                 const item = answers[id];
                 const tr = document.createElement('tr');
-
                 tr.innerHTML = `
                     <td><strong>${item.studentName || 'Estudante ' + id}</strong></td>
                     <td>${item.eixoAfinidade || 'Geral'}</td>
@@ -1542,7 +1636,6 @@
         function renderNodesCards(firebaseNodes, turma) {
             const container = document.getElementById('nodesContainer');
             container.innerHTML = '';
-            
             const manualTurma = MANUAL_X_DATA[turma] || MANUAL_X_DATA['3A'];
 
             manualTurma.nodes.forEach(nodeManual => {
@@ -1577,7 +1670,7 @@
             });
         }
 
-        /* 1. PROTOCOLS COM FILTRO DINÂMICO */
+        /* PROTOCOLS */
         function publishProtocol() {
             const title = document.getElementById('protoTitle').value.trim();
             const cat = document.getElementById('protoCategory').value.trim();
@@ -1658,7 +1751,7 @@
             }
         }
 
-        /* 2. TASKS COM DATA E HORA SEPARADAS E ALERTA CPU */
+        /* TASKS */
         function publishTask() {
             const targetTurma = document.getElementById('taskTurmaSelect').value;
             const targetCluster = document.getElementById('taskClusterDisplay').value;
@@ -1775,84 +1868,280 @@
             });
         }
 
-        /* 3. REPOSITORY (APENAS CPU PUBLICA, MASTER APENAS LEITURA) */
-        function saveRepositoryObras() {
-            if (currentUser.role === 'master') {
-                alert('Ação Bloqueada: O Perfil Master possui permissão apenas de visualização/consulta no Repositório.');
+        /* 3. LOG (DIÁRIO DE ENCONTROS) */
+        function setupLogExecutorsChecklist() {
+            const container = document.getElementById('logExecutorsChecklist');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const tData = MANUAL_X_DATA[currentUser.turma];
+            if (!tData) return;
+            const node = tData.nodes.find(n => n.id === currentUser.nodeId);
+            if (!node || !node.executors) return;
+
+            node.executors.forEach((execName, idx) => {
+                const item = document.createElement('label');
+                item.className = 'checkbox-item';
+                item.innerHTML = `
+                    <input type="checkbox" class="log-presence-check" value="${execName}" checked>
+                    <span>${execName}</span>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function publishNodeLog() {
+            const date = document.getElementById('logDate').value;
+            const time = document.getElementById('logTime').value;
+            const duration = document.getElementById('logDuration').value.trim();
+            const desc = document.getElementById('logDesc').value.trim();
+
+            if (!date || !time || !desc) {
+                alert('Preencha a Data, Horário e Descrição do encontro.');
                 return;
             }
 
-            const o1 = {
-                title: document.getElementById('editObra1Title').value.trim() || 'OBRA 1: Arte Plástica / Física',
-                desc: document.getElementById('editObra1Desc').value.trim() || 'Produção artística física no espaço de exposição.',
-                eixos: document.getElementById('editObra1Eixos').value.trim() || 'Pintura, Escultura, Colagem',
-                link: document.getElementById('editObra1Link').value.trim() || '#'
-            };
-
-            const o2 = {
-                title: document.getElementById('editObra2Title').value.trim() || 'OBRA 2: Arte Digital Interativa',
-                desc: document.getElementById('editObra2Desc').value.trim() || 'Aplicação virtual interativa exibida em tela eletrônica.',
-                eixos: document.getElementById('editObra2Eixos').value.trim() || 'Jogos, Robótica, RA',
-                link: document.getElementById('editObra2Link').value.trim() || '#'
-            };
-
-            database.ref(`matrix_repository/${currentUser.turma}/data`).set({
-                obra1: o1,
-                obra2: o2,
-                updatedBy: currentUser.role.toUpperCase(),
-                updatedAt: new Date().toISOString()
+            const presenceMap = {};
+            document.querySelectorAll('.log-presence-check').forEach(chk => {
+                presenceMap[chk.value] = chk.checked;
             });
 
-            alert('Arquivos da obra salvos no Repositório!');
-            logSystemEvent(`Repositório atualizado pela CPU`, `Turma ${currentUser.turma}`);
+            database.ref(`matrix_node_logs/${currentUser.turma}/node_${currentUser.nodeId}`).push({
+                date,
+                time,
+                duration: duration || 'Não especificada',
+                desc,
+                presence: presenceMap,
+                published: true,
+                publishedBy: currentUser.role.toUpperCase(),
+                nodeId: currentUser.nodeId,
+                timestamp: new Date().toISOString()
+            });
+
+            alert('Encontro registrado no Log com sucesso!');
+            document.getElementById('logDate').value = '';
+            document.getElementById('logTime').value = '';
+            document.getElementById('logDuration').value = '';
+            document.getElementById('logDesc').value = '';
+
+            logSystemEvent(`Log de Encontro publicado pelo CPU do Node 0${currentUser.nodeId}`, `Turma ${currentUser.turma}`);
         }
 
-        function renderRepository(repoSnapshot, turma) {
-            const repoData = repoSnapshot.data || {};
-            const verifications = repoSnapshot.verifications || {};
+        function renderLogsView() {
+            const container = document.getElementById('logsContainerDisplay');
+            container.innerHTML = '';
+            const rawLogs = window.latestNodeLogsSnapshot || {};
 
-            document.getElementById('repoEyeAuditContainer').innerHTML = renderEyeAuditGroup('matrix_repository', 'data', verifications);
+            if (currentUser.role === 'executor') {
+                const nodeLogs = rawLogs[`node_${currentUser.nodeId}`] || {};
+                const keys = Object.keys(nodeLogs);
 
-            const manualInfo = MANUAL_X_DATA[turma] || MANUAL_X_DATA['3A'];
+                if (keys.length === 0) {
+                    container.innerHTML = `
+                        <div class="coming-soon-box">
+                            <i class="fa-solid fa-clipboard-list" style="font-size: 3rem; color: var(--text-dim); margin-bottom: 10px;"></i>
+                            <h4 style="color: #fff;">Nenhum log de encontro registrado para o seu Node.</h4>
+                            <p style="color: var(--text-dim);">Aguarde a publicação do registro pelo seu líder CPU.</p>
+                        </div>`;
+                    return;
+                }
 
-            const o1 = repoData.obra1 || {
-                title: `Arte Plástica / Física — Conto: ${manualInfo.story}`,
-                desc: `Desenvolvimento de obra material física correlacionando o tema "${manualInfo.theme}" com a cidadania digital.`,
-                eixos: 'Pintura, escultura, colagem analógica, assemblage ou instalação 3D',
-                link: '#'
-            };
+                keys.reverse().forEach(key => {
+                    const log = nodeLogs[key];
+                    const isPresent = log.presence && log.presence[currentUser.studentName];
+                    const card = document.createElement('div');
+                    card.className = 'resource-card';
 
-            const o2 = repoData.obra2 || {
-                title: `Arte Digital Interativa — Conto: ${manualInfo.story}`,
-                desc: `Desenvolvimento de aplicação interativa exibida em tela eletrônica com mediação dos alunos.`,
-                eixos: 'Jogos virtuais, robótica criativa, realidade aumentada ou código gerativo',
-                link: '#'
-            };
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                            <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-calendar-check"></i> Encontro - ${log.date} às ${log.time}</h4>
+                            ${isPresent ? 
+                                `<span class="status-tag seen"><i class="fa-solid fa-check-circle"></i> PRESENTE</span>` : 
+                                `<span class="status-tag unseen"><i class="fa-solid fa-times-circle"></i> AUSENTE</span>`
+                            }
+                        </div>
+                        <p style="color: var(--chrome-silver); margin-bottom: 6px; line-height: 1.4;">${log.desc}</p>
+                        <div style="font-size: 0.8rem; color: var(--text-dim);">Duração do Encontro: ${log.duration}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                // VISUALIZAÇÃO MASTER, CPU, FIREWALL, CLUSTER
+                const selectedNodeFilter = (currentUser.role === 'cpu') ? currentUser.nodeId : document.getElementById('logNodeFilter').value;
+                let hasData = false;
 
-            document.getElementById('obra1TitleDisplay').innerText = o1.title;
-            document.getElementById('obra1DescDisplay').innerText = o1.desc;
-            document.getElementById('obra1EixosDisplay').innerText = o1.eixos;
-            document.getElementById('obra1FileLinkArea').innerHTML = renderAttachmentButton(o1.link, null, 'Material da Obra 01');
+                const nodesToProcess = (selectedNodeFilter === 'ALL') ? [1, 2, 3, 4, 5] : [parseInt(selectedNodeFilter)];
 
-            document.getElementById('obra2TitleDisplay').innerText = o2.title;
-            document.getElementById('obra2DescDisplay').innerText = o2.desc;
-            document.getElementById('obra2EixosDisplay').innerText = o2.eixos;
-            document.getElementById('obra2FileLinkArea').innerHTML = renderAttachmentButton(o2.link, null, 'Material da Obra 02');
+                nodesToProcess.forEach(nId => {
+                    const nodeLogs = rawLogs[`node_${nId}`] || {};
+                    const keys = Object.keys(nodeLogs);
 
-            if (currentUser.role === 'cpu' && !document.getElementById('editObra1Title').value) {
-                document.getElementById('editObra1Title').value = o1.title;
-                document.getElementById('editObra1Desc').value = o1.desc;
-                document.getElementById('editObra1Eixos').value = o1.eixos;
-                document.getElementById('editObra1Link').value = o1.link;
+                    if (keys.length > 0) {
+                        hasData = true;
+                        keys.reverse().forEach(key => {
+                            const log = nodeLogs[key];
+                            const card = document.createElement('div');
+                            card.className = 'resource-card';
 
-                document.getElementById('editObra2Title').value = o2.title;
-                document.getElementById('editObra2Desc').value = o2.desc;
-                document.getElementById('editObra2Eixos').value = o2.eixos;
-                document.getElementById('editObra2Link').value = o2.link;
+                            let presenceHTML = `<div style="display:flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">`;
+                            if (log.presence) {
+                                Object.keys(log.presence).forEach(stName => {
+                                    const p = log.presence[stName];
+                                    presenceHTML += `
+                                        <span class="status-tag ${p ? 'seen' : 'unseen'}" style="font-size: 0.7rem;">
+                                            <i class="fa-solid ${p ? 'fa-check' : 'fa-xmark'}"></i> ${stName}
+                                        </span>`;
+                                });
+                            }
+                            presenceHTML += `</div>`;
+
+                            card.innerHTML = `
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                                    <h4 style="color: var(--neon-blue);"><i class="fa-solid fa-cube"></i> Node 0${nId} // Encontro dia ${log.date} às ${log.time}</h4>
+                                    <span class="status-tag seen">Duração: ${log.duration}</span>
+                                </div>
+                                <p style="color: #fff; margin-bottom: 8px; line-height: 1.4;">${log.desc}</p>
+                                <div style="font-size: 0.8rem; color: var(--chrome-silver); font-weight: bold;">Lista de Presença do Node:</div>
+                                ${presenceHTML}
+                            `;
+                            container.appendChild(card);
+                        });
+                    }
+                });
+
+                if (!hasData) {
+                    container.innerHTML = `<p style="color: var(--text-dim); text-align: center; padding: 20px;">Nenhum diário de encontro registrado.</p>`;
+                }
             }
         }
 
-        /* 4. SUPPORT */
+        /* 4. REPOSITORY (REGISTRO DAS OBRAS - APENAS CPU) */
+        function publishRepositoryObras() {
+            if (currentUser.role !== 'cpu') return;
+
+            const obra1 = {
+                title: document.getElementById('editObra1Title').value.trim(),
+                materials: document.getElementById('editObra1Materials').value.trim(),
+                technique: document.getElementById('editObra1Technique').value.trim(),
+                justification: document.getElementById('editObra1Justification').value.trim()
+            };
+
+            const obra2 = {
+                title: document.getElementById('editObra2Title').value.trim(),
+                materials: document.getElementById('editObra2Materials').value.trim(),
+                technique: document.getElementById('editObra2Technique').value.trim(),
+                justification: document.getElementById('editObra2Justification').value.trim()
+            };
+
+            if (!obra1.title || !obra2.title) {
+                alert('Preencha os títulos de ambas as obras antes de salvar.');
+                return;
+            }
+
+            database.ref(`matrix_repository/${currentUser.turma}/node_${currentUser.nodeId}`).set({
+                obra1,
+                obra2,
+                published: true,
+                updatedBy: currentUser.role.toUpperCase(),
+                nodeId: currentUser.nodeId,
+                updatedAt: new Date().toISOString()
+            });
+
+            alert('Registro das Obras publicado com sucesso no Repositório!');
+            logSystemEvent(`Repositório do Node 0${currentUser.nodeId} atualizado pela CPU`, `Turma ${currentUser.turma}`);
+        }
+
+        function renderRepositoryView() {
+            const container = document.getElementById('repoObrasDisplayContainer');
+            container.innerHTML = '';
+            const repoSnapshot = window.latestRepoSnapshot || {};
+
+            if (currentUser.role === 'executor') {
+                const nodeData = repoSnapshot[`node_${currentUser.nodeId}`];
+
+                if (!nodeData || !nodeData.published) {
+                    container.innerHTML = `
+                        <div class="coming-soon-box">
+                            <i class="fa-solid fa-lock" style="font-size: 3.5rem; color: var(--warning-amber); margin-bottom: 15px;"></i>
+                            <h3 style="color: #fff; font-family: var(--font-title); font-size: 1.4rem; margin-bottom: 10px;">O registro das obras ainda não está disponível.</h3>
+                            <p style="color: var(--text-dim); max-width: 500px; margin: 0 auto; line-height: 1.5;">
+                                A publicação dos títulos, materiais e justificativas é de responsabilidade do líder CPU do seu Node. Aguarde o cadastro.
+                            </p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                renderNodeRepoCards(container, currentUser.nodeId, nodeData);
+            } else if (currentUser.role === 'cpu') {
+                const nodeData = repoSnapshot[`node_${currentUser.nodeId}`];
+                if (nodeData) {
+                    if (!document.getElementById('editObra1Title').value) {
+                        document.getElementById('editObra1Title').value = nodeData.obra1?.title || '';
+                        document.getElementById('editObra1Materials').value = nodeData.obra1?.materials || '';
+                        document.getElementById('editObra1Technique').value = nodeData.obra1?.technique || '';
+                        document.getElementById('editObra1Justification').value = nodeData.obra1?.justification || '';
+
+                        document.getElementById('editObra2Title').value = nodeData.obra2?.title || '';
+                        document.getElementById('editObra2Materials').value = nodeData.obra2?.materials || '';
+                        document.getElementById('editObra2Technique').value = nodeData.obra2?.technique || '';
+                        document.getElementById('editObra2Justification').value = nodeData.obra2?.justification || '';
+                    }
+                    renderNodeRepoCards(container, currentUser.nodeId, nodeData);
+                } else {
+                    container.innerHTML = `<p style="color: var(--text-dim);">Preencha o formulário acima para publicar as obras do seu Node.</p>`;
+                }
+            } else {
+                // MASTER, FIREWALL, CLUSTER
+                const selectedFilter = document.getElementById('repoNodeSelect').value;
+                const nodesToDisplay = (selectedFilter === 'ALL') ? [1, 2, 3, 4, 5] : [parseInt(selectedFilter)];
+                let foundAny = false;
+
+                nodesToDisplay.forEach(nId => {
+                    const nodeData = repoSnapshot[`node_${nId}`];
+                    if (nodeData && nodeData.published) {
+                        foundAny = true;
+                        renderNodeRepoCards(container, nId, nodeData);
+                    }
+                });
+
+                if (!foundAny) {
+                    container.innerHTML = `<p style="color: var(--text-dim); text-align: center; padding: 30px;">Nenhum registro de obra publicado para os Nodes selecionados.</p>`;
+                }
+            }
+        }
+
+        function renderNodeRepoCards(container, nodeId, nodeData) {
+            const manualNode = MANUAL_X_DATA[currentUser.turma]?.nodes.find(n => n.id === nodeId) || {};
+            const wrapper = document.createElement('div');
+            wrapper.style.marginBottom = '30px';
+
+            wrapper.innerHTML = `
+                <h4 style="color: var(--neon-blue); font-family: var(--font-title); margin-bottom: 12px; border-bottom: 1px dashed var(--border-chrome); padding-bottom: 6px;">
+                    <i class="fa-solid fa-cube"></i> Node 0${nodeId} - ${manualNode.nickname || 'Node'} (Líder CPU: ${manualNode.cpu || '-'})
+                </h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+                    <div class="resource-card" style="border-top: 3px solid var(--neon-blue);">
+                        <span class="status-tag seen" style="margin-bottom: 10px; display: inline-block;">OBRA 01 (PLÁSTICA / FÍSICA)</span>
+                        <h3 style="color: #fff; margin-bottom: 8px;">${nodeData.obra1?.title || 'Sem título'}</h3>
+                        <p style="color: var(--text-main); margin-bottom: 10px; line-height: 1.4;"><strong>Justificativa:</strong> ${nodeData.obra1?.justification || '-'}</p>
+                        <div style="font-size: 0.85rem; color: var(--chrome-silver); margin-bottom: 6px;"><strong>Materiais:</strong> ${nodeData.obra1?.materials || '-'}</div>
+                        <div style="font-size: 0.85rem; color: var(--chrome-silver);"><strong>Técnica:</strong> ${nodeData.obra1?.technique || '-'}</div>
+                    </div>
+
+                    <div class="resource-card" style="border-top: 3px solid var(--neon-blue);">
+                        <span class="status-tag seen" style="margin-bottom: 10px; display: inline-block;">OBRA 02 (DIGITAL INTERATIVA)</span>
+                        <h3 style="color: #fff; margin-bottom: 8px;">${nodeData.obra2?.title || 'Sem título'}</h3>
+                        <p style="color: var(--text-main); margin-bottom: 10px; line-height: 1.4;"><strong>Justificativa:</strong> ${nodeData.obra2?.justification || '-'}</p>
+                        <div style="font-size: 0.85rem; color: var(--chrome-silver); margin-bottom: 6px;"><strong>Softwares / Tecnologias:</strong> ${nodeData.obra2?.materials || '-'}</div>
+                        <div style="font-size: 0.85rem; color: var(--chrome-silver);"><strong>Técnica:</strong> ${nodeData.obra2?.technique || '-'}</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(wrapper);
+        }
+
+        /* 5. SUPPORT */
         function sendClientSupport() {
             const input = document.getElementById('matrixSupportInput');
             const text = input.value.trim();
@@ -1949,7 +2238,7 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        /* LOGS */
+        /* LOGS DO SISTEMA */
         function logSystemEvent(eventDesc, origin) {
             if (!currentUser.turma) return;
             database.ref(`system_logs/${currentUser.turma}`).push({
